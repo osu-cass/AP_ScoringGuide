@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ScoringGuide.Core
+namespace SmarterBalanced.ScoringGuide.Core
 {
     public class Class1
     {
