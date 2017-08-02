@@ -14,7 +14,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:2513"
+      "applicationUrl": "http://localhost:2513",
+      "launchUrl": "ScoringGuide"
     },
     "IIS Express": {
       "commandName": "IISExpress",
