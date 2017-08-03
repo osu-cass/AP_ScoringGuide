@@ -72,40 +72,30 @@ module.exports = React;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["initializePage"] = initializePage;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ItemViewerFrame__ = __webpack_require__(3);
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(0);
-var ReactDOM = __webpack_require__(2);
-var ItemViewerFrame = __webpack_require__(3);
-var ScoringGuidePage = (function (_super) {
-    __extends(ScoringGuidePage, _super);
-    function ScoringGuidePage() {
-        return _super !== null && _super.apply(this, arguments) || this;
+
+
+class ScoringGuidePage extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    render() {
+        return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_2__ItemViewerFrame__["a" /* ItemFrame */], { url: "http://ivs.smarterbalanced.org/items?ids=187-1437" }));
     }
-    ScoringGuidePage.prototype.render = function () {
-        return (React.createElement(ItemViewerFrame.ItemFrame, { url: "http://ivs.smarterbalanced.org/items?ids=187-1437" }));
-    };
-    return ScoringGuidePage;
-}(React.Component));
-exports.ScoringGuidePage = ScoringGuidePage;
-function initializePage() {
-    var container = document.getElementById("react-page-container");
-    ReactDOM.render(React.createElement(ScoringGuidePage, null), container);
 }
-exports.initializePage = initializePage;
+/* harmony export (immutable) */ __webpack_exports__["ScoringGuidePage"] = ScoringGuidePage;
+
+function initializePage() {
+    const container = document.getElementById("react-page-container");
+    __WEBPACK_IMPORTED_MODULE_1_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_0_react__["createElement"](ScoringGuidePage, null), container);
+}
 
 
 /***/ }),
@@ -116,63 +106,51 @@ module.exports = ReactDOM;
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(0);
-var ItemFrame = (function (_super) {
-    __extends(ItemFrame, _super);
-    function ItemFrame(props) {
-        var _this = _super.call(this, props) || this;
-        _this.startLoad = function () {
-            _this.setState({
+class ItemFrame extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    constructor(props) {
+        super(props);
+        this.startLoad = () => {
+            this.setState({
                 loading: true
             });
         };
-        _this.finishLoad = function () {
-            _this.setState({
+        this.finishLoad = () => {
+            this.setState({
                 loading: false
             });
         };
-        _this.state = { loading: true };
-        return _this;
+        this.state = { loading: true };
     }
-    ItemFrame.prototype.renderNoItem = function () {
-        return (React.createElement("div", { className: "no-item" },
-            React.createElement("p", null, "No Item Found")));
-    };
-    ItemFrame.prototype.renderItem = function () {
-        var spinner = this.state.loading
-            ? React.createElement("div", { className: "itemviewer-iframe-spinner" },
-                React.createElement("img", { src: "/images/spin-large.gif" }))
+    renderNoItem() {
+        return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "no-item" },
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("p", null, "No Item Found")));
+    }
+    renderItem() {
+        const spinner = this.state.loading
+            ? __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "itemviewer-iframe-spinner" },
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("img", { src: "/images/spin-large.gif" }))
             : null;
-        return (React.createElement("div", { className: "itemViewerFrame", tabIndex: 0 },
+        return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "itemViewerFrame", tabIndex: 0 },
             spinner,
-            React.createElement("iframe", { id: "itemviewer-iframe", className: "itemviewer-iframe", onLoadStart: this.startLoad, onLoad: this.finishLoad, src: this.props.url })));
-    };
-    ItemFrame.prototype.render = function () {
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("iframe", { id: "itemviewer-iframe", className: "itemviewer-iframe", onLoadStart: this.startLoad, onLoad: this.finishLoad, src: this.props.url })));
+    }
+    render() {
         if (this.props.url) {
             return this.renderItem();
         }
         else {
             return this.renderNoItem();
         }
-    };
-    return ItemFrame;
-}(React.Component));
-exports.ItemFrame = ItemFrame;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = ItemFrame;
+
 
 
 /***/ })

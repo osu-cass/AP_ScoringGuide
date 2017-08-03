@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmarterBalanced.ScoringGuid
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmarterBalanced.ScoringGuide.Core", "SmarterBalanced.ScoringGuide.Core\SmarterBalanced.ScoringGuide.Core.csproj", "{3532D256-B6B0-4ACD-85BB-506EAC2B27BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmarterBalanced.ScoringGuide.Test", "SmarterBalanced.ScoringGuide.Test\SmarterBalanced.ScoringGuide.Test.csproj", "{D977D162-9E1A-4E77-B12B-06A3F47EFF7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmarterBalanced.ScoringGuide.Test", "SmarterBalanced.ScoringGuide.Test\SmarterBalanced.ScoringGuide.Test.csproj", "{D977D162-9E1A-4E77-B12B-06A3F47EFF7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
