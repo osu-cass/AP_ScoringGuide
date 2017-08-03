@@ -6,7 +6,7 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, 'wwwroot/scripts/'),
+    path: path.join(__dirname, 'wwwroot/js/'),
     filename: "[name].js",
     libraryTarget: "var",
     library: "EntryPoint"

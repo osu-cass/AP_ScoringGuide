@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SmarterBalanced.SampleItems.Dal" Version="1.1.0" />
+    <PackageReference Include="SmarterBalanced.SampleItems.Dal" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmarterBalanced.ScoringGuide.Core\SmarterBalanced.ScoringGuide.Core.csproj" />
+    <ProjectReference Include="..\SmarterBalanced.ScoringGuide.Web\SmarterBalanced.ScoringGuide.Web.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,10 +2,6 @@
 'use strict';
 
 const lessFiles = {
-    'wwwroot/css/about.css': 'Styles/about.less',
-    'wwwroot/css/home.css': 'Styles/home.less',
-    'wwwroot/css/item.css': 'Styles/item.less',
-    'wwwroot/css/search.css': 'Styles/search.less',
     'wwwroot/css/site.css': 'Styles/site.less'
 };
 
@@ -46,7 +42,7 @@ module.exports = function (grunt) {
             },
             target: {
                 files: {
-                    "wwwroot/css/style.min.css": ["wwwroot/css/style.css"]
+                    "wwwroot/css/site.min.css": ["wwwroot/css/site.css"]
                 }
             }
         },

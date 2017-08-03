@@ -17,6 +17,15 @@
       "applicationUrl": "http://localhost:2513",
       "launchUrl": "ScoringGuide"
     },
+    "Kestrel Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "applicationUrl": "http://localhost:2513",
+      "launchUrl": "ScoringGuide"
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,

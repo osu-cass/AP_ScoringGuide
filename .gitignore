@@ -259,3 +259,18 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+#Javascript/Typescript
+_references.js
+/**/wwwroot/scripts/
+/SmarterBalanced.ScoringGuide.Web/.tscache/*
+/SmarterBalanced.ScoringGuide.Web/Scripts/.baseDir.ts
+
+# minified css
+**/*.min.css
+
+# css generated from less files
+/**/wwwroot/css/
+
+#jmeter
+/jmeter/Results/
