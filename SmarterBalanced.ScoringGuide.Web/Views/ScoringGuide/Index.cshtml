@@ -6,5 +6,15 @@
 }
 
 @section Scripts {
-    
+    <environment names="Development">
+        <script src="js/sb.scoringguide.index.js"></script>
+    </environment>
+    <environment names="Staging, Production">
+        <script src="js/sb.scoringguide.index.min.js"></script>
+    </environment>
+    <script>
+        EntryPoint.initializePage();
+    </script>
 }
+
+<div id="react-page-container"></div>

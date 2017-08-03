@@ -2,7 +2,7 @@
 
 module.exports = {
   entry: {
-    "sb.scoringguide.index": "./Scripts/index.tsx"
+    "sb.scoringguide.index": "./Scripts/ScoringGuidePage.tsx"
   },
 
   output: {
