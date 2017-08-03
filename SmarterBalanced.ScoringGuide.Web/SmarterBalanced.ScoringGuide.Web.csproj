@@ -4,6 +4,23 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
 
+
+  <ItemGroup>
+    <Content Include="..\ClaimConfigurations\ItemsPatch.xml" Link="config\ItemsPatch.xml" />
+    <Content Include="..\ClaimConfigurations\ClaimsConfig.xml" Link="config\ClaimsConfig.xml" />
+    <Content Include="..\CoreStandardsConfigurations\CoreStandards.xml" Link="config\CoreStandards.xml" />
+    <Content Include="..\InteractionTypeConfigurations\InteractionTypes.xml" Link="config\InteractionTypes.xml" />
+    <Content Include="..\AccessibilityAccommodationConfigurations\AccessibilityConfig.xml" Link="config\AccessibilityConfig.xml" />
+
+  </ItemGroup>
+  
+  <ItemGroup>
+
+    <None Update="wwwroot\scripts\*.js.map">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  
   <PropertyGroup>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
   </PropertyGroup>
@@ -23,6 +40,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="config\" />
+    <Folder Include="Scripts\" />
     <Folder Include="Styles\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
