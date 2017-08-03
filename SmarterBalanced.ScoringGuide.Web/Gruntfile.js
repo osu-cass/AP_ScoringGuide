@@ -59,6 +59,10 @@ module.exports = function (grunt) {
             less: {
                 files: ["Styles/*.less"],
                 tasks: ["less"]
+            },
+            typescript: {
+                files: ["Scripts/*.ts", "Scripts/*.tsx"],
+                tasks: ["tsrecompile"]
             }
         },
 

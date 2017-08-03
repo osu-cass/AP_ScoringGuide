@@ -96,7 +96,7 @@ var ScoringGuidePage = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ScoringGuidePage.prototype.render = function () {
-        return (React.createElement(ItemViewerFrame.ItemFrame, { url: "https://ivs.smarterbalanced.org/items?ids=1437" }));
+        return (React.createElement(ItemViewerFrame.ItemFrame, { url: "http://ivs.smarterbalanced.org/items?ids=187-1437" }));
     };
     return ScoringGuidePage;
 }(React.Component));

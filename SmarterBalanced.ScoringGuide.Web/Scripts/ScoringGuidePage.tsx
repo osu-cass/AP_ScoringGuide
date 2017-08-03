@@ -5,7 +5,7 @@ import * as ItemViewerFrame from './ItemViewerFrame';
 export class ScoringGuidePage extends React.Component {
     render() {
         return (
-            <ItemViewerFrame.ItemFrame url="https://ivs.smarterbalanced.org/items?ids=1437" />
+            <ItemViewerFrame.ItemFrame url="http://ivs.smarterbalanced.org/items?ids=187-1437" />
         );
     }
 }
