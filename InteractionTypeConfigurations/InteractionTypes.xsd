@@ -1,0 +1,44 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="InteractionTypes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Items">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Item" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="Code"/>
+                    <xs:element type="xs:string" name="Label"/>
+                    <xs:element type="xs:string" name="Description"/>
+                    <xs:element type="xs:byte" name="Order"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Families">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Family" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="SubjectCode"/>
+                    <xs:element name="InteractionTypeCodes">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="Code" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

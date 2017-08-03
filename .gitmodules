@@ -1,0 +1,3 @@
+[submodule "AccessibilityAccommodationConfigurations"]
+	path = AccessibilityAccommodationConfigurations
+	url = https://github.com/osu-cass/AccessibilityAccommodationConfigurations.git
