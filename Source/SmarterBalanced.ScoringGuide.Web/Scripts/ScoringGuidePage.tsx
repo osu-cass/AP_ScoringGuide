@@ -1,6 +1,14 @@
 ﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as ItemViewerFrame from './ItemViewerFrame';
+import * as ItemModels from './ItemModels';
+import * as ApiModels from './ApiModels';
+import * as ItemCard from './ItemCard';
+
+export interface State {
+    searchParams: ItemModels.ScoreSearchParams;
+    itemSearchResult: ApiModels.Resource<ItemCard.ItemCard>;
+}
 
 export class ScoringGuidePage extends React.Component {
     render() {

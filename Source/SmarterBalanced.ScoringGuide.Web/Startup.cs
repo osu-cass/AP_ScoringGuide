@@ -11,6 +11,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using SmarterBalanced.SampleItems.Dal.Providers;
 using SmarterBalanced.SampleItems.Dal.Configurations.Models;
+using SmarterBalanced.ScoringGuide.Core.Repos;
 
 namespace SmarterBalanced.ScoringGuide.Web
 {
@@ -54,6 +55,7 @@ namespace SmarterBalanced.ScoringGuide.Web
             }
 
             // Add framework services.
+            services.AddScoped<IScoringRepo, ScoringRepo>();
             services.AddMvc();
             services.AddRouting();
 
