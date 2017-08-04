@@ -1,0 +1,40 @@
+language: csharp
+sudo: required
+node_js: 
+  - "7"
+python:
+  - "2.7"
+install: 
+  - travis_retry pip install --upgrade pip
+  - travis_retry pip install ecs-deploy
+  - travis_retry pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - cd $TRAVIS_BUILD_DIR/src/SmarterBalanced.ScoringGuide.Web
+  - travis_retry npm install 
+  - travis_retry $(npm bin)/bower install
+  - travis_retry dotnet restore ../
+
+services:
+  - docker
+
+before_script:
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST, BRANCH=$BRANCH"
+
+script: 
+  - dotnet build 
+  - grunt all
+#  - cd $TRAVIS_BUILD_DIR/src/SmarterBalanced.ScoringGuide.Test
+#  - dotnet test 
+  - dotnet publish $TRAVIS_BUILD_DIR/src/SmarterBalanced.ScoringGuide.Web -o $TRAVIS_BUILD_DIR/publish/
+
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: required
+    dotnet: 1.0.4
+    mono: none
+
+#Docker section
+
