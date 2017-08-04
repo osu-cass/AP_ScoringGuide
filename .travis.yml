@@ -9,7 +9,7 @@ install:
 #  - travis_retry pip install ecs-deploy
 #  - travis_retry pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
-  - cd $TRAVIS_BUILD_DIR/src/SmarterBalanced.ScoringGuide.Web
+  - cd $TRAVIS_BUILD_DIR/Source/SmarterBalanced.ScoringGuide.Web
   - travis_retry npm install 
   - travis_retry $(npm bin)/bower install
   - travis_retry dotnet restore ../
@@ -24,9 +24,9 @@ before_script:
 script: 
   - dotnet build 
   - grunt all
-#  - cd $TRAVIS_BUILD_DIR/src/SmarterBalanced.ScoringGuide.Test
+#  - cd $TRAVIS_BUILD_DIR/Source/SmarterBalanced.ScoringGuide.Test
 #  - dotnet test 
-  - dotnet publish $TRAVIS_BUILD_DIR/src/SmarterBalanced.ScoringGuide.Web -o $TRAVIS_BUILD_DIR/publish/
+  - dotnet publish $TRAVIS_BUILD_DIR/Source/SmarterBalanced.ScoringGuide.Web -o $TRAVIS_BUILD_DIR/publish/
 
 matrix:
   include:
