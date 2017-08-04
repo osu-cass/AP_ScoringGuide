@@ -1,9 +1,11 @@
-﻿import { ItemCardViewModel } from "./ItemCard";
-import * as $ from 'jquery'
+﻿import * as ItemCard from "./ItemCard";
+import * as $ from 'jquery';
+import * as GradeLevels from './GradeLevels';
 
 export interface ScoreSearchParams {
-    itemKey: number;
-    bankKey: number;
+    gradeLevels: GradeLevels.GradeLevels;
+    subjects: string[];
+    techType: string[];
 }
 
 async function get<T>(url: string, params: object) {
@@ -20,4 +22,4 @@ async function get<T>(url: string, params: object) {
     });
 }
 
-export const ScoreSearchClient = (params: ScoreSearchParams) => get<ItemCardViewModel>("/Controller/ScoringGuideController", params) 
+export const ScoreSearchClient = (params: ScoreSearchParams) => get<ItemCard.ItemCardViewModel[]>("/ScoringGuide/Search", params) 

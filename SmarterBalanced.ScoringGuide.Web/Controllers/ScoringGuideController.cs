@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SmarterBalanced.ScoringGuide.Core.Repos;
+using SmarterBalanced.SampleItems.Dal.Providers.Models;
+using SmarterBalanced.ScoringGuide.Core.Repos.Models;
 
 namespace SmarterBalanced.ScoringGuide.Web.Controllers
 {
@@ -14,10 +16,11 @@ namespace SmarterBalanced.ScoringGuide.Web.Controllers
         {
             this.scoringRepo = scoringRepo;
         }
-        public IActionResult Search(int bankKey, int itemKey)
+        public IActionResult Search(GradeLevels gradeLevels, string[] subject, string[] techType)
         {
-            var item = scoringRepo.GetItemCard(bankKey, itemKey);
-            return Json(item);
+            var searchParams = new ScoreSearchParams(gradeLevels, subject, techType);
+            var items = scoringRepo.GetItemCards(searchParams);
+            return Json(items);
         }
         public IActionResult Index()
         {

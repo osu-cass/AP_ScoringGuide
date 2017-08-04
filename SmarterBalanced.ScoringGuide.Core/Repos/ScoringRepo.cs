@@ -31,7 +31,25 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
 
         public List<ItemCardViewModel> GetItemCards(ScoreSearchParams scoreParams)
         {
-            throw new NotImplementedException();
+            var query = context.ItemCards.Where(i => i.Grade != GradeLevels.NA && !i.BrailleOnlyItem);
+
+            if(scoreParams == null)
+            {
+                return query.ToList();
+            }
+
+            if (scoreParams.Grades != GradeLevels.All && scoreParams.Grades != GradeLevels.NA)
+            {
+                query = query.Where(i => scoreParams.Subjects.Contains(i.SubjectCode));
+            }
+
+            //TODO: what is CAT technology? filter? ignore?
+            if (scoreParams.TechType.Any(t => t.ToLower() == "pt"))
+            {
+                query = query.Where(i => i.IsPerformanceItem);
+            }
+
+            return query.OrderBy(i => i.SubjectCode).ThenBy(i => i.Grade).ThenBy(i => i.ClaimCode).ToList();
         }
     }
 }
