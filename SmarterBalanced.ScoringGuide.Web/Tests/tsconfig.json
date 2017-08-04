@@ -6,13 +6,12 @@
     "removeComments": false,
     "sourceMap": true,
     "target": "es5",
-    "outDir": "../wwwroot/scripts",
+    "outDir": "../wwwroot/js",
     "jsx": "react",
     "strictNullChecks": true
   },
   "exclude": [
     "node_modules",
     "wwwroot"
-  ],
-  "compileOnSave": true
+  ]
 }
