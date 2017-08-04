@@ -14,13 +14,6 @@
 
   </ItemGroup>
   
-  <ItemGroup>
-
-    <None Update="wwwroot\scripts\*.js.map">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
-  
   <PropertyGroup>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
   </PropertyGroup>

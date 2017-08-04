@@ -5,14 +5,13 @@
     "noEmitOnError": false,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es2015",
-    "outDir": "../wwwroot/scripts",
+    "target": "es5",
+    "outDir": "../wwwroot/js",
     "jsx": "react",
     "strictNullChecks": true
   },
   "exclude": [
     "node_modules",
     "wwwroot"
-  ],
-  "compileOnSave": true
+  ]
 }
