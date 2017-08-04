@@ -24,8 +24,9 @@ before_script:
 script: 
   - dotnet build 
   - grunt all
-#  - cd $TRAVIS_BUILD_DIR/Source/SmarterBalanced.ScoringGuide.Test
-#  - dotnet test 
+  - npm test
+  - cd $TRAVIS_BUILD_DIR/Source/SmarterBalanced.ScoringGuide.Test
+  - dotnet test 
   - dotnet publish $TRAVIS_BUILD_DIR/Source/SmarterBalanced.ScoringGuide.Web -o $TRAVIS_BUILD_DIR/publish/
 
 matrix:
