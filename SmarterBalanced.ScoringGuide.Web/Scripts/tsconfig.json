@@ -5,10 +5,11 @@
     "noEmitOnError": false,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es2015",
+    "target": "es5",
     "outDir": "../wwwroot/scripts",
     "jsx": "react",
-    "strictNullChecks": true
+    "strictNullChecks": true,
+     "lib": ["es2015", "dom"]
   },
   "exclude": [
     "node_modules",

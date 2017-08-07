@@ -10,11 +10,13 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos.Models
         public GradeLevels Grades { get; }
         public IList<string> Subjects { get; }
         public IList<string> TechType { get; }
-        public ScoreSearchParams(GradeLevels gradeLevels, string[] subjects, string[] techType)
+        public Boolean IsBraille { get; }
+        public ScoreSearchParams(GradeLevels gradeLevels, string[] subjects, string[] techType, bool braille)
         {
             Grades = gradeLevels;
             Subjects = subjects;
             TechType = techType;
+            IsBraille = braille;
         }
     }
 
