@@ -16,9 +16,9 @@ namespace SmarterBalanced.ScoringGuide.Web.Controllers
         {
             this.scoringRepo = scoringRepo;
         }
-        public IActionResult Search(GradeLevels gradeLevels, string[] subject, string[] techType)
+        public IActionResult Search(GradeLevels gradeLevels, string[] subject, string[] techType, bool braille)
         {
-            var searchParams = new ScoreSearchParams(gradeLevels, subject, techType);
+            var searchParams = new ScoreSearchParams(gradeLevels, subject, techType, braille);
             var items = scoringRepo.GetItemCards(searchParams);
             return Json(items);
         }
