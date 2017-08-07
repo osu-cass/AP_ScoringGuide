@@ -5,6 +5,7 @@ import * as ItemModels from './ItemModels';
 import * as ApiModels from './ApiModels';
 import * as ItemCard from './ItemCard';
 import * as GradeLevels from './GradeLevels';
+import * as ItemTable from './ItemTable';
 
 export interface Props {
 }
@@ -57,16 +58,45 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             .catch((err) => this.onSearchError(err));
     }
 
+    isLoading() {
+        return this.state.itemSearchResult.kind === "loading" || this.state.itemSearchResult.kind === "reloading";
+    }
+
     render() {
-        var result;
-        if (this.state.itemSearchResult.kind == "success") {
-            result = this.state.itemSearchResult.content;
+        const searchResults = this.state.itemSearchResult;
+
+        let resultElement: JSX.Element[] | JSX.Element | undefined;
+        if (searchResults.kind === "success" || searchResults.kind === "reloading") {
+            if (searchResults.content == null || searchResults.content.length === 0) {
+                resultElement = <span className="placeholder-text" role="alert">No results found for the given search terms.</span>
+            }
+            else {
+                const TableModel: ItemTable.ItemTableModel = {
+                    data: searchResults.content,
+                    sortables: {
+                        item: { State: ItemTable.SortingState.NoSort, Priority: 0 },
+                        subject: { State: ItemTable.SortingState.NoSort, Priority: 0 },
+                        grade: { State: ItemTable.SortingState.NoSort, Priority: 0 },
+                        claimAndTaget: { State: ItemTable.SortingState.NoSort, Priority: 0 },
+                        interactionType: { State: ItemTable.SortingState.NoSort, Priority: 0 }
+                    }
+                };
+                resultElement = <ItemTable.ItemTable {...TableModel} />;
+            }
+        } else if (searchResults.kind === "failure") {
+            resultElement = <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div>;
         } else {
-            result = null;
+            resultElement = undefined;
         }
+        const isLoading = this.isLoading();
         return (
+            // TODO: ItemViewer Stuff
             //<ItemViewerFrame.ItemFrame url="http://ivs.smarterbalanced.org/items?ids=187-1437" />
-            <div></div>
+
+
+            <div className="search-container">
+                {resultElement}
+            </div>
         );
     }
 }

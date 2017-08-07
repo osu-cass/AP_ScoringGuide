@@ -232,3 +232,76 @@ h1, h2, h3, h4, h5 {
 }
 
 
+.search-results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    flex-basis: 600px;
+    justify-content: center;
+    padding: 20px;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: #cccccc;
+    border-radius: 0px 0px 10px 10px;
+    margin-top: -20px;
+    background-color: #ffffff;
+}
+
+.selected {
+    background-color: #63666A;
+    color: white;
+}
+
+.selected:hover {
+    background-color: #535559;
+    color: white;
+}
+
+.selected:focus {
+    background-color: #535559;
+    color: white;
+}
+
+.placeholder-text {
+    color: darkgray;
+    font-size: @font-size-base;
+    padding: 8px;
+}
+
+table.item-table {
+    width: auto;
+    display: block;
+    margin: 8px;
+    background-color: #E7E7E7;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #D9D9D9;
+}
+
+table.item-table > thead {
+    background-color: #E7E7E7;
+    border-radius: 5px;
+}
+
+table.item-table > tbody {
+    display: block;
+    height: 280px;
+    overflow: auto;
+}
+
+table.item-table > tbody > tr:nth-child(even) {
+    background-color: #F3F3F3;
+    border: 1px solid #D9D9D9;
+}
+
+table.item-table > tbody > tr:nth-child(odd) {
+    background-color: #F9F9F9;
+    border: 1px solid #D9D9D9;
+}
+
+table.item-table > thead > tr > th,
+table.item-table > tbody > tr > td {
+    width: 150px;
+    padding: 5px;
+}
