@@ -263,6 +263,7 @@ __pycache__/
 #Javascript/Typescript
 _references.js
 /**/wwwroot/js/
+/**/wwwroot/scripts/
 /SmarterBalanced.ScoringGuide.Web/.tscache/*
 /SmarterBalanced.ScoringGuide.Web/Scripts/.baseDir.ts
 
