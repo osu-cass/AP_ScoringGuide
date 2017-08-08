@@ -92,7 +92,7 @@ export class RubricComponent extends React.Component<Rubric, {}> {
     render() {
         const label = `${this.props.language} Rubric`;
         return (
-            <div>
+            <div className="rubric-content">
                 {this.renderRubrics()}
                 {this.renderSampleResponses()}
             </div>

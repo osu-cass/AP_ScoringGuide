@@ -1,5 +1,7 @@
 ﻿import * as React from 'react';
 import * as GradeLevels from './GradeLevels';
+import * as API from './ApiModels';
+import * as AboutItem from './AboutItem';
 
 export interface ItemCardViewModel {
     bankKey: number;
@@ -21,7 +23,6 @@ export function itemPageLink(bankKey: number, itemKey: number) {
 }
 
 export class ItemCard extends React.Component<ItemCardViewModel, {}> {
-
     handleKeyPress(bankKey: number, itemKey: number, e: React.KeyboardEvent<HTMLElement>) {
         if (e.keyCode === 13 || e.keyCode === 23) {
             itemPageLink(bankKey, itemKey);
