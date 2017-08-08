@@ -75,7 +75,25 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         return this.state.itemSearchResult.kind === "loading" || this.state.itemSearchResult.kind === "reloading";
     }
 
-    render() {
+    renderAboutItemDetails() {
+
+        const selectedResult = this.state.selectedItem;
+        if (selectedResult.kind == "success" && selectedResult.content) {
+            const itemCard = selectedResult.content.itemCardViewModel;
+            const url = "http://ivs.smarterbalanced.org/items?ids=" + itemCard.bankKey.toString() + "-" + itemCard.itemKey.toString();
+            return (
+                <div>
+                    <ItemCardViewer.ItemCardViewer {...selectedResult.content} />
+                    <ItemViewerFrame.ItemFrame url={url} />
+                </div>
+            );
+        } else {
+            return (<div></div>);
+        }
+
+    }
+
+    renderSearch() {
         const searchResults = this.state.itemSearchResult;
 
         let resultElement: JSX.Element[] | JSX.Element | undefined;
@@ -99,27 +117,17 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         } else if (searchResults.kind === "failure") {
             resultElement = <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div>;
         }
-        const selectedResult = this.state.selectedItem;
-        if (selectedResult.kind == "success" && selectedResult.content) {
-            const itemCard = selectedResult.content.itemCardViewModel;
-            const url = "http://ivs.smarterbalanced.org/items?ids=" + itemCard.bankKey.toString() + "-" + itemCard.itemKey.toString(); 
-            return (
-                <div>
-                    <ItemCardViewer.ItemCardViewer {...selectedResult.content} />
-                    <ItemViewerFrame.ItemFrame url={url}/>
-                </div>
-            );
-        } else {
-            return (<div></div>);
-        }
+
+        return resultElement;
+    }
+
+    render() {
+      
         const isLoading = this.isLoading();
         return (
-            // TODO: ItemViewer Stuff
-            //<ItemViewerFrame.ItemFrame url="http://ivs.smarterbalanced.org/items?ids=187-1437" />
-
-
             <div className="search-container">
-                {resultElement}
+                {this.renderSearch()}
+                {this.renderAboutItemDetails()}
             </div>
         );
     }
