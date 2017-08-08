@@ -20,6 +20,7 @@ interface TableSortables {
 export interface ItemTableModel {
     data: ItemCard.ItemCardViewModel[];
     sortables: TableSortables;
+    onClick(item: ItemCard.ItemCardViewModel): void;
 }
 
 const decendingArrow = (
@@ -229,7 +230,7 @@ export class ItemTable extends React.Component<ItemTableModel, {}> {
                             </thead>
                             <tbody>
                                 {this.props.data.map(digest =>
-                                    <ItemTableRow.ItemTableRow {...digest} key={digest.bankKey.toString() + "-" + digest.itemKey.toString()} />)}
+                                    <ItemTableRow.ItemTableRow itemCard={digest} onClick={this.props.onClick} key={digest.bankKey.toString() + "-" + digest.itemKey.toString()} />)}
                             </tbody>
                         </table>
                     </div>

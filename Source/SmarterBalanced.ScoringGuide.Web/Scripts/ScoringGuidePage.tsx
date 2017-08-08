@@ -25,7 +25,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             searchParams: {
                 gradeLevels: GradeLevels.GradeLevels.NA,
                 subjects: [],
-                techType: ["pt"]
+                techType: []
             },
             itemSearchResult: { kind: "loading" },
             selectedItem: { kind: "loading" }
@@ -56,8 +56,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.setState({
             itemSearchResult: { kind: "success", content: items },
         });
-        //TODO: remove once table is implemented
-        this.onSelectItem(items[0]);
     }
 
     onSearchError(err: any) {
@@ -110,7 +108,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                         grade: { State: ItemTable.SortingState.NoSort, Priority: 0 },
                         claimAndTaget: { State: ItemTable.SortingState.NoSort, Priority: 0 },
                         interactionType: { State: ItemTable.SortingState.NoSort, Priority: 0 }
-                    }
+                    },
+                    onClick: this.onSelectItem
                 };
                 resultElement = <ItemTable.ItemTable {...TableModel} />;
             }
