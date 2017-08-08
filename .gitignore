@@ -264,8 +264,8 @@ __pycache__/
 _references.js
 /**/wwwroot/js/
 /**/wwwroot/scripts/
-/SmarterBalanced.ScoringGuide.Web/.tscache/*
-/SmarterBalanced.ScoringGuide.Web/Scripts/.baseDir.ts
+/**/.tscache/*
+/**/.baseDir.ts
 
 # minified css
 **/*.min.css

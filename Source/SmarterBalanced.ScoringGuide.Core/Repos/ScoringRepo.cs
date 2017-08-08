@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace SmarterBalanced.ScoringGuide.Core.Repos
 {
-    public class ScoringRepo : IScoringRepo
+    public class ScoringRepo : AboutItemsRepo, IScoringRepo
     {
         private readonly SampleItemsContext context;
         private readonly ILogger logger;
-        public ScoringRepo(SampleItemsContext context, ILoggerFactory loggerFactory)
+        public ScoringRepo(SampleItemsContext context, ILoggerFactory loggerFactory) : base(context, loggerFactory)
         {
             this.context = context;
             logger = loggerFactory.CreateLogger<ScoringRepo>();

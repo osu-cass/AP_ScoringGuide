@@ -5,6 +5,8 @@ import * as ItemModels from './ItemModels';
 import * as ApiModels from './ApiModels';
 import * as ItemCard from './ItemCard';
 import * as GradeLevels from './GradeLevels';
+import * as ItemCardViewer from './ItemCardViewer';
+import * as AboutItem from './AboutItem';
 import * as ItemTable from './ItemTable';
 
 export interface Props {
@@ -13,7 +15,7 @@ export interface Props {
 export interface State {
     searchParams: ItemModels.ScoreSearchParams;
     itemSearchResult: ApiModels.Resource<ItemCard.ItemCardViewModel[]>;
-    selectedItem?: ItemCard.ItemCardViewModel;
+    selectedItem: ApiModels.Resource<AboutItem.AboutThisItem>;
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
@@ -25,17 +27,28 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 subjects: [],
                 techType: ["pt"]
             },
-            itemSearchResult: { kind: "loading" }
+            itemSearchResult: { kind: "loading" },
+            selectedItem: { kind: "loading" }
         }
         this.callSearch();
     }
 
     //TODO: call as event handler
     onSelectItem = (item: ItemCard.ItemCardViewModel) => {
-        this.setState({
-            selectedItem: item
-        })
+        AboutItem.ScoreSearchClient({ bankKey: item.bankKey, itemKey: item.itemKey })
+            .then((data) => this.onAboutItemSuccess(data))
+            .catch((err) => this.onAboutItemError(err));
     };
+
+    onAboutItemSuccess(item: AboutItem.AboutThisItem) {
+        this.setState({
+            selectedItem: { kind: "success", content: item }
+        })
+    }
+
+    onAboutItemError(err: any) {
+
+    }
 
     onSearchSuccess(result: ItemCard.ItemCardViewModel[]) {
         const searchParams = this.state.searchParams;
@@ -85,8 +98,19 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             }
         } else if (searchResults.kind === "failure") {
             resultElement = <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div>;
+        }
+        const selectedResult = this.state.selectedItem;
+        if (selectedResult.kind == "success" && selectedResult.content) {
+            const itemCard = selectedResult.content.itemCardViewModel;
+            const url = "http://ivs.smarterbalanced.org/items?ids=" + itemCard.bankKey.toString() + "-" + itemCard.itemKey.toString(); 
+            return (
+                <div>
+                    <ItemCardViewer.ItemCardViewer {...selectedResult.content} />
+                    <ItemViewerFrame.ItemFrame url={url}/>
+                </div>
+            );
         } else {
-            resultElement = undefined;
+            return (<div></div>);
         }
         const isLoading = this.isLoading();
         return (
@@ -104,5 +128,4 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 export function initializePage() {
     const container = document.getElementById("react-page-container");
     ReactDOM.render(<ScoringGuidePage />, container)
-
 }
