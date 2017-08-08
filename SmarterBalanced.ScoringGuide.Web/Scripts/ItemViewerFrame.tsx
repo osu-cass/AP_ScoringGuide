@@ -1,5 +1,4 @@
 ﻿import * as React from 'react';
-import * as ItemInformation from './ItemInformation';
 
 interface FrameProps {
     url: string;

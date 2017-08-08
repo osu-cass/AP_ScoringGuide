@@ -4,7 +4,7 @@
 
 interface Success<T> {
     kind: "success";
-    content: T | null;
+    content: T | undefined;
 }
 
 interface Failure {
@@ -13,7 +13,7 @@ interface Failure {
 
 interface Reloading<T> {
     kind: "reloading";
-    content: T | null;
+    content: T | undefined;
 }
 
 export type Resource<T> = Loading | Success<T> | Reloading<T> | Failure
@@ -29,3 +29,18 @@ export type Resource<T> = Loading | Success<T> | Reloading<T> | Failure
 //    }
 //    return queryObject;
 //}
+
+
+export async function get<T>(url: string, params: object) {
+    return new Promise<T>((resolve, reject) => {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            traditional: true,
+            data: params,
+            success: resolve,
+            error: (xhr, status, err) => reject(new Error(err)),
+            type: "GET"
+        })
+    });
+}

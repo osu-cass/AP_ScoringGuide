@@ -16,6 +16,18 @@ namespace SmarterBalanced.ScoringGuide.Web.Controllers
         {
             this.scoringRepo = scoringRepo;
         }
+
+        public IActionResult AboutThisItem(int? bankKey, int? itemKey)
+        {
+            if (!bankKey.HasValue || !itemKey.HasValue)
+            {
+                return BadRequest();
+            }
+
+            var aboutThis = scoringRepo.GetAboutThisItem(bankKey.Value, itemKey.Value);
+
+            return Json(aboutThis);
+        }
         public IActionResult Search(GradeLevels gradeLevels, string[] subject, string[] techType, bool braille)
         {
             var searchParams = new ScoreSearchParams(gradeLevels, subject, techType, braille);

@@ -13,5 +13,7 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
         List<ItemCardViewModel> GetItemCards();
         List<ItemCardViewModel> GetItemCards(ScoreSearchParams scoreParams);
 
+        AboutThisItem GetAboutThisItem(int itemBank, int itemKey);
+
     }
 }
