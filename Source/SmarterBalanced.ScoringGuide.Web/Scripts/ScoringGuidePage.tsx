@@ -154,17 +154,21 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             else {
                 resultElement =
                     <div className="search-container">
-                        <div className="search-results">
-                            <ItemTable.HeaderTable
-                                sorts={this.state.sorts}
-                                onHeaderClick={this.onClickHeader}
-                                columns={this.headerColumns} />
-                            <ItemTable.DataTable
-                                mapRows={this.getTableData(searchResults.content)}
-                                rowOnClick={this.onSelectItem}
-                                sort={this.state.sorts}
-                                tableRef={ref => this.dataTableRef = ref}
-                                columns={this.headerColumns} />
+                    <div className="search-results">
+                        <div className="search-controls">
+                            <button className="clear-sort" onClick={this.clearSort}>Clear Sort</button>
+                            <button>Print Items</button>
+                        </div>
+                        <ItemTable.HeaderTable
+                            sorts={this.state.sorts}
+                            onHeaderClick={this.onClickHeader}
+                            columns={this.headerColumns} />
+                        <ItemTable.DataTable
+                            mapRows={this.getTableData(searchResults.content)}
+                            rowOnClick={this.onSelectItem}
+                            sort={this.state.sorts}
+                            tableRef={ref => this.dataTableRef = ref}
+                            columns={this.headerColumns} />
                         </div>
                     </div>;
             }
