@@ -3,6 +3,7 @@ import * as Rubric from './Rubric';
 import * as AboutItem from './AboutItem';
 import * as PageTabs from './PageTabs';
 import * as ItemViewerFrame from './ItemViewerFrame';
+import * as ItemInformation from './ItemInformation';
 
 
 export interface Props {
@@ -33,11 +34,9 @@ export class ItemCardViewer extends React.Component<Props, State> {
 
         if (selectedTab == "viewer") {
             const url = "http://ivs.smarterbalanced.org/items?ids=" + itemCard.bankKey.toString() + "-" + itemCard.itemKey.toString();
-
             return (
                 <div className="item-content">
                     <ItemViewerFrame.ItemFrame url={url} />
-
                 </div>
             );
         }
@@ -49,9 +48,13 @@ export class ItemCardViewer extends React.Component<Props, State> {
         }
         else if (selectedTab == "information") {
             return (
-                <div>
-                    <div>{this.props.aboutItem.itemCardViewModel.bankKey}</div>
-
+                <div className="item-content">
+                    <div><ItemInformation.ItemInformationDetail
+                        itemCardViewModel={this.props.aboutItem.itemCardViewModel}
+                        depthOfKnowledge={this.props.aboutItem.depthOfKnowledge}
+                        commonCoreStandardsDescription={this.props.aboutItem.commonCoreStandardsDescription}
+                        targetDescription={this.props.aboutItem.targetDescription}/>
+                    </div>
                 </div>
             );
         }
