@@ -16,7 +16,7 @@ export interface HeaderSort {
 export interface SortColumn {
     header: Header;
     className: string;
-    accessor: (mcs: ItemCard.ItemCardViewModel) => string | number;
+    accessor: (label: ItemCard.ItemCardViewModel) => string | number;
     compare: (a: ItemCard.ItemCardViewModel, b: ItemCard.ItemCardViewModel) => number;
 }
 
@@ -36,13 +36,13 @@ export const headerColumns: SortColumn[] = [
     {
         header: "Item",
         className: "item",
-        accessor: mcs => mcs.itemKey,
+        accessor: label => label.itemKey,
         compare: (a, b) => (a.itemKey) - (b.itemKey)
     },
     {
         header: "Claim/Target",
         className: "claimAndTarget",
-        accessor: mcs => mcs.claimLabel + "/" + mcs.target,
+        accessor: label => label.claimLabel + "/" + label.target,
         compare: (a, b) => {
             if (a.claimCode < b.claimCode || a.target < b.target) {
                 return 1
@@ -58,19 +58,19 @@ export const headerColumns: SortColumn[] = [
     {
         header: "Subject",
         className: "subject",
-        accessor: mcs => mcs.subjectLabel,
+        accessor: label => label.subjectLabel,
         compare: (a, b) => (a.subjectCode).localeCompare(b.subjectCode)
     },
     {
         header: "Grade",
         className: "grade",
-        accessor: mcs => mcs.gradeLabel,
+        accessor: label => label.gradeLabel,
         compare: (a, b) => (a.grade) - (b.grade)
     },
     {
         header: "Item Type",
         className: "interactionType",
-        accessor: mcs => mcs.interactionTypeLabel,
+        accessor: label => label.interactionTypeLabel,
         compare: (a, b) => (a.interactionTypeCode).localeCompare(b.interactionTypeCode)
     },
 ];
@@ -83,8 +83,8 @@ interface HeaderProps {
     sorts: HeaderSort[];
 }
 
-export class MCHeaders extends React.Component<HeaderProps, {}> {
-    compareMCRs(lhs: ItemCard.ItemCardViewModel, rhs: ItemCard.ItemCardViewModel): number {
+export class HeaderTable extends React.Component<HeaderProps, {}> {
+    compareColumn(lhs: ItemCard.ItemCardViewModel, rhs: ItemCard.ItemCardViewModel): number {
         const sorts = this.props.sorts || [];
         for (const sort of sorts) {
             const diff = sort.col.compare(lhs, rhs) * sort.direction;
@@ -138,34 +138,34 @@ interface Props {
     columns: SortColumn[];
 }
 
-export class MCComponent extends React.Component<Props, {}> {
+export class DataTable extends React.Component<Props, {}> {
     constructor(props: Props) {
         super(props);
         this.state = {};
     }
 
-    renderCell(col: SortColumn, mcr: ItemCard.ItemCardViewModel): JSX.Element {
+    renderCell(col: SortColumn, cellData: ItemCard.ItemCardViewModel): JSX.Element {
 
         return (
             <td key={col.header}
                 className={col.className}>
                 <div className={col.className}>
-                    {col.accessor(mcr)}
+                    {col.accessor(cellData)}
                 </div>
             </td>
         );
     }
 
-    renderRow(mcr: ItemCard.ItemCardViewModel): JSX.Element {
+    renderRow(rowData: ItemCard.ItemCardViewModel): JSX.Element {
         return (
-            <tr onClick={() => this.props.rowOnClick(mcr)}>
-                {this.props.columns.map(col => this.renderCell(col, mcr))}
+            <tr onClick={() => this.props.rowOnClick(rowData)}>
+                {this.props.columns.map(col => this.renderCell(col, rowData))}
             </tr>
         );
     }
 
     renderRows(): JSX.Element {
-        const rows = this.props.mapRows.map(mcr => this.renderRow(mcr));
+        const rows = this.props.mapRows.map(rowData => this.renderRow(rowData));
         return (
             <tbody>{rows}</tbody>
         );

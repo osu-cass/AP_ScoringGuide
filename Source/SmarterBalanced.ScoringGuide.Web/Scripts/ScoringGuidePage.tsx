@@ -7,7 +7,7 @@ import * as ItemCard from './ItemCard';
 import * as GradeLevels from './GradeLevels';
 import * as ItemCardViewer from './ItemCardViewer';
 import * as AboutItem from './AboutItem';
-import * as MapComponent from './MapComponent';
+import * as ItemTable from './ItemTable';
 
 export interface State {
     searchParams: ItemModels.ScoreSearchParams;
@@ -20,12 +20,12 @@ export interface Props {
 
 export interface State {
     selectedRow?: number; // Show only MCRs with this row number. This doesn't refer to a single MCR.
-    sorts: MapComponent.HeaderSort[];
+    sorts: ItemTable.HeaderSort[];
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
-    private headerColumns = MapComponent.headerColumns;
-    private refMCBody: HTMLTableElement;
+    private headerColumns = ItemTable.headerColumns;
+    private dataTableRef: HTMLTableElement;
 
     constructor(props: Props) {
         super(props);
@@ -100,19 +100,19 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     }
 
-    onMCHeaderClick = (col: MapComponent.SortColumn) => {
+    onClickHeader = (col: ItemTable.SortColumn) => {
         const newSorts = (this.state.sorts || []).slice();
         const headIdx = newSorts.findIndex(hs => hs.col.header === col.header);
         if (headIdx !== -1) {
             const newSort = Object.assign({}, newSorts[headIdx]);
-            newSort.direction = newSort.direction === MapComponent.SortDirection.Ascending
-                ? MapComponent.SortDirection.Descending
-                : MapComponent.SortDirection.Ascending;
+            newSort.direction = newSort.direction === ItemTable.SortDirection.Ascending
+                ? ItemTable.SortDirection.Descending
+                : ItemTable.SortDirection.Ascending;
             newSorts[headIdx] = newSort;
         } else {
-            const newSort: MapComponent.HeaderSort = {
+            const newSort: ItemTable.HeaderSort = {
                 col: col,
-                direction: MapComponent.SortDirection.Ascending
+                direction: ItemTable.SortDirection.Ascending
             };
             newSorts.push(newSort);
         }
@@ -123,7 +123,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.setState({ sorts: [] });
     }
 
-    compareMCRs(lhs: ItemCard.ItemCardViewModel, rhs: ItemCard.ItemCardViewModel): number {
+    invokeMultiSort(lhs: ItemCard.ItemCardViewModel, rhs: ItemCard.ItemCardViewModel): number {
         const sorts = this.state.sorts || [];
         for (const sort of sorts) {
             const diff = sort.col.compare(lhs, rhs) * sort.direction;
@@ -134,12 +134,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         return 0;
     }
 
-    getDisplayMCRs(data: ItemCard.ItemCardViewModel[]): ItemCard.ItemCardViewModel[] {
-        const sortedMCRs = this.state.sorts && this.state.sorts.length !== 0
-            ? data.sort((lhs, rhs) => this.compareMCRs(lhs, rhs))
+    //Post sorted table data.
+    getTableData(data: ItemCard.ItemCardViewModel[]): ItemCard.ItemCardViewModel[] {
+        const sortedData = this.state.sorts && this.state.sorts.length !== 0
+            ? data.sort((lhs, rhs) => this.invokeMultiSort(lhs, rhs))
             : data;
 
-        return sortedMCRs;
+        return sortedData;
     }
 
     renderSearch() {
@@ -154,15 +155,15 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 resultElement =
                     <div className="search-container">
                         <div className="search-results">
-                            <MapComponent.MCHeaders
+                            <ItemTable.HeaderTable
                                 sorts={this.state.sorts}
-                                onHeaderClick={this.onMCHeaderClick}
+                                onHeaderClick={this.onClickHeader}
                                 columns={this.headerColumns} />
-                            <MapComponent.MCComponent
-                                mapRows={this.getDisplayMCRs(searchResults.content)}
+                            <ItemTable.DataTable
+                                mapRows={this.getTableData(searchResults.content)}
                                 rowOnClick={this.onSelectItem}
                                 sort={this.state.sorts}
-                                tableRef={ref => this.refMCBody = ref}
+                                tableRef={ref => this.dataTableRef = ref}
                                 columns={this.headerColumns} />
                         </div>
                     </div>;
