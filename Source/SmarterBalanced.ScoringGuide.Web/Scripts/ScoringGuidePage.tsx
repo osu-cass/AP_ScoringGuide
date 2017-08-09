@@ -7,10 +7,7 @@ import * as ItemCard from './ItemCard';
 import * as GradeLevels from './GradeLevels';
 import * as ItemCardViewer from './ItemCardViewer';
 import * as AboutItem from './AboutItem';
-import * as ItemTable from './ItemTable';
-
-export interface Props {
-}
+import * as MapComponent from './MapComponent';
 
 export interface State {
     searchParams: ItemModels.ScoreSearchParams;
@@ -18,7 +15,18 @@ export interface State {
     selectedItem: ApiModels.Resource<AboutItem.AboutThisItem>;
 }
 
+export interface Props {
+}
+
+export interface State {
+    selectedRow?: number; // Show only MCRs with this row number. This doesn't refer to a single MCR.
+    sorts: MapComponent.HeaderSort[];
+}
+
 export class ScoringGuidePage extends React.Component<Props, State> {
+    private headerColumns = MapComponent.headerColumns;
+    private refMCBody: HTMLTableElement;
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -28,7 +36,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 techType: []
             },
             itemSearchResult: { kind: "loading" },
-            selectedItem: { kind: "loading" }
+            selectedItem: { kind: "loading" },
+            selectedRow: 1,
+            sorts: [],
         }
         this.callSearch();
     }
@@ -74,7 +84,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     renderAboutItemDetails() {
-
         const selectedResult = this.state.selectedItem;
         if (selectedResult.kind == "success" && selectedResult.content) {
             const itemCard = selectedResult.content.itemCardViewModel;
@@ -91,6 +100,48 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     }
 
+    onMCHeaderClick = (col: MapComponent.SortColumn) => {
+        const newSorts = (this.state.sorts || []).slice();
+        const headIdx = newSorts.findIndex(hs => hs.col.header === col.header);
+        if (headIdx !== -1) {
+            const newSort = Object.assign({}, newSorts[headIdx]);
+            newSort.direction = newSort.direction === MapComponent.SortDirection.Ascending
+                ? MapComponent.SortDirection.Descending
+                : MapComponent.SortDirection.Ascending;
+            newSorts[headIdx] = newSort;
+        } else {
+            const newSort: MapComponent.HeaderSort = {
+                col: col,
+                direction: MapComponent.SortDirection.Ascending
+            };
+            newSorts.push(newSort);
+        }
+        this.setState({ sorts: newSorts });
+    }
+
+    clearSort = () => {
+        this.setState({ sorts: [] });
+    }
+
+    compareMCRs(lhs: ItemCard.ItemCardViewModel, rhs: ItemCard.ItemCardViewModel): number {
+        const sorts = this.state.sorts || [];
+        for (const sort of sorts) {
+            const diff = sort.col.compare(lhs, rhs) * sort.direction;
+            if (diff !== 0) {
+                return diff;
+            }
+        }
+        return 0;
+    }
+
+    getDisplayMCRs(data: ItemCard.ItemCardViewModel[]): ItemCard.ItemCardViewModel[] {
+        const sortedMCRs = this.state.sorts && this.state.sorts.length !== 0
+            ? data.sort((lhs, rhs) => this.compareMCRs(lhs, rhs))
+            : data;
+
+        return sortedMCRs;
+    }
+
     renderSearch() {
         const searchResults = this.state.itemSearchResult;
 
@@ -100,18 +151,21 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 resultElement = <span className="placeholder-text" role="alert">No results found for the given search terms.</span>
             }
             else {
-                const TableModel: ItemTable.ItemTableModel = {
-                    data: searchResults.content,
-                    sortables: {
-                        item: { State: ItemTable.SortingState.NoSort, Priority: 0 },
-                        subject: { State: ItemTable.SortingState.NoSort, Priority: 0 },
-                        grade: { State: ItemTable.SortingState.NoSort, Priority: 0 },
-                        claimAndTaget: { State: ItemTable.SortingState.NoSort, Priority: 0 },
-                        interactionType: { State: ItemTable.SortingState.NoSort, Priority: 0 }
-                    },
-                    onClick: this.onSelectItem
-                };
-                resultElement = <ItemTable.ItemTable {...TableModel} />;
+                resultElement =
+                    <div className="search-container">
+                        <div className="search-results">
+                            <MapComponent.MCHeaders
+                                sorts={this.state.sorts}
+                                onHeaderClick={this.onMCHeaderClick}
+                                columns={this.headerColumns} />
+                            <MapComponent.MCComponent
+                                mapRows={this.getDisplayMCRs(searchResults.content)}
+                                rowOnClick={this.onSelectItem}
+                                sort={this.state.sorts}
+                                tableRef={ref => this.refMCBody = ref}
+                                columns={this.headerColumns} />
+                        </div>
+                    </div>;
             }
         } else if (searchResults.kind === "failure") {
             resultElement = <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div>;
