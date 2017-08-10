@@ -33,5 +33,29 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos.Models
             EducationalDifficulty = educationalDifficulty;
             EvidenceStatement = evidenceStatement;
         }
+
+        public static AboutThisItem Create(
+          ImmutableArray<Rubric> rubrics = new ImmutableArray<Rubric>(),
+          ItemCardViewModel itemCard = null,
+          string targetDescription = "",
+          string depthOfKnowledge = "",
+          string commonCoreStandardsDescription = "",
+          string educationalDifficulty = "",
+          string evidenceStatement = "")
+        {
+
+            return new AboutThisItem
+            (
+                rubrics: rubrics,
+                itemCard: itemCard,
+                targetDescription: targetDescription,
+                depthOfKnowledge: depthOfKnowledge,
+                commonCoreStandardsDescription: commonCoreStandardsDescription,
+                educationalDifficulty: educationalDifficulty,
+                evidenceStatement: evidenceStatement
+            );
+    }
+
+
     }
 }

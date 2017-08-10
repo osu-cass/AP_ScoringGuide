@@ -21,21 +21,23 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
 
         public ItemCardViewModel GetItemCard(int bankKey, int itemKey)
         {
-            return context.ItemCards.SingleOrDefault(i => i.BankKey == bankKey && i.ItemKey == itemKey);
+            return context.ItemCards.FirstOrDefault(i => i.BankKey == bankKey && i.ItemKey == itemKey);
         }
 
-        public List<ItemCardViewModel> GetItemCards()
+
+        public List<ItemCardViewModel> GetItemCards(GradeLevels gradeLevels, string[] subject, string[] techType, bool braille)
         {
-            return context.ItemCards.ToList();
+            var scoreParams = new ScoreSearchParams(gradeLevels, subject, techType, braille);
+            return GetItemCards(scoreParams);
         }
 
-        public List<ItemCardViewModel> GetItemCards(ScoreSearchParams scoreParams)
+        public List<ItemCardViewModel> GetItemCards(ScoreSearchParams scoreParams = null)
         {
             var query = context.ItemCards.Where(i => i.Grade != GradeLevels.NA && !i.BrailleOnlyItem);
 
-            if(scoreParams == null)
+            if (scoreParams == null)
             {
-                return query.ToList();
+                return query.OrderBy(i => i.SubjectCode).ThenBy(i => i.Grade).ThenBy(i => i.ClaimCode).ToList();
             }
 
             if (scoreParams.Grades != GradeLevels.All && scoreParams.Grades != GradeLevels.NA)

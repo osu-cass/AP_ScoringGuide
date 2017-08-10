@@ -42,7 +42,7 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
 
         private ItemCardViewModel GetItemCardViewModel(int bankKey, int itemKey)
         {
-            return context.ItemCards.SingleOrDefault(item => item.BankKey == bankKey && item.ItemKey == itemKey);
+            return context.ItemCards.FirstOrDefault(item => item.BankKey == bankKey && item.ItemKey == itemKey);
         }
 
         public AboutThisItem GetAboutThisItem(int itemBank, int itemKey)
