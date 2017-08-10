@@ -53,7 +53,9 @@ export class ItemCardViewer extends React.Component<Props, State> {
                         itemCardViewModel={this.props.aboutItem.itemCardViewModel}
                         depthOfKnowledge={this.props.aboutItem.depthOfKnowledge}
                         commonCoreStandardsDescription={this.props.aboutItem.commonCoreStandardsDescription}
-                        targetDescription={this.props.aboutItem.targetDescription}/>
+                        targetDescription={this.props.aboutItem.targetDescription}
+                        educationalDifficulty={this.props.aboutItem.educationalDifficulty}
+                        evidenceStatement={this.props.aboutItem.evidenceStatement}/>
                     </div>
                 </div>
             );

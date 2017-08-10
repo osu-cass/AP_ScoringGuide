@@ -6,6 +6,8 @@ export interface Props {
     depthOfKnowledge: string;
     targetDescription: string;
     commonCoreStandardsDescription: string;
+    educationalDifficulty: string;
+    evidenceStatement: string;
 }
 
 export class ItemInformation extends React.Component<Props, {}> {
@@ -65,6 +67,8 @@ export class ItemInformationDetail extends React.Component<Props, {}> {
                 {this.renderField("Depth of Knowledge", this.props.depthOfKnowledge, "dok")}
                 {this.renderField("Common Core State Standard", this.props.commonCoreStandardsDescription, "ccss")}
                 {this.renderField("Target Description", this.props.targetDescription, "target-description")}
+                {this.renderField("Educational Difficulty", this.props.educationalDifficulty, "educational-difficulty")}
+                {this.renderField("Evidence Statement", this.props.evidenceStatement, "evidence-statement")}
 
             </div>
         );
