@@ -133,7 +133,7 @@ export class HeaderTable extends React.Component<HeaderProps, {}> {
 interface Props {
     tableRef?: (ref: HTMLTableElement) => void;
     mapRows: ItemCard.ItemCardViewModel[];
-    rowOnClick: (item: ItemCard.ItemCardViewModel) => void;
+    rowOnClick: (item: ItemCard.ItemCardViewModel, e: React.MouseEvent<HTMLTableRowElement>) => void;
     sort: HeaderSort[];
     columns: SortColumn[];
 }
@@ -156,16 +156,16 @@ export class DataTable extends React.Component<Props, {}> {
         );
     }
 
-    renderRow(rowData: ItemCard.ItemCardViewModel): JSX.Element {
+    renderRow(rowData: ItemCard.ItemCardViewModel, e: React.MouseEvent<HTMLTableRowElement>): JSX.Element {
         return (
-            <tr onClick={() => this.props.rowOnClick(rowData)}>
+            <tr onClick={() => this.props.rowOnClick(rowData,e)}>
                 {this.props.columns.map(col => this.renderCell(col, rowData))}
             </tr>
         );
     }
 
     renderRows(): JSX.Element {
-        const rows = this.props.mapRows.map(rowData => this.renderRow(rowData));
+        const rows = this.props.mapRows.map((rowData,e) => this.renderRow(rowData));
         return (
             <tbody>{rows}</tbody>
         );

@@ -43,17 +43,22 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.callSearch();
     }
 
-    //TODO: call as event handler
-    onSelectItem = (item: ItemCard.ItemCardViewModel) => {
+    onSelectItem = (item: ItemCard.ItemCardViewModel, e: React.MouseEvent<HTMLTableRowElement>) => {
         AboutItem.ScoreSearchClient({ bankKey: item.bankKey, itemKey: item.itemKey })
             .then((data) => this.onAboutItemSuccess(data))
             .catch((err) => this.onAboutItemError(err));
+
+        //const tableBody = $("#data-table > tbody > tr");
+        //if (tableBody != null) {
+        //    console.log(tableBody[idx]);
+        //    $(tableBody[idx]).addClass("selected-item");
+        //}
     };
 
     onAboutItemSuccess(item: AboutItem.AboutThisItem) {
         this.setState({
             selectedItem: { kind: "success", content: item }
-        })
+        });
     }
 
     onAboutItemError(err: any) {
