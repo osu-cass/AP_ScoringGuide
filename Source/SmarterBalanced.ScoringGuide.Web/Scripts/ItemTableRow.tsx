@@ -26,11 +26,11 @@ export class ItemTableRow extends React.Component<Props, {}> {
                 onClick={() => this.props.onClick(card)}
                 onKeyUp={(e) => this.handleKeyPress(e)}
                 tabIndex={0}>
-                <td>{card.itemKey}</td>
-                <td>{card.claimLabel}/{card.target}</td>
-                <td>{card.subjectLabel}</td>
-                <td>{card.gradeLabel}</td>
-                <td>{card.interactionTypeLabel}</td>
+                <td className="ItemNumber">{card.itemKey}</td>
+                <td className="Claim">{card.claimLabel}/{card.target}</td>
+                <td className="Subject">{card.subjectLabel}</td>
+                <td className="Grade">{card.gradeLabel}</td>
+                <td className="ItemType">{card.interactionTypeLabel}</td>
             </tr>
         );
     }

@@ -196,31 +196,31 @@ export class ItemTable extends React.Component<ItemTableModel, {}> {
                         <table className="item-table">
                             <thead>
                                 <tr>
-                                    <th onClick={() => {
+                                    <th className="ItemNumber" onClick={() => {
                                         this.cycleColumnSortState(this.props.sortables.item);
                                         this.invokeSort(this.props.sortables.item);
                                     }}>
                                         Item # {this.sortingArrowDisplay(this.props.sortables.item.State)}
                                     </th>
-                                    <th onClick={() => {
+                                    <th className="Claim" onClick={() => {
                                         this.cycleColumnSortState(this.props.sortables.claimAndTaget);
                                         this.invokeSort(this.props.sortables.claimAndTaget);
                                     }}>
                                         Claim/Target {this.sortingArrowDisplay(this.props.sortables.claimAndTaget.State)}
                                     </th>
-                                    <th onClick={() => {
+                                    <th className="Subject" onClick={() => {
                                         this.cycleColumnSortState(this.props.sortables.subject);
                                         this.invokeSort(this.props.sortables.subject);
                                     }}>
                                         Subject {this.sortingArrowDisplay(this.props.sortables.subject.State)}
                                     </th>
-                                    <th onClick={() => {
+                                    <th className="Grade" onClick={() => {
                                         this.cycleColumnSortState(this.props.sortables.grade);
                                         this.invokeSort(this.props.sortables.grade);
                                     }}>
                                         Grade {this.sortingArrowDisplay(this.props.sortables.grade.State)}
                                     </th>
-                                    <th onClick={() => {
+                                    <th className="ItemType" onClick={() => {
                                         this.cycleColumnSortState(this.props.sortables.interactionType);
                                         this.invokeSort(this.props.sortables.interactionType)
                                     }}>
