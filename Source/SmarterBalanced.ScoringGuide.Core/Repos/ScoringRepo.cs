@@ -42,7 +42,7 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
 
             if (scoreParams.Grades != GradeLevels.All && scoreParams.Grades != GradeLevels.NA)
             {
-                query = query.Where(i => scoreParams.Subjects.Contains(i.SubjectCode));
+                query = query.Where(i => scoreParams.Grades.Contains(i.Grade));
             }
 
             //TODO: what is CAT technology? filter? ignore?
