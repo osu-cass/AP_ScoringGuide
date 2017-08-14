@@ -122,6 +122,7 @@ export class HeaderTable extends React.Component<HeaderProps, {}> {
             <table className="item-table table mapcomponent-table">
                 <thead>
                     <tr className="primary">
+                        <td></td>
                         {this.props.columns.map(col => this.renderHeader(col))}
                     </tr>
                 </thead>
@@ -132,11 +133,17 @@ export class HeaderTable extends React.Component<HeaderProps, {}> {
 
 interface Props {
     tableRef?: (ref: HTMLTableElement) => void;
-    mapRows: ItemCard.ItemCardViewModel[];
-    rowOnClick: (item: ItemCard.ItemCardViewModel, e: React.MouseEvent<HTMLTableRowElement>) => void;
+    mapRows: dataTableModel[];
+    rowOnClick: (item: ItemCard.ItemCardViewModel) => void;
     sort: HeaderSort[];
     columns: SortColumn[];
 }
+
+export interface dataTableModel extends ItemCard.ItemCardViewModel {
+    isSelected?: boolean;
+}
+
+
 
 export class DataTable extends React.Component<Props, {}> {
     constructor(props: Props) {
@@ -144,8 +151,13 @@ export class DataTable extends React.Component<Props, {}> {
         this.state = {};
     }
 
-    renderCell(col: SortColumn, cellData: ItemCard.ItemCardViewModel): JSX.Element {
+    toggleSelectRow(rowData: dataTableModel, index: number) {
+        rowData.isSelected = !rowData.isSelected;
+        this.props.mapRows[index] = rowData;
+        this.setState(this.props);
+    }
 
+    renderCell(col: SortColumn, cellData: dataTableModel): JSX.Element {
         return (
             <td key={col.header}
                 className={col.className}>
@@ -156,16 +168,22 @@ export class DataTable extends React.Component<Props, {}> {
         );
     }
 
-    renderRow(rowData: ItemCard.ItemCardViewModel, e: React.MouseEvent<HTMLTableRowElement>): JSX.Element {
+    //TODO replace X with checkmark icon 
+    renderRow(rowData: dataTableModel,index:number): JSX.Element {
         return (
-            <tr onClick={() => this.props.rowOnClick(rowData,e)}>
+            <tr className={rowData.isSelected ? "selected-item" : ""}
+                onClick={() => {
+                    this.props.rowOnClick(rowData);
+                    this.toggleSelectRow(rowData, index);
+                }}>
+                <td>{rowData.isSelected ? "X" : ""}</td>
                 {this.props.columns.map(col => this.renderCell(col, rowData))}
             </tr>
         );
     }
 
     renderRows(): JSX.Element {
-        const rows = this.props.mapRows.map((rowData,e) => this.renderRow(rowData));
+        const rows = this.props.mapRows.map((rowData,idx) => this.renderRow(rowData,idx));
         return (
             <tbody>{rows}</tbody>
         );

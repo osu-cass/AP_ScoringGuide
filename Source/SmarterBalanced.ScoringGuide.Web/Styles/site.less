@@ -283,7 +283,12 @@ table.item-table > thead > tr > td,
 table.item-table > tbody > tr > td {
     width: 250px;
 }
+table.item-table > thead > tr > td:first-child,
+table.item-table > tbody > tr > td:first-child {
+    width: 50px;
+    text-align:center;
+}
 
-.selected-item {
-    background-color: #EBF1E4;
+tr.selected-item {
+    background-color: #EBF1E4 !important;
 }

@@ -43,16 +43,10 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.callSearch();
     }
 
-    onSelectItem = (item: ItemCard.ItemCardViewModel, e: React.MouseEvent<HTMLTableRowElement>) => {
+    onSelectItem = (item: ItemCard.ItemCardViewModel) => {
         AboutItem.ScoreSearchClient({ bankKey: item.bankKey, itemKey: item.itemKey })
             .then((data) => this.onAboutItemSuccess(data))
             .catch((err) => this.onAboutItemError(err));
-
-        //const tableBody = $("#data-table > tbody > tr");
-        //if (tableBody != null) {
-        //    console.log(tableBody[idx]);
-        //    $(tableBody[idx]).addClass("selected-item");
-        //}
     };
 
     onAboutItemSuccess(item: AboutItem.AboutThisItem) {
@@ -140,13 +134,19 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     //Post sorted table data.
-    getTableData(data: ItemCard.ItemCardViewModel[]): ItemCard.ItemCardViewModel[] {
+    getTableData(data: ItemCard.ItemCardViewModel[]): ItemTable.dataTableModel[] {
         const sortedData = this.state.sorts && this.state.sorts.length !== 0
             ? data.sort((lhs, rhs) => this.invokeMultiSort(lhs, rhs))
             : data;
 
         return sortedData;
+        //return sortedData.map(i => {
+        //    const dataTable: ItemTable.dataTableModel = { ...i, isSelected: false };
+        //    return dataTable;
+        //});
     }
+
+
 
     renderSearch() {
         const searchResults = this.state.itemSearchResult;
