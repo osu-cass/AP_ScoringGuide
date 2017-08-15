@@ -8,6 +8,7 @@ import * as GradeLevels from './GradeLevels';
 import * as ItemCardViewer from './ItemCardViewer';
 import * as AboutItem from './AboutItem';
 import * as ItemTable from './ItemTable';
+import * as ItemSearchDropdown from './ItemSearchDropdown';
 
 export interface State {
     searchParams: ItemModels.ScoreSearchParams;
@@ -140,10 +141,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             : data;
 
         return sortedData;
-        //return sortedData.map(i => {
-        //    const dataTable: ItemTable.dataTableModel = { ...i, isSelected: false };
-        //    return dataTable;
-        //});
     }
 
 
@@ -157,10 +154,24 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 resultElement = <span className="placeholder-text" role="alert">No results found for the given search terms.</span>
             }
             else {
+
+                //<ItemSearchDropdown.ItemSearchDropdown
+                //    interactionTypes={this.props.interactionTypes}
+                //    subjects={this.props.subjects}
+                //    onChange={(params) => this.beginSearch(params)}
+                //    selectSingleResult={() => this.selectSingleResult()}
+                //    isLoading={false} />
+
+
                 resultElement =
                     <div className="search-container">
                     <div className="search-results">
                         <div className="search-controls">
+
+                            
+                            
+
+
                             <button className="clear-sort" onClick={this.clearSort}>Clear Sort</button>
                             <button>Print Items</button>
                         </div>
