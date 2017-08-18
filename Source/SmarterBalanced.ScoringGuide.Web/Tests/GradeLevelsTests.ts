@@ -9,3 +9,15 @@ it('caseToString for high school', () => {
     const grade = GradeLevels.caseToString(GradeLevels.GradeLevels.High);
     expect(grade).toBe("High");
 });
+
+it("contains false for GradeLevels", () => {
+    const gradeToFind = GradeLevels.GradeLevels.Elementary;
+    const grade = GradeLevels.contains(GradeLevels.GradeLevels.Grade10, gradeToFind);
+    expect(grade).toBe(false);
+});
+
+it("contains true for GradeLevels", () => {
+    const gradeToFind = GradeLevels.GradeLevels.Elementary;
+    const grade = GradeLevels.contains(GradeLevels.GradeLevels.All, gradeToFind);
+    expect(grade).toBe(true);
+});
