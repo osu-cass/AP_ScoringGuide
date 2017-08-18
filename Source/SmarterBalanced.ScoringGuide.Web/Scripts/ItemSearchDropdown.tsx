@@ -1,24 +1,24 @@
 ﻿import * as React from 'react';
 import * as GradeLevels  from "./GradeLevels";
 
-interface InteractionType {
+export interface InteractionType {
     code: string;
     label: string;
 }
 
-interface Claim {
+export interface Claim {
     code: string;
     label: string;
 }
 
-interface Subject {
+export interface Subject {
     code: string;
     label: string;
     claims: Claim[];
     interactionTypeCodes: string[];
 }
 
-interface SearchAPIParams {
+export interface SearchAPIParams {
     itemId: string;
     gradeLevels: GradeLevels.GradeLevels;
     subjects: string[];

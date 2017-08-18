@@ -14,15 +14,34 @@ export interface State {
     searchParams: ItemModels.ScoreSearchParams;
     itemSearchResult: ApiModels.Resource<ItemCard.ItemCardViewModel[]>;
     selectedItem: ApiModels.Resource<AboutItem.AboutThisItem>;
-}
-
-export interface Props {
-}
-
-export interface State {
     selectedRow?: number; // Show only MCRs with this row number. This doesn't refer to a single MCR.
     sorts: ItemTable.HeaderSort[];
 }
+
+export interface Props {
+    interactionTypes: ItemSearchDropdown.InteractionType[];
+    subjects: ItemSearchDropdown.Subject[];
+    apiClient: ItemsSearchClient;
+}
+
+interface ItemsSearchClient {
+    itemsSearch(params: ItemSearchDropdown.SearchAPIParams,
+        onSuccess: (data: ItemCard.ItemCardViewModel[]) => void,
+        onError?: (jqXHR: JQueryXHR, textStatus: string, errorThrown: string) => any): any;
+}
+
+const client: ItemsSearchClient = {
+    itemsSearch: (params, onSuccess, onError) => {
+        $.ajax({
+            dataType: "json",
+            url: "/BrowseItems/search",
+            traditional: true, // causes arrays to be serialized in a way supported by MVC
+            data: params,
+            success: onSuccess,
+            error: onError
+        });
+    }
+};
 
 export class ScoringGuidePage extends React.Component<Props, State> {
     private headerColumns = ItemTable.headerColumns;
@@ -143,7 +162,39 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         return sortedData;
     }
 
+    onSearch(results: ItemCard.ItemCardViewModel[]) {
+        this.setState({ itemSearchResult: { kind: "success", content: results } });
+    }
 
+    onError(err: any) {
+        this.setState({ itemSearchResult: { kind: "failure" } });
+    }
+
+    selectSingleResult() {
+        const searchResults = this.state.itemSearchResult;
+        if (searchResults.kind === "success" && searchResults.content!.length === 1) {
+            const searchResult = searchResults.content![0];
+            ItemCard.itemPageLink(searchResult.bankKey, searchResult.itemKey);
+        }
+    }
+
+    beginSearch(params: ItemSearchDropdown.SearchAPIParams) {
+        const searchResults = this.state.itemSearchResult;
+        if (searchResults.kind === "success") {
+            this.setState({
+                itemSearchResult: {
+                    kind: "reloading",
+                    content: searchResults.content
+                }
+            });
+        } else if (searchResults.kind === "failure") {
+            this.setState({
+                itemSearchResult: { kind: "loading" }
+            });
+        }
+
+        this.props.apiClient.itemsSearch(params, this.onSearch.bind(this), this.onError.bind(this));
+    }
 
     renderSearch() {
         const searchResults = this.state.itemSearchResult;
@@ -154,13 +205,12 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 resultElement = <span className="placeholder-text" role="alert">No results found for the given search terms.</span>
             }
             else {
-
-                //<ItemSearchDropdown.ItemSearchDropdown
-                //    interactionTypes={this.props.interactionTypes}
-                //    subjects={this.props.subjects}
-                //    onChange={(params) => this.beginSearch(params)}
-                //    selectSingleResult={() => this.selectSingleResult()}
-                //    isLoading={false} />
+                 <ItemSearchDropdown.ItemSearchDropdown
+                    interactionTypes={this.props.interactionTypes}
+                    subjects={this.props.subjects}
+                    onChange={(params) => this.beginSearch(params)}
+                    selectSingleResult={() => this.selectSingleResult()}
+                    isLoading={false} />
 
 
                 resultElement =
@@ -207,7 +257,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 }
 
-export function initializePage() {
+export function initializePage(viewModel: ItemSearchDropdown.Props) {
     const container = document.getElementById("react-page-container");
-    ReactDOM.render(<ScoringGuidePage />, container)
+    ReactDOM.render(<ScoringGuidePage apiClient={client}
+        interactionTypes={viewModel.interactionTypes}
+        subjects={viewModel.subjects} />, container)
 }
