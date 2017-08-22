@@ -107,7 +107,7 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
         }
 
         if (pairs.length === 0) {
-            return "/BrowseItems";
+            return "/ScoringGuide";
         }
 
         const query = "?" + pairs.join("&");
@@ -232,6 +232,9 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
                 </div>
                 <div className="search-categories" aria-live="polite" aria-relevant="additions removals">
                     {this.renderGrades()}
+                    {this.renderSubjects()}
+                    {this.renderClaims()}
+                    {this.renderInteractionTypes()}
                 </div>
             </div>
         );
@@ -247,22 +250,73 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
 
     renderGrades() {
         const gradeLevels = this.state.gradeLevels;
-        const elementarySelected = GradeLevels.contains(gradeLevels, GradeLevels.GradeLevels.Elementary);
-        const middleSelected = GradeLevels.contains(gradeLevels, GradeLevels.GradeLevels.Middle);
-        const highSelected = GradeLevels.contains(gradeLevels, GradeLevels.GradeLevels.High);
+
+        
 
         const tags = [
             <option key={GradeLevels.GradeLevels.NA} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.NA)}>NA</option>,
-            <option key={GradeLevels.GradeLevels.Elementary} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Elementary)}>Elementary</option>,
-            <option key={GradeLevels.GradeLevels.Middle} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Middle)}>Middle</option>,
-            <option key={GradeLevels.GradeLevels.High} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.High)}>High</option>,
+            //<option key={GradeLevels.GradeLevels.Elementary} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Elementary)}>Elementary</option>,
+            //<option key={GradeLevels.GradeLevels.Middle} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Middle)}>Middle</option>,
+            //<option key={GradeLevels.GradeLevels.High} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.High)}>High</option>,
+
+            <option key={GradeLevels.GradeLevels.Grade3} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Grade3)}>Grade 3</option>,
         ];
 
-        return (
-            <select>
-                {tags}
-            </select>
-        );
+        return (<select>{tags}</select>);
     }
 
+    renderSingleSubject(subject: Subject) {
+        const subjects = this.state.subjects;
+        const containsSubject = subjects.indexOf(subject.code) !== -1;
+        const className = (containsSubject ? "selected" : "") + " tag";
+
+        return (<option key={subject.code} onClick={() => this.toggleSubject(subject.code)} >{subject.label}</option>);
+    }
+
+    renderSubjects() {
+        const tags = this.props.subjects.map(s => this.renderSingleSubject(s));
+
+        return (<select>{tags}</select>);
+    }
+
+    renderSingleClaim(claim: Claim) {
+        const selectedClaims = this.state.claims;
+        let containsClaim = selectedClaims.indexOf(claim.code) !== -1;
+
+        return (<option key={claim.code} onClick={() => this.toggleClaim(claim.code)} >{claim.label}</option>);
+    }
+
+    renderClaims() {
+        // If no subjects are selected, use the entire list of subjects
+        const selectedSubjectCodes = this.state.subjects;
+        const subjects = selectedSubjectCodes.length !== 0
+            ? this.props.subjects.filter(s => selectedSubjectCodes.indexOf(s.code) !== -1)
+            : [];
+
+        const tags = subjects
+            .reduce((cs: Claim[], s: Subject) => cs.concat(s.claims), [])
+            .map(c => this.renderSingleClaim(c));
+
+        return (<select>{tags}</select>);
+    }
+
+    renderSingleInteractionType(it: InteractionType) {
+        const selectedInteractionTypes = this.state.interactionTypes;
+        let containsInteractionType = selectedInteractionTypes.indexOf(it.code) !== -1;
+
+        return (<option key={it.code} onClick={() => this.toggleInteractionType(it.code)} >{it.label}</option>);
+    }
+
+    renderInteractionTypes() {
+        const selectedSubjectCodes = this.state.subjects;
+        const selectedSubjects = selectedSubjectCodes.length !== 0
+            ? this.props.subjects.filter(subj => selectedSubjectCodes.indexOf(subj.code) !== -1)
+            : [];
+
+        const visibleInteractionTypes = selectedSubjects.length !== 0
+            ? this.props.interactionTypes.filter(it => selectedSubjects.some(subj => subj.interactionTypeCodes.indexOf(it.code) !== -1))
+            : [];
+
+        const tags = visibleInteractionTypes.map(vit => this.renderSingleInteractionType(vit));
+    }
 }

@@ -16,11 +16,14 @@ export interface State {
     selectedItem: ApiModels.Resource<AboutItem.AboutThisItem>;
     selectedRow?: number; // Show only MCRs with this row number. This doesn't refer to a single MCR.
     sorts: ItemTable.HeaderSort[];
+
+    interactionTypes: ItemSearchDropdown.InteractionType[];
+    subjects: ItemSearchDropdown.Subject[];
 }
 
 export interface Props {
-    interactionTypes: ItemSearchDropdown.InteractionType[];
-    subjects: ItemSearchDropdown.Subject[];
+    //interactionTypes: ItemSearchDropdown.InteractionType[];
+    //subjects: ItemSearchDropdown.Subject[];
     apiClient: ItemsSearchClient;
 }
 
@@ -34,7 +37,7 @@ const client: ItemsSearchClient = {
     itemsSearch: (params, onSuccess, onError) => {
         $.ajax({
             dataType: "json",
-            url: "/BrowseItems/search",
+            url: "/ScoringGuide/Search",
             traditional: true, // causes arrays to be serialized in a way supported by MVC
             data: params,
             success: onSuccess,
@@ -59,6 +62,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             selectedItem: { kind: "loading" },
             selectedRow: 1,
             sorts: [],
+
+            subjects: [],
+            interactionTypes:[],
         }
         this.callSearch();
     }
@@ -205,22 +211,19 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 resultElement = <span className="placeholder-text" role="alert">No results found for the given search terms.</span>
             }
             else {
-                 <ItemSearchDropdown.ItemSearchDropdown
-                    interactionTypes={this.props.interactionTypes}
-                    subjects={this.props.subjects}
-                    onChange={(params) => this.beginSearch(params)}
-                    selectSingleResult={() => this.selectSingleResult()}
-                    isLoading={false} />
-
+                const isLoading = this.isLoading();
 
                 resultElement =
                     <div className="search-container">
                     <div className="search-results">
                         <div className="search-controls">
-
                             
-                            
-
+                            <ItemSearchDropdown.ItemSearchDropdown
+                                interactionTypes={this.state.interactionTypes}
+                                subjects={this.state.subjects}
+                                onChange={(params) => this.beginSearch(params)}
+                                selectSingleResult={() => this.selectSingleResult()}
+                                isLoading={isLoading} />
 
                             <button className="clear-sort" onClick={this.clearSort}>Clear Sort</button>
                             <button>Print Items</button>
@@ -257,9 +260,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 }
 
-export function initializePage(viewModel: ItemSearchDropdown.Props) {
+export function initializePage() {
     const container = document.getElementById("react-page-container");
-    ReactDOM.render(<ScoringGuidePage apiClient={client}
-        interactionTypes={viewModel.interactionTypes}
-        subjects={viewModel.subjects} />, container)
+    ReactDOM.render(<ScoringGuidePage apiClient={client} />, container);
 }
