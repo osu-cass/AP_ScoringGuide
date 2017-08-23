@@ -33,12 +33,17 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
         {
             var query = context.ItemCards.Where(i => i.Grade != GradeLevels.NA && !i.BrailleOnlyItem);
 
-            if(scoreParams == null)
+            if (scoreParams == null)
             {
                 return query.ToList();
             }
 
             if (scoreParams.Grades != GradeLevels.All && scoreParams.Grades != GradeLevels.NA)
+            {
+                query = query.Where(i => GradeLevelsUtils.Contains(scoreParams.Grades, i.Grade));
+            }
+
+            if (scoreParams.Subjects != null && scoreParams.Subjects.Any())
             {
                 query = query.Where(i => scoreParams.Subjects.Contains(i.SubjectCode));
             }

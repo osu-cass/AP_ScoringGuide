@@ -133,31 +133,21 @@ export class HeaderTable extends React.Component<HeaderProps, {}> {
 
 interface Props {
     tableRef?: (ref: HTMLTableElement) => void;
-    mapRows: dataTableModel[];
+    mapRows: ItemCard.ItemCardViewModel[];
     rowOnClick: (item: ItemCard.ItemCardViewModel) => void;
     sort: HeaderSort[];
     columns: SortColumn[];
+    selectedRow?: ItemCard.ItemCardViewModel;
 }
-
-export interface dataTableModel extends ItemCard.ItemCardViewModel {
-    isSelected?: boolean;
-}
-
-
 
 export class DataTable extends React.Component<Props, {}> {
     constructor(props: Props) {
         super(props);
-        this.state = {};
     }
 
-    toggleSelectRow(rowData: dataTableModel, index: number) {
-        rowData.isSelected = !rowData.isSelected;
-        this.props.mapRows[index] = rowData;
-        this.setState(this.props);
-    }
+   
 
-    renderCell(col: SortColumn, cellData: dataTableModel): JSX.Element {
+    renderCell(col: SortColumn, cellData: ItemCard.ItemCardViewModel): JSX.Element {
         return (
             <td key={col.header}
                 className={col.className}>
@@ -169,14 +159,19 @@ export class DataTable extends React.Component<Props, {}> {
     }
 
     //TODO replace X with checkmark icon 
-    renderRow(rowData: dataTableModel,index:number): JSX.Element {
+    renderRow(rowData: ItemCard.ItemCardViewModel, index: number): JSX.Element {
+        let isSelected = false;
+        if (this.props.selectedRow) {
+            isSelected = rowData.itemKey === this.props.selectedRow.itemKey
+                        && rowData.bankKey === this.props.selectedRow.bankKey;
+        }
+        
         return (
-            <tr className={rowData.isSelected ? "selected-item" : ""}
+            <tr key={index} className={isSelected ? "selected-item" : ""}
                 onClick={() => {
                     this.props.rowOnClick(rowData);
-                    this.toggleSelectRow(rowData, index);
                 }}>
-                <td>{rowData.isSelected ? "X" : ""}</td>
+                <td>{isSelected ? "X" : ""}</td>
                 {this.props.columns.map(col => this.renderCell(col, rowData))}
             </tr>
         );
@@ -189,7 +184,7 @@ export class DataTable extends React.Component<Props, {}> {
         );
     }
 
-    render(): JSX.Element {
+    render() {
         return (
             <table className="item-table table table-striped mapcomponent-table"
                 ref={this.props.tableRef}>

@@ -14,7 +14,7 @@ export interface State {
     searchParams: ItemModels.ScoreSearchParams;
     itemSearchResult: ApiModels.Resource<ItemCard.ItemCardViewModel[]>;
     selectedItem: ApiModels.Resource<AboutItem.AboutThisItem>;
-    selectedRow?: number; // Show only MCRs with this row number. This doesn't refer to a single MCR.
+    selectedRow?: ItemCard.ItemCardViewModel; // Show only MCRs with this row number. This doesn't refer to a single MCR.
     sorts: ItemTable.HeaderSort[];
 
     interactionTypes: ItemSearchDropdown.InteractionType[];
@@ -37,7 +37,7 @@ const client: ItemsSearchClient = {
     itemsSearch: (params, onSuccess, onError) => {
         $.ajax({
             dataType: "json",
-            url: "/ScoringGuide/Search",
+            url: "/ScoringGuide/search",
             traditional: true, // causes arrays to be serialized in a way supported by MVC
             data: params,
             success: onSuccess,
@@ -60,21 +60,25 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             },
             itemSearchResult: { kind: "loading" },
             selectedItem: { kind: "loading" },
-            selectedRow: 1,
             sorts: [],
 
             subjects: [],
-            interactionTypes:[],
+            interactionTypes: [],
         }
-        this.callSearch();
     }
 
+    //row is selected passed from item table
     onSelectItem = (item: ItemCard.ItemCardViewModel) => {
+        this.setState({
+            selectedRow: item
+        });
+
         AboutItem.ScoreSearchClient({ bankKey: item.bankKey, itemKey: item.itemKey })
             .then((data) => this.onAboutItemSuccess(data))
             .catch((err) => this.onAboutItemError(err));
     };
 
+    //on load success, after row is selected
     onAboutItemSuccess(item: AboutItem.AboutThisItem) {
         this.setState({
             selectedItem: { kind: "success", content: item }
@@ -82,7 +86,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     onAboutItemError(err: any) {
-
+        console.error(err);
     }
 
     onSearchSuccess(result: ItemCard.ItemCardViewModel[]) {
@@ -160,7 +164,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     //Post sorted table data.
-    getTableData(data: ItemCard.ItemCardViewModel[]): ItemTable.dataTableModel[] {
+    getTableData(data: ItemCard.ItemCardViewModel[]): ItemCard.ItemCardViewModel[] {
         const sortedData = this.state.sorts && this.state.sorts.length !== 0
             ? data.sort((lhs, rhs) => this.invokeMultiSort(lhs, rhs))
             : data;
@@ -174,6 +178,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     onError(err: any) {
         this.setState({ itemSearchResult: { kind: "failure" } });
+        console.error(err);
     }
 
     selectSingleResult() {
@@ -201,6 +206,20 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
         this.props.apiClient.itemsSearch(params, this.onSearch.bind(this), this.onError.bind(this));
     }
+    renderSearchControls(isLoading: boolean) {
+        return (
+            <div className="search-controls">
+                <ItemSearchDropdown.ItemSearchDropdown
+                    interactionTypes={this.state.interactionTypes}
+                    subjects={this.state.subjects}
+                    onChange={(params) => this.beginSearch(params)}
+                    selectSingleResult={() => this.selectSingleResult()}
+                    isLoading={isLoading} />
+                <button className="clear-sort" onClick={this.clearSort}>Clear Sort</button>
+                <button>Print Items</button>
+            </div>
+        );
+    }
 
     renderSearch() {
         const searchResults = this.state.itemSearchResult;
@@ -211,23 +230,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 resultElement = <span className="placeholder-text" role="alert">No results found for the given search terms.</span>
             }
             else {
-                const isLoading = this.isLoading();
-
                 resultElement =
-                    <div className="search-container">
                     <div className="search-results">
-                        <div className="search-controls">
-                            
-                            <ItemSearchDropdown.ItemSearchDropdown
-                                interactionTypes={this.state.interactionTypes}
-                                subjects={this.state.subjects}
-                                onChange={(params) => this.beginSearch(params)}
-                                selectSingleResult={() => this.selectSingleResult()}
-                                isLoading={isLoading} />
 
-                            <button className="clear-sort" onClick={this.clearSort}>Clear Sort</button>
-                            <button>Print Items</button>
-                        </div>
                         <ItemTable.HeaderTable
                             sorts={this.state.sorts}
                             onHeaderClick={this.onClickHeader}
@@ -237,9 +242,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                             rowOnClick={this.onSelectItem}
                             sort={this.state.sorts}
                             tableRef={ref => this.dataTableRef = ref}
-                            columns={this.headerColumns} />
-                        </div>
-                    </div>;
+                            columns={this.headerColumns}
+                            selectedRow={this.state.selectedRow} />
+                    </div>
             }
         } else if (searchResults.kind === "failure") {
             resultElement = <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div>;
@@ -249,11 +254,14 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     render() {
-      
+
         const isLoading = this.isLoading();
         return (
-            <div className="search-container">
-                {this.renderSearch()}
+            <div className="search-page">
+                <div className="search-container">
+                    {this.renderSearchControls(isLoading)}
+                    {this.renderSearch()}
+                </div>
                 {this.renderAboutItemDetails()}
             </div>
         );

@@ -1,5 +1,6 @@
 ﻿import * as React from 'react';
-import * as GradeLevels  from "./GradeLevels";
+import * as GradeLevels from "./GradeLevels";
+import { parseQueryString } from "./ApiModels";
 
 export interface InteractionType {
     code: string;
@@ -26,7 +27,7 @@ export interface SearchAPIParams {
     interactionTypes: string[];
     performanceOnly: boolean;
 }
-
+//passed in props, all options
 export interface Props {
     interactionTypes: InteractionType[];
     subjects: Subject[];
@@ -34,7 +35,7 @@ export interface Props {
     selectSingleResult: () => void;
     isLoading: boolean;
 }
-
+//selected items
 export interface State {
     itemId: string;
     gradeLevels: GradeLevels.GradeLevels;
@@ -44,17 +45,6 @@ export interface State {
     performanceOnly: boolean;
 }
 
-function parseQueryString(url: string): { [key: string]: string[] | undefined } {
-    let queryObject: { [key: string]: string[] | undefined } = {};
-    const pairs = url.slice(url.indexOf("?") + 1).split("&");
-    for (const pair of pairs) {
-        const pairParts = pair.split("=");
-        if (pairParts[0] && pairParts[1]) {
-            queryObject[pairParts[0]] = pairParts[1].split(",");
-        }
-    }
-    return queryObject;
-}
 
 export class ItemSearchDropdown extends React.Component<Props, State>{
     timeoutToken?: number;
@@ -221,6 +211,10 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
     render() {
         history.replaceState(null, "", this.encodeQuery());
 
+            //{this.renderSubjects()}
+            //{this.renderClaims()}
+            //{this.renderInteractionTypes()}
+
         return (
             <div className="search-params">
                 <div className="search-header">
@@ -232,37 +226,31 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
                 </div>
                 <div className="search-categories" aria-live="polite" aria-relevant="additions removals">
                     {this.renderGrades()}
-                    {this.renderSubjects()}
-                    {this.renderClaims()}
-                    {this.renderInteractionTypes()}
+
                 </div>
             </div>
         );
     }
 
-    toggleGrades(grades: GradeLevels.GradeLevels) {
+    toggleGrades = (event: React.FormEvent<HTMLSelectElement>) => {
+        console.log("click happened");
+        
         this.setState({
             // Exclusive OR to flip just the bits for the input grades
-            gradeLevels: this.state.gradeLevels ^ grades // tslint:disable-line:no-bitwise
+            gradeLevels: Number(event.currentTarget.value) // tslint:disable-line:no-bitwise
         }, () => this.beginChangeTimeout());
-
     }
 
     renderGrades() {
-        const gradeLevels = this.state.gradeLevels;
-
         
-
         const tags = [
-            <option key={GradeLevels.GradeLevels.NA} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.NA)}>NA</option>,
-            //<option key={GradeLevels.GradeLevels.Elementary} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Elementary)}>Elementary</option>,
-            //<option key={GradeLevels.GradeLevels.Middle} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Middle)}>Middle</option>,
-            //<option key={GradeLevels.GradeLevels.High} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.High)}>High</option>,
-
-            <option key={GradeLevels.GradeLevels.Grade3} onClick={() => this.toggleGrades(GradeLevels.GradeLevels.Grade3)}>Grade 3</option>,
+            <option key={1} value={GradeLevels.GradeLevels.NA}>NA</option>,
+            <option key={2} value={GradeLevels.GradeLevels.Elementary}>Elementary</option>,
+            <option key={3} value={GradeLevels.GradeLevels.Middle}>Middle</option>,
+            <option key={4} value={GradeLevels.GradeLevels.High}>High</option>,
         ];
 
-        return (<select>{tags}</select>);
+        return (<select value={this.state.gradeLevels} onChange={this.toggleGrades}>{tags}</select>);
     }
 
     renderSingleSubject(subject: Subject) {
