@@ -9,6 +9,7 @@ import * as ItemCardViewer from './ItemCardViewer';
 import * as AboutItem from './AboutItem';
 import * as ItemTable from './ItemTable';
 import * as ItemSearchDropdown from './ItemSearchDropdown';
+import * as PageTabs from './PageTabs'
 
 export interface State {
     searchParams: ItemModels.ScoreSearchParams;
@@ -116,11 +117,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         const selectedResult = this.state.selectedItem;
         if (selectedResult.kind == "success" && selectedResult.content) {
             const itemCard = selectedResult.content.itemCardViewModel;
-            const url = "http://ivs.smarterbalanced.org/items?ids=" + itemCard.bankKey.toString() + "-" + itemCard.itemKey.toString();
             return (
                 <div>
-                    <ItemCardViewer.ItemCardViewer {...selectedResult.content} />
-                    <ItemViewerFrame.ItemFrame url={url} />
+                    <ItemCardViewer.ItemCardViewer aboutItem= {selectedResult.content} />
                 </div>
             );
         } else {

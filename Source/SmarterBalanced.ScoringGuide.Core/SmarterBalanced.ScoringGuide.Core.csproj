@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SmarterBalanced.SampleItems.Dal" Version="2.1.0" />
+    <PackageReference Include="SmarterBalanced.SampleItems.Dal" Version="1.1.0-alpha-262890275" />
   </ItemGroup>
 
 </Project>

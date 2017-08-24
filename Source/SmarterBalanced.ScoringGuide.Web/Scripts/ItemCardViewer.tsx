@@ -1,57 +1,73 @@
 ﻿import * as React from 'react';
 import * as Rubric from './Rubric';
 import * as AboutItem from './AboutItem';
+import * as PageTabs from './PageTabs';
+import * as ItemViewerFrame from './ItemViewerFrame';
+import * as ItemInformation from './ItemInformation';
 
-export type Tab = "viewer" | "rubric" | "information";
 
-export interface Props extends AboutItem.AboutThisItem {
+export interface Props {
+    aboutItem: AboutItem.AboutThisItem
 }
 
 export interface State {
-    selectedTab: Tab;
+    selectedTab: PageTabs.Tabs;
 }
 
 export class ItemCardViewer extends React.Component<Props, State> {
-    onClick(tab: Tab) {
-        this.setState({
-            selectedTab: "rubric"
-        })
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            selectedTab: "viewer"
+        };
     }
 
-    renderTabs() {
-        return (
-            <div className="tabs">
-                <div className="item-viewer-tab">Item Viewer</div>
-                <div className="rubric-tab">Rubric and Exemplar</div>
-                <div className="information-tab">Item Information</div>
-            </div>
-        );
+    onTabChange(tab: PageTabs.Tabs) {
+        this.setState({
+            selectedTab: tab
+        });
     }
 
     renderChosen() {
-        if (this.state.selectedTab == "viewer") {
+        const selectedTab = this.state.selectedTab;
+        const itemCard = this.props.aboutItem.itemCardViewModel;
+
+        if (selectedTab == "viewer") {
+            const url = "http://ivs.smarterbalanced.org/items?ids=" + itemCard.bankKey.toString() + "-" + itemCard.itemKey.toString();
             return (
-                <div></div>
+                <div className="item-content">
+                    <ItemViewerFrame.ItemFrame url={url} />
+                </div>
             );
         }
-        else if (this.state.selectedTab == "rubric") {
-            const rubrics = this.props.rubrics.map((ru, i) => <Rubric.RubricComponent {...ru } key= { String(i) }/>)
+        else if (selectedTab == "rubric") {
+            const rubrics = this.props.aboutItem.rubrics.map((ru, i) => <Rubric.RubricComponent {...ru } key={String(i)} />)
             return (
-                <div></div>
-                //<div><Rubric.RubricEntryComponent/></div>
+                <div className="item-content">{rubrics}</div>
             );
         }
-        else if (this.state.selectedTab == "information") {
+        else if (selectedTab == "information") {
             return (
-                <div></div>
+                <div className="item-content">
+                    <div><ItemInformation.ItemInformationDetail
+                        itemCardViewModel={this.props.aboutItem.itemCardViewModel}
+                        depthOfKnowledge={this.props.aboutItem.depthOfKnowledge}
+                        commonCoreStandardsDescription={this.props.aboutItem.commonCoreStandardsDescription}
+                        targetDescription={this.props.aboutItem.targetDescription}
+                        educationalDifficulty={this.props.aboutItem.educationalDifficulty}
+                        evidenceStatement={this.props.aboutItem.evidenceStatement}/>
+                    </div>
+                </div>
             );
         }
     }
 
     render() {
+        const tabs = PageTabs.ItemTabs;
         return (
             <div className="item-card">
-                {this.renderTabs()}
+                <PageTabs.ItemTabs changedTab={(tab) => this.onTabChange(tab)} selectedTab={this.state.selectedTab} />
+                {this.renderChosen()}
             </div>
         );
     }

@@ -9,10 +9,7 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
     public interface IScoringRepo
     {
         ItemCardViewModel GetItemCard(int bankKey, int itemKey);
-
-        List<ItemCardViewModel> GetItemCards();
-        List<ItemCardViewModel> GetItemCards(ScoreSearchParams scoreParams);
-
+        List<ItemCardViewModel> GetItemCards(GradeLevels gradeLevels, string[] subject, string[] techType, bool braille);
         AboutThisItem GetAboutThisItem(int itemBank, int itemKey);
 
     }

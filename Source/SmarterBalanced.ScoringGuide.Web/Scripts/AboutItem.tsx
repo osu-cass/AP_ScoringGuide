@@ -9,6 +9,8 @@ export interface AboutThisItem {
     depthOfKnowledge: string;
     targetDescription: string;
     commonCoreStandardsDescription: string;
+    educationalDifficulty: string;
+    evidenceStatement: string;
 }
 
 
