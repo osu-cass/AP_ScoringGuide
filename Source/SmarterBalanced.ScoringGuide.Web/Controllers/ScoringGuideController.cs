@@ -22,7 +22,7 @@ namespace SmarterBalanced.ScoringGuide.Web.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            return View(scoringRepo.GetScoringGuideViewModel());
         }
 
         public IActionResult AboutThisItem(int? bankKey, int? itemKey)

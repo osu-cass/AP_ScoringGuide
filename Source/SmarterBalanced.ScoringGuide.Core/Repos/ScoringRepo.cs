@@ -19,6 +19,15 @@ namespace SmarterBalanced.ScoringGuide.Core.Repos
             logger = loggerFactory.CreateLogger<ScoringRepo>();
         }
 
+        public ScoringGuideViewModel GetScoringGuideViewModel()
+        {
+            return new ScoringGuideViewModel
+            {
+                InteractionTypes = context.InteractionTypes,
+                Subjects = context.Subjects
+            };
+        }
+
         public ItemCardViewModel GetItemCard(int bankKey, int itemKey)
         {
             return context.ItemCards.FirstOrDefault(i => i.BankKey == bankKey && i.ItemKey == itemKey);

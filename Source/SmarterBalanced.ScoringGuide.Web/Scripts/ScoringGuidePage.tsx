@@ -23,9 +23,14 @@ export interface State {
 }
 
 export interface Props {
-    //interactionTypes: ItemSearchDropdown.InteractionType[];
-    //subjects: ItemSearchDropdown.Subject[];
+    interactionTypes: ItemSearchDropdown.InteractionType[];
+    subjects: ItemSearchDropdown.Subject[];
     apiClient: ItemsSearchClient;
+}
+
+interface ItemsSearchViewModel {
+    interactionTypes: ItemSearchDropdown.InteractionType[];
+    subjects: ItemSearchDropdown.Subject[];
 }
 
 interface ItemsSearchClient {
@@ -63,8 +68,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             selectedItem: { kind: "loading" },
             sorts: [],
 
-            subjects: [],
-            interactionTypes: [],
+            subjects: props.subjects,
+            interactionTypes: props.interactionTypes,
         }
     }
 
@@ -267,7 +272,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 }
 
-export function initializePage() {
+export function initializePage(viewModel: ItemsSearchViewModel) {
     const container = document.getElementById("react-page-container");
-    ReactDOM.render(<ScoringGuidePage apiClient={client} />, container);
+    ReactDOM.render(<ScoringGuidePage apiClient={client} {...viewModel}  />, container);
 }
