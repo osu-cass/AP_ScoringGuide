@@ -1,0 +1,11 @@
+language: node_js
+node_js: 
+  - "7.7.x"
+
+install: 
+  - npm install
+
+script: 
+  - npm run build-server
+  - npm run build-client
+  
