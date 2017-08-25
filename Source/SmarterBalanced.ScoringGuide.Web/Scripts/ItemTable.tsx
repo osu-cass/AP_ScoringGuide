@@ -4,6 +4,7 @@ import * as React from "react";
 export type Header = "Item" | "Claim/Target" | "Subject" | "Grade" | "Item Type";
 
 export enum SortDirection {
+    NoSort = 0,
     Ascending = 1,
     Descending = -1
 }
@@ -11,6 +12,7 @@ export enum SortDirection {
 export interface HeaderSort {
     col: SortColumn;
     direction: SortDirection;
+    resetSortCount: number;
 }
 
 export interface SortColumn {
@@ -20,6 +22,8 @@ export interface SortColumn {
     compare: (a: ItemCard.ItemCardViewModel, b: ItemCard.ItemCardViewModel) => number;
 }
 
+const invokeResetSortLimit = 2;
+
 const decendingArrow = (
     <span aria-label="Decend">▼</span>
 );
@@ -28,8 +32,8 @@ const acendingArrow = (
     <span aria-label="Ascend">▲</span>
 );
 
-const noSortArrow = (
-    <span aria-label="NoSort">◄</span>
+const noSort = (
+    <span aria-label="NoSort"></span>
 );
 
 export const headerColumns: SortColumn[] = [
@@ -75,8 +79,6 @@ export const headerColumns: SortColumn[] = [
     },
 ];
 
-
-
 interface HeaderProps {
     columns: SortColumn[];
     onHeaderClick: (header: SortColumn) => void;
@@ -84,6 +86,10 @@ interface HeaderProps {
 }
 
 export class HeaderTable extends React.Component<HeaderProps, {}> {
+    constructor(props: HeaderProps){
+        super(props);
+    }
+
     compareColumn(lhs: ItemCard.ItemCardViewModel, rhs: ItemCard.ItemCardViewModel): number {
         const sorts = this.props.sorts || [];
         for (const sort of sorts) {
@@ -95,25 +101,31 @@ export class HeaderTable extends React.Component<HeaderProps, {}> {
         return 0;
     }
 
+    headerEventHandler(scol: SortColumn, hcol: HeaderSort|undefined) {
+        this.props.onHeaderClick(scol);
+    }
+
     renderHeader(col: SortColumn): JSX.Element {
         let dirElem: string | undefined | JSX.Element;
         const headerSort = this.props.sorts.find(hs => hs.col.header === col.header);
         if (!headerSort) {
-            dirElem = undefined;//noSortArrow
+            dirElem = noSort;
         } else if (headerSort.direction === SortDirection.Ascending) {
             dirElem = acendingArrow;
-        } else {
+        } else if (headerSort.direction === SortDirection.Descending) {
             dirElem = decendingArrow;
+        } else {
+            dirElem = noSort;
         }
 
         return (
-            <td key={col.header}
+            <th key={col.header}
                 className={col.className}
-                onClick={() => this.props.onHeaderClick(col)}>
+                onClick={() => this.headerEventHandler(col,headerSort)}>
                 <div className={col.className}>
                     {dirElem} {col.header}
                 </div>
-            </td>
+            </th>
         );
     }
 
@@ -122,7 +134,7 @@ export class HeaderTable extends React.Component<HeaderProps, {}> {
             <table className="item-table table mapcomponent-table">
                 <thead>
                     <tr className="primary">
-                        <td></td>
+                        <th></th>
                         {this.props.columns.map(col => this.renderHeader(col))}
                     </tr>
                 </thead>
@@ -167,7 +179,7 @@ export class DataTable extends React.Component<Props, {}> {
         }
         
         return (
-            <tr key={index} className={isSelected ? "selected-item" : ""}
+            <tr key={index} className={isSelected ? "selected" : ""}
                 onClick={() => {
                     this.props.rowOnClick(rowData);
                 }}>

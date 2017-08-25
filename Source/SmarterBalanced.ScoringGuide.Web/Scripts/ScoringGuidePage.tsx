@@ -138,22 +138,26 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         const headIdx = newSorts.findIndex(hs => hs.col.header === col.header);
         if (headIdx !== -1) {
             const newSort = Object.assign({}, newSorts[headIdx]);
-            newSort.direction = newSort.direction === ItemTable.SortDirection.Ascending
-                ? ItemTable.SortDirection.Descending
-                : ItemTable.SortDirection.Ascending;
+            if (newSort.direction == ItemTable.SortDirection.Ascending) {
+                newSort.direction = ItemTable.SortDirection.Descending;
+            }
+            else if (newSort.direction == ItemTable.SortDirection.Descending) {
+                newSort.direction = ItemTable.SortDirection.NoSort;
+            }
+            else {
+                newSort.direction = ItemTable.SortDirection.Ascending;
+            }
+
             newSorts[headIdx] = newSort;
         } else {
             const newSort: ItemTable.HeaderSort = {
                 col: col,
-                direction: ItemTable.SortDirection.Ascending
+                direction: ItemTable.SortDirection.Ascending,
+                resetSortCount:0
             };
             newSorts.push(newSort);
         }
         this.setState({ sorts: newSorts });
-    }
-
-    clearSort = () => {
-        this.setState({ sorts: [] });
     }
 
     invokeMultiSort(lhs: ItemCard.ItemCardViewModel, rhs: ItemCard.ItemCardViewModel): number {
@@ -213,14 +217,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     renderSearchControls(isLoading: boolean) {
         return (
             <div className="search-controls">
+                <a>Print Items</a>
                 <ItemSearchDropdown.ItemSearchDropdown
                     interactionTypes={this.state.interactionTypes}
                     subjects={this.state.subjects}
                     onChange={(params) => this.beginSearch(params)}
                     selectSingleResult={() => this.selectSingleResult()}
                     isLoading={isLoading} />
-                <button className="clear-sort" onClick={this.clearSort}>Clear Sort</button>
-                <button>Print Items</button>
             </div>
         );
     }

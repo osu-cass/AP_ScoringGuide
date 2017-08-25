@@ -188,8 +188,6 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
     }
 
     toggleGrades = (event: React.FormEvent<HTMLSelectElement>) => {
-        console.log("click happened");
-        
         this.setState({
             // Exclusive OR to flip just the bits for the input grades
             gradeLevels: Number(event.currentTarget.value) // tslint:disable-line:no-bitwise
