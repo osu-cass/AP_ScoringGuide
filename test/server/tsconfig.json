@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "outDir": "../../dist/server",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "jsx": "react"
+    },
+    "include": [
+        "**/*"
+    ]
+  }

@@ -1,5 +1,5 @@
 {
-  "name": "puppeteer-test",
+  "name": "sample-items-scoring-guide",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -27,6 +27,12 @@
     "awesome-typescript-loader": "3.2.3",
     "source-map-loader": "0.2.1",
     "typescript": "2.4.2",
-    "webpack": "3.5.5"
+    "webpack": "3.5.5",
+    "ts-jest": "20.0.7",
+    "@types/jest": "20.0.8",
+    "jest": "20.0.4",
+    "enzyme": "2.9.1",
+    "react-test-renderer": "15.6.1",
+    "@types/enzyme": "2.8.6"
   }
 }

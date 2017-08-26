@@ -58,5 +58,5 @@ typings/
 .env
 
 screenshots/
-dist/public/js/
+dist/client/js/
 dist/server/
