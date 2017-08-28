@@ -8,7 +8,8 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}\\index.js"
+            "preLaunchTask": "build-all",
+            "program": "${workspaceRoot}\\dist\\server\\server.js"
         }
     ]
 }
