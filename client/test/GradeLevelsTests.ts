@@ -1,4 +1,4 @@
-import * as GradeLevels from '../../src/client/GradeLevels';
+import * as GradeLevels from '../src/GradeLevels';
 
 it('caseToString for grade 3', () => {
     const grade = GradeLevels.caseToString(GradeLevels.GradeLevels.Grade3);

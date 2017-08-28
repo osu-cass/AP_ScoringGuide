@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { ScoringGuidePage, ItemsSearchClient } from '../../src/client/ScoringGuidePage';
-import { ItemSearchDropdown, SearchAPIParams } from '../../src/client/ItemSearchDropdown';
-import { ItemCardViewModel } from '../../src/client/ItemCard'
+import { ScoringGuidePage, ItemsSearchClient } from '../src/ScoringGuidePage';
+import { ItemSearchDropdown, SearchAPIParams } from '../src/ItemSearchDropdown';
+import { ItemCardViewModel } from '../src/ItemCard';
 
 describe('<ScoringGuidePage />', () => {
 

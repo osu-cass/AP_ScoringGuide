@@ -1,11 +1,11 @@
 {
     "transform": {
-        ".(ts|tsx)": "../../node_modules/ts-jest/preprocessor.js"
+        ".(ts|tsx)": "../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(test/.+)\\.(tsx?)",
     "globals": {
         "ts-jest": {
-            "tsConfigFile": "src/client/tsconfig.json"
+            "tsConfigFile": "src/tsconfig.json"
         }
     },
     "moduleFileExtensions": [ "js", "jsx", "json", "ts", "tsx" ]
