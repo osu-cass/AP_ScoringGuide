@@ -33,7 +33,7 @@ interface ItemsSearchViewModel {
     subjects: ItemSearchDropdown.Subject[];
 }
 
-interface ItemsSearchClient {
+export interface ItemsSearchClient {
     itemsSearch(params: ItemSearchDropdown.SearchAPIParams,
         onSuccess: (data: ItemCard.ItemCardViewModel[]) => void,
         onError?: (jqXHR: JQueryXHR, textStatus: string, errorThrown: string) => any): any;
