@@ -60,3 +60,4 @@ typings/
 screenshots/
 dist/client/js/
 dist/server/
+dist/client/css

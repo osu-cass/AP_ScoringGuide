@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "less": "lessc src/client/styles/site.less dist/client/css/site.css",
     "build-server": "tsc -p src/server",
     "build-client": "cd src/client && webpack",
     "build-all": "npm run build-server && npm run build-client",
