@@ -4,7 +4,7 @@ module.exports = {
   entry: './ScoringGuidePage',
 
   output: {
-    path: path.join(__dirname, "../../dist/client/js"),
+    path: path.join(__dirname, "../dist/js"),
     filename: "bundle.js",
     libraryTarget: "var",
     library: "EntryPoint"
