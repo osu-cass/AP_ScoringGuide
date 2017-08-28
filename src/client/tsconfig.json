@@ -5,6 +5,7 @@
     "noEmitOnError": false,
     "removeComments": false,
     "sourceMap": true,
+    "module": "es2015",
     "target": "es5",
     "outDir": "../../dist/public/js",
     "jsx": "react",
@@ -13,7 +14,8 @@
   },
   "exclude": [
     "node_modules",
-    "wwwroot"
+    "wwwroot",
+    "node_modules/@types/node"
   ],
   "compileOnSave": true
 }
