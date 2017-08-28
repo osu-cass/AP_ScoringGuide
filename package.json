@@ -6,7 +6,8 @@
   "scripts": {
     "build-server": "tsc -p src/server",
     "build-client": "cd src/client && webpack",
-    "build-all": "npm run build-server && npm run build-client"
+    "build-all": "npm run build-server && npm run build-client",
+    "test-client": "jest -c=test/client/jest.json"
   },
   "keywords": [],
   "author": "",
