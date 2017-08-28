@@ -1,0 +1,6 @@
+#! /bin/bash
+cd client
+npm run build
+npm run less
+cd ../server
+npm run build

@@ -3,13 +3,19 @@ node_js:
   - "8"
 
 install: 
+  - cd server
+  - npm install
+  - cd ../client
   - npm install
   - npm install -g typescript@2.4.2
   - npm install -g jest@20.0.4
   - npm install -g less@2.7.2
 
 script: 
-  - npm run build-server
-  - npm run build-client
+  # currently in ./client
+  - npm run build
   - npm run less
-  - npm run test-client
+  - npm run test
+  - cd ../server
+  - npm run build
+  - npm run test

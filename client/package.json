@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "less": "lessc styles/site.less dist/css/site.css",
-    "build": "cd src/client && webpack",
+    "build": "cd src && webpack",
     "test": "jest -c=test/jest.json"
   },
   "keywords": [],

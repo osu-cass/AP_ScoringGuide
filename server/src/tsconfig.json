@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "es2017",
-        "outDir": "../../dist/server",
+        "outDir": "../dist",
         "module": "commonjs",
         "noImplicitAny": true,
         "sourceMap": true,

@@ -6,7 +6,7 @@
         {
             "taskName": "build-all",
             "type": "shell",
-            "command": "./build-all.cmd"
+            "command": "./build-all"
         }
     ]
 }

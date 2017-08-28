@@ -2,7 +2,7 @@
     "transform": {
         ".(ts|tsx)": "../../node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(test/client/.+)\\.(tsx?)",
+    "testRegex": "(test/.+)\\.(tsx?)",
     "globals": {
         "ts-jest": {
             "tsConfigFile": "src/client/tsconfig.json"
