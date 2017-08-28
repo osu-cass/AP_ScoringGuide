@@ -1,0 +1,4 @@
+[submodule "src/client/styles"]
+	path = src/client/styles
+	url = https://github.com/osu-cass/SmarterBalancedStyles.git
+	branch = master
