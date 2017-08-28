@@ -276,6 +276,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 }
 
 export function initializePage(viewModel: ItemsSearchViewModel) {
-    const container = document.getElementById("react-page-container");
+    const container = document.getElementById("react-container");
     ReactDOM.render(<ScoringGuidePage apiClient={client} {...viewModel}  />, container);
 }
