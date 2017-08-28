@@ -7,7 +7,7 @@
     "less": "lessc src/client/styles/site.less dist/client/css/site.css",
     "build-server": "tsc -p src/server",
     "build-client": "cd src/client && webpack",
-    "build-all": "npm run build-server && npm run build-client",
+    "build-all": "npm run build-server && npm run build-client && npm run less",
     "test-client": "jest -c=test/client/jest.json",
     "start": "node dist/server/server.js",
     "dev": "npm run build-all && npm run start"
