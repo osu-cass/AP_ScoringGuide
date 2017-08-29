@@ -32,10 +32,10 @@ bower_components
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
-# Dependency directories
-client/node_modules/
-server/node_modules/
-jspm_packages/
+# Dependency directories (We're ignoring package-lock in favor of Yarn lockfile)
+node_modules
+jspm_packages
+package-lock.json
 
 # Typescript v1 declaration files
 typings/
