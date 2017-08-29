@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "less": "lessc styles/site.less dist/css/site.css",
+    "less": "lessc-each styles/ dist/css/",
     "build": "cd src && webpack",
     "test": "jest -c=test/jest.json"
   },

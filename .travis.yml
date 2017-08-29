@@ -12,10 +12,11 @@ install:
   - npm install -g less@2.7.2
 
 script: 
-  # currently in ./client
+  # Client
   - npm run build
   - npm run less
   - npm run test
+  # Server
   - cd ../server
   - npm run build
   - npm run test

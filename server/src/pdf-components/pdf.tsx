@@ -16,7 +16,8 @@ export class Component extends React.Component<undefined, undefined> {
         return (
             <html>
                 <head>
-                    <base href={'localhost:' + port} />
+                    <base href={'http://localhost:' + port} />
+                    <link rel='stylesheet' href='css/pdf.css' />
                 </head>
                 <body>
                     <Header.Component />
