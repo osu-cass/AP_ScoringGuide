@@ -1,11 +1,18 @@
 import * as React from 'react';
 
-export class Component extends React.Component<undefined, undefined> {
+interface Props {
+    title: string;
+}
+
+export class Component extends React.Component<Props, undefined> {
     render() {
         return (
-            <header>
-                test
-            </header>
+            <div className='header'>
+                <img src='images/SmarterBalanced_logo.png' className='header-logo' />
+                <div className='header-title'>
+                    {this.props.title}
+                </div>
+            </div>
         );
     }
 }

@@ -8,10 +8,10 @@ interface Props {
 
 export class Component extends React.Component<undefined, undefined> {
     render() {
-        // let pageData: JSX.Element[] = [];
-        // for (let i = 0; i < 10000; i++) {
-        //     pageData.push(<div>{i}</div>);
-        // }
+        let pageData: JSX.Element[] = [];
+        for (let i = 0; i < 100; i++) {
+            pageData.push(<div>{i}</div>);
+        }
         const port = process.env.PORT || 3000;
         return (
             <html>
@@ -20,8 +20,8 @@ export class Component extends React.Component<undefined, undefined> {
                     <link rel='stylesheet' href='css/pdf.css' />
                 </head>
                 <body>
-                    <Header.Component />
-                    hello world!
+                    <Header.Component title='Grade 4 Math' />
+                    {pageData}
                 </body>
             </html>
         );
