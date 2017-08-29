@@ -18,9 +18,9 @@ export class Component extends React.Component<undefined, undefined> {
                 <head>
                     <base href={'localhost:' + port} />
                 </head>
-                <Header.Component />
                 <body>
-                    
+                    <Header.Component />
+                    hello world!
                 </body>
             </html>
         );

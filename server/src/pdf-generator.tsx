@@ -4,24 +4,19 @@ import * as ReactDOMServer from 'react-dom/server';
 import { ItemMetadata } from './models';
 import * as Pdf from './pdf-components/pdf';
 
-//for testing: 
-import * as FileSystem from 'fs';
-
 export class PdfGenerator {
-    static async generate(chromePort: number, html: string) {
+    static async generate(html: string, chromePort?: number) {
         const options: HtmlPdf.CreateOptions = {
-            port: chromePort
+            host: 'localhost',
+            port: chromePort || 9222,
+            //completionTrigger: new HtmlPdf.CompletionTrigger.Element('div', 5000)
         };
         const pdf = await HtmlPdf.create(html, options);
-        const bytes = pdf.toBase64();
-        return bytes;
+        const buffer = pdf.toBuffer();
+        return buffer;
     }
 
     static render(items: ItemMetadata[]) {
         return ReactDOMServer.renderToString(<Pdf.Component />)
     }
 }
-
-// let html = PdfGenerator.render([]);
-// let bytes = PdfGenerator.generate();
-// FileSystem.writeFileSync()
