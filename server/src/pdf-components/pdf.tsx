@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ItemMetadata } from '../models';
-import * as Header from './header';
 import * as ItemPage from './item-page';
+
 interface Props {
     items: ItemMetadata[];
 }
@@ -16,7 +16,8 @@ export class Component extends React.Component<undefined, undefined> {
             depthOfKnowledge: 'depth',
             ccssMc: 'ccss mc',
             ccssMp: 'ccss mp'
-        }
+        };
+        let title = 'Grade 5 Math';
         const port = process.env.PORT || 3000;
         return (
             <html>
@@ -25,26 +26,8 @@ export class Component extends React.Component<undefined, undefined> {
                     <link rel='stylesheet' href='css/pdf.css' />
                 </head>
                 <body>
-                    <table className='full-width'>
-                        <thead>
-                            <tr>
-                                <td>
-                                    <Header.Component title='Grade 4 Math' />
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <ItemPage.Component tableData={itemData} />
-                            <ItemPage.Component tableData={itemData} />
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>
-                                    this is the footer!
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <ItemPage.Component tableData={itemData} title={title} />
+                    <ItemPage.Component tableData={itemData} title={title} />
                 </body>
             </html>
         );
