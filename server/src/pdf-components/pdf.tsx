@@ -10,7 +10,11 @@ export class Component extends React.Component<undefined, undefined> {
     render() {
         let pageData: JSX.Element[] = [];
         for (let i = 0; i < 100; i++) {
-            pageData.push(<div>{i}</div>);
+            pageData.push(
+                <tr>
+                    <td>{i}</td>
+                </tr>
+            );
         }
         const port = process.env.PORT || 3000;
         return (
@@ -20,8 +24,25 @@ export class Component extends React.Component<undefined, undefined> {
                     <link rel='stylesheet' href='css/pdf.css' />
                 </head>
                 <body>
-                    <Header.Component title='Grade 4 Math' />
-                    {pageData}
+                    <table className='full-width'>
+                        <thead>
+                            <tr>
+                                <td>
+                                    <Header.Component title='Grade 4 Math' />
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {pageData}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>
+                                    this is the footer!
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </body>
             </html>
         );
