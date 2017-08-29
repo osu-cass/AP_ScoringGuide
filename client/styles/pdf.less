@@ -23,8 +23,23 @@ body {
     font-size: 26px;
 }
 
-.item-data-table th {
+
+
+.item-data-table {
+    border-collapse: collapse;
+}
+
+.item-data-table thead {
     background-color: green;
     color: white;
     font-weight: bold;
+}
+
+.item-data-table td, .item-data-table th {
+    border: .5px solid black;
+    padding: 4px 10px;
+}
+
+.item-page {
+    page-break-after: always;
 }

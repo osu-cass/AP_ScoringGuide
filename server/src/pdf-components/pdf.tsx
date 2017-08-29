@@ -1,20 +1,21 @@
 import * as React from 'react';
 import { ItemMetadata } from '../models';
 import * as Header from './header';
-
+import * as ItemPage from './item-page';
 interface Props {
     items: ItemMetadata[];
 }
 
 export class Component extends React.Component<undefined, undefined> {
     render() {
-        let pageData: JSX.Element[] = [];
-        for (let i = 0; i < 100; i++) {
-            pageData.push(
-                <tr>
-                    <td>{i}</td>
-                </tr>
-            );
+        let itemData = {
+            item: 'item',
+            claim: 'claim',
+            domain: 'domain',
+            target: 'target',
+            depthOfKnowledge: 'depth',
+            ccssMc: 'ccss mc',
+            ccssMp: 'ccss mp'
         }
         const port = process.env.PORT || 3000;
         return (
@@ -33,7 +34,8 @@ export class Component extends React.Component<undefined, undefined> {
                             </tr>
                         </thead>
                         <tbody>
-                            {pageData}
+                            <ItemPage.Component tableData={itemData} />
+                            <ItemPage.Component tableData={itemData} />
                         </tbody>
                         <tfoot>
                             <tr>

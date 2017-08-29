@@ -10,6 +10,9 @@ export class PdfGenerator {
             host: 'localhost',
             port: chromePort || 9222,
             //completionTrigger: new HtmlPdf.CompletionTrigger.Element('div', 5000)
+            printOptions: {
+                printBackground: true
+            }
         };
         const pdf = await HtmlPdf.create(html, options);
         const buffer = pdf.toBuffer();
