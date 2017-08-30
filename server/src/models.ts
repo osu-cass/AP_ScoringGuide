@@ -5,7 +5,7 @@ export interface PicturePath {
 }
 
 export interface ItemPictures {
-    passage: PicturePath,
+    passage?: PicturePath,
     questions: PicturePath[]
 }
 
