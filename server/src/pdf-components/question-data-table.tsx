@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { ItemTableData } from "../models";
+import { QuestionTableData } from "../models";
 
 interface Props {
-    tableData: ItemTableData;
+    tableData: QuestionTableData;
 }
 
 export class Component extends React.Component<Props, undefined> {

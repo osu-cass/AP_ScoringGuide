@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { ItemMetadata } from '../models';
+import { Item } from '../models';
 import * as ItemPage from './item-page';
 import * as Footer from './footer';
 
 interface Props {
-    items: ItemMetadata[];
+    items: Item[];
 }
 
 export class Component extends React.Component<undefined, undefined> {

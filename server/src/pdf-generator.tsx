@@ -1,7 +1,7 @@
 import * as HtmlPdf from 'html-pdf-chrome';
 import * as React from 'react';
 import * as ReactDOMServer from 'react-dom/server';
-import { ItemMetadata } from './models';
+import { Item } from './models';
 import * as Pdf from './pdf-components/pdf';
 
 export class PdfGenerator {
@@ -19,7 +19,7 @@ export class PdfGenerator {
         return buffer;
     }
 
-    static render(items: ItemMetadata[]) {
+    static render(items: Item[]) {
         return ReactDOMServer.renderToString(<Pdf.Component />)
     }
 }

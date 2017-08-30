@@ -1,9 +1,31 @@
-export interface ItemMetadata {
-    ids: string[];
-    subject: number; //TODO: Change this to a Subject
+export interface PicturePath {
+    item: string,
+    path: string,
+    type: PictureType
 }
 
-export interface ItemTableData {
+export interface ItemPictures {
+    passage: PicturePath,
+    questions: PicturePath[]
+}
+
+export enum PictureType {
+    question,
+    passage
+}
+
+export interface Item {
+    passage: PicturePath;
+    questions: Question[];
+}
+
+export interface Question {
+    id: string;
+    tableData: QuestionTableData;
+    path: PicturePath;
+}
+
+export interface QuestionTableData {
     item: string;
     claim: string;
     domain: string;

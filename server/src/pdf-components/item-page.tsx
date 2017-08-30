@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { ItemTableData } from "../models";
-import * as ItemTable from './item-table';
+import { QuestionTableData } from "../models";
+import * as ItemTable from './question-data-table';
 import * as Header from './header';
 
 interface Props {
-    tableData: ItemTableData;
+    tableData: QuestionTableData;
     title: string
 }
 

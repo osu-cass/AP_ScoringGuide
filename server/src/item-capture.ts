@@ -1,23 +1,8 @@
 import * as Path from 'path';
 import * as FileStructure from 'fs';
+import { PicturePath, ItemPictures, PictureType } from './models';
 const puppeteer = require('puppeteer');
 const pageWidth = 640;
-
-export interface PicturePath {
-    item: string,
-    path: string,
-    type: PictureType
-}
-
-export interface ItemPictures {
-    passage: PicturePath,
-    questions: PicturePath[]
-}
-
-export enum PictureType {
-    question,
-    passage
-}
 
 export interface ScreenshotOptions {
     screenshotPath?: string,
