@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Item } from '../models';
 import * as ItemPage from './item-page';
-import * as Footer from './footer';
 
 interface Props {
     items: Item[];
@@ -29,7 +28,6 @@ export class Component extends React.Component<undefined, undefined> {
                 <body>
                     <ItemPage.Component tableData={itemData} title={title} />
                     <ItemPage.Component tableData={itemData} title={title} />
-                    <Footer.Component gradeLevel='Grade 5' subject='Mathmatics' />
                 </body>
             </html>
         );

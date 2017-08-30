@@ -1,9 +1,15 @@
+const wkhtmltopdf = require('wkhtmltopdf');
 import { Request, Response } from 'express';
-import { PdfGenerator } from "../pdf-generator";
+import { HtmlRenderer } from "../pdf-generator";
 
 export default async function post(req: Request, res: Response) {
-    const htmlString = PdfGenerator.render([]);
-    const buffer = await PdfGenerator.generate(htmlString, 9222);
+    const htmlString = HtmlRenderer.renderBody([]);
+    const title = 'Grade 5 Mathematics';
+    const options = {
+        headerHtml: HtmlRenderer.renderHeader(title),
+        footerRight: 'Page [page]',
+        footerLeft: 'Smarter Balanced ' + title + 'Practice Test Scoring Guide'
+    };
     res.type('application/pdf');
-    res.end(buffer);
+    wkhtmltopdf(htmlString, options).pipe(res);
 }
