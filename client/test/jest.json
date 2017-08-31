@@ -5,7 +5,7 @@
     "testRegex": "(test/.+)\\.(tsx?)",
     "globals": {
         "ts-jest": {
-            "tsConfigFile": "src/tsconfig.json"
+            "tsConfigFile": "test/tsconfig.json"
         }
     },
     "moduleFileExtensions": [ "js", "jsx", "json", "ts", "tsx" ]
