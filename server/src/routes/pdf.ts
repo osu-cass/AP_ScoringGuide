@@ -2,19 +2,20 @@ const wkhtmltopdf = require('wkhtmltopdf');
 import { Request, Response } from 'express';
 import { HtmlRenderer } from "../pdf-generator";
 import { ItemCapture } from "../item-capture";
+import { ScreenshotManager } from "../screenshot-manager";
 
-let chrome = new ItemCapture({
+
+let screenshotManager = new ScreenshotManager({
     pageWidth: 640,
     screenshotPath: 'client/dist/images/screenshots'
-});
-chrome.launchBrowser();
+})
 
 export default async function post(req: Request, res: Response) {
     const ids = req.param('ids', '') as string;
     const idsArray = ids.split(',');
 
-    let pictures = await Promise.all(idsArray.map(id => chrome.takeScreenshots([id])));
-    console.log(JSON.stringify(pictures));
+    let pictures = await Promise.all(idsArray.map(id => screenshotManager.getScreenshots([id])));
+    console.log(pictures);
 
     const htmlString = HtmlRenderer.renderBody([]);
     const title = 'Grade 5 Mathematics';
