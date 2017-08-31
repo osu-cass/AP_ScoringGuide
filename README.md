@@ -1,6 +1,6 @@
 # Scoring Guide
 
-This project automatically generates scoring guides for Smarter Balanced practice tests. 
+The Scoreing Guide website is a Typescript, Node, and Express Application. It allows users to quickly generate PDF documents with sample questions from the Smarter Balanced test.
 
 ## Getting Started
 
