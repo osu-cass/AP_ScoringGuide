@@ -84,7 +84,8 @@ export class ItemCapture {
                 passage: {
                     item: itemIds[0],
                     path: passagePath,
-                    type: PictureType.passage
+                    type: PictureType.passage,
+                    captured: true
                 },
                 questions: []
             }
@@ -121,7 +122,8 @@ export class ItemCapture {
             pictures.questions.push({
                 item: itemIds[i],
                 path: questionPath,
-                type: PictureType.question
+                type: PictureType.question,
+                captured: true
             });
         }
         await page.close();

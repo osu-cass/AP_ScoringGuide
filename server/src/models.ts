@@ -1,7 +1,8 @@
 export interface PicturePath {
     item: string,
     path: string,
-    type: PictureType
+    type: PictureType,
+    captured: boolean
 }
 
 export interface ItemPictures {
