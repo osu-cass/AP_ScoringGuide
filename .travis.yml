@@ -9,13 +9,14 @@ install:
   - npm install
   - npm install -g typescript@2.4.2
   - npm install -g jest@20.0.4
-  - npm install -g less@2.7.2
+  - npm install -g lessc-each@1.1.0
 
 script: 
-  # currently in ./client
+  # Client
   - npm run build
   - npm run less
-  - npm run test
+#  - npm run test
+  # Server
   - cd ../server
   - npm run build
-  - npm run test
+#  - npm run test

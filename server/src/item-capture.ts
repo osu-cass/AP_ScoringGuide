@@ -1,74 +1,63 @@
 import * as Path from 'path';
 import * as FileStructure from 'fs';
+import { PicturePath, ItemPictures, PictureType } from './models';
 const puppeteer = require('puppeteer');
-const pageWidth = 640;
-
-export interface PicturePath {
-    item: string,
-    path: string,
-    type: PictureType
-}
-
-export interface ItemPictures {
-    passage: PicturePath,
-    questions: PicturePath[]
-}
-
-export enum PictureType {
-    question,
-    passage
-}
-
-export interface ScreenshotOptions {
-    screenshotPath?: string,
-    pageWidth?: number
-}
 
 export class ItemCapture {
     browser: any;
-    pageWidth: number;
-    screenshotPath: string;
+    pageWidth = 640;
 
-    constructor(chromePort: number, options?: ScreenshotOptions) {
-        this.browser = puppeteer.connect({
-            browserWSEndpoint: 'localhost:' + chromePort
-        });
-        if (!options) {
-            this.pageWidth = options.pageWidth || 640;
-            this.screenshotPath = options.screenshotPath || 'screenshots/'
-        }
+    constructor(pageWidth: number) {
+        this.pageWidth = pageWidth;
     }
 
-    async takeScreenshots(itemIds: string[]) {
-        let pictures: ItemPictures
+    async launchBrowser(){
+        this.browser = await puppeteer.launch();
+        console.log('chrome url: ', this.browser.wsEndpoint());
+    }
+
+    getIdString(paths: ItemPictures) {
+        let ids = paths.questions.map(p => p.item);
+        if (paths.passage) {
+            ids.push(paths.passage.item);
+        }
+        return ids.join(',');
+    }
+
+    async takeScreenshots(paths: ItemPictures) {
         const page = await this.browser.newPage();
-        
-        const idsString = itemIds.join(',');
+        const idsString = this.getIdString(paths);
         await page.goto('http://ivs.smarterbalanced.org/items?ids=' + idsString + '&isaap=TDS_SLM1');
         await page.setViewport({
-            width: pageWidth,
+            width: this.pageWidth,
             height: 1000
         });
         const iframe = await page.frames()[1];
         await iframe.waitForSelector('.grouping', {
             timeout: 5000
         });
+
+        await new Promise(resolve => setTimeout(resolve, 50));
         
-        const groupingHeight: number = await iframe.evaluate(() => {
-            return document.querySelector('.grouping').clientHeight;
-        });
         const headerHeight: number = await iframe.evaluate(() => {
             return document.querySelector('#topBar').scrollHeight;
         });
-    
+        const groupingHeight: number = await iframe.evaluate(() => {
+            return document.querySelector('.grouping').clientHeight;
+        });
+
         await page.setViewport({
-            width: pageWidth,
+            width: this.pageWidth,
             height: groupingHeight + headerHeight
         });
     
-        //passage
+        // passage
         const passageRect = await iframe.evaluate(() => {
-            let rect = document.querySelector('.thePassage').getBoundingClientRect();
+            let passage = document.querySelector('.thePassage');
+            if (!passage) {
+                return undefined;
+            }
+            let rect = passage.getBoundingClientRect();
             return {
                 x: scrollX + rect.left, 
                 y: scrollY + rect.top,
@@ -76,36 +65,29 @@ export class ItemCapture {
                 height: rect.height
             }
         });
-        if (!FileStructure.existsSync(this.screenshotPath)) {
-            FileStructure.mkdirSync(this.screenshotPath); 
+        
+        if (passageRect && paths.passage) {
+            await page.screenshot({
+                path: paths.passage.path,
+                clip: passageRect
+            });
+            paths.passage.captured = true
+        } else if (!passageRect) {
+            paths.passage = undefined;
         }
-        const passagePath = Path.join(this.screenshotPath, itemIds[0] + '-passage.png');
-        await page.screenshot({
-            path: 'screenshots/passage.png',
-            clip: passageRect
-        });
-
-        pictures = {
-            passage: {
-                item: itemIds[0],
-                path: passagePath,
-                type: PictureType.passage
-            },
-            questions: []
-        }
-    
-        // items
+        
+        // questions
         const itemRects = await iframe.evaluate(() => {
             const elements = document.querySelector('.theQuestions').children;
             let rects = [];
-            for (let i = 1; i < elements.length; i++) {
+            for (let i = 0; i < elements.length; i++) {
                 const boundingClientRect = elements[i].getBoundingClientRect();
                 var rect = {
                     x: scrollX + boundingClientRect.left,
                     y: scrollY + boundingClientRect.top,
                     width: boundingClientRect.width,
                     height: boundingClientRect.height,
-                    item: elements[i].id
+                    itemId: elements[i].id.match(/\d+/)[0]
                 };
                 rects.push(rect);
             }
@@ -113,17 +95,14 @@ export class ItemCapture {
         });
     
         for (let i = 0; i < itemRects.length; i++) {
-            const questionPath = Path.join(this.screenshotPath, itemIds[i] + '-question.png');
+            const question = paths.questions.find(q => q.item.includes(itemRects[i].itemId));
             await page.screenshot({
-                path: questionPath,
+                path: question.path,
                 clip: itemRects[i]
             });
-            pictures.questions.push({
-                item: itemIds[i],
-                path: questionPath,
-                type: PictureType.question
-            });
+            question.captured = true;
         }
-        return pictures;
+        page.close(); // fire and forget
+        return paths;
     }
 }

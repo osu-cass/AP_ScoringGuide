@@ -1,26 +1,33 @@
 import * as React from 'react';
-import { ItemMetadata } from '../models';
-import * as Header from './header';
+import { Item } from '../models';
+import * as ItemPage from './item-page';
 
 interface Props {
-    items: ItemMetadata[];
+    items: Item[];
 }
 
 export class Component extends React.Component<undefined, undefined> {
     render() {
-        // let pageData: JSX.Element[] = [];
-        // for (let i = 0; i < 10000; i++) {
-        //     pageData.push(<div>{i}</div>);
-        // }
+        let itemData = {
+            item: 'item',
+            claim: 'claim',
+            domain: 'domain',
+            target: 'target',
+            depthOfKnowledge: 'depth',
+            ccssMc: 'ccss mc',
+            ccssMp: 'ccss mp'
+        };
+        let title = 'Grade 5 Math';
         const port = process.env.PORT || 3000;
         return (
             <html>
                 <head>
-                    <base href={'localhost:' + port} />
+                    <base href={'http://localhost:' + port} />
+                    <link rel='stylesheet' href='css/pdf.css' />
                 </head>
-                <Header.Component />
                 <body>
-                    
+                    <ItemPage.Component tableData={itemData} title={title} />
+                    <ItemPage.Component tableData={itemData} title={title} />
                 </body>
             </html>
         );
