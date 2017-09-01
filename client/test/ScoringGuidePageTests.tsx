@@ -8,6 +8,6 @@ describe('<ScoringGuidePage />', () => {
 
     it('Contains an ItemSearchDropdown', () => {
         const wrapper = shallow(<ScoringGuidePage/>)
-        expect(wrapper.find(ItemSearchDropdown)).toHaveLength(0);
+        expect(wrapper.find(ItemSearchDropdown)).toHaveLength(1);
     });
 });

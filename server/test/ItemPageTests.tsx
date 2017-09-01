@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { QuestionDataTable } from '../src/components/QuestionDataTable';
+import { ItemPage } from '../src/components/ItemPage';
 import { QuestionTableData } from '../src/models'
 
-describe('<QuestionDataTable />', () => {
-    it('Contains an QuestionDataTable', () => {
+describe('<ItemPage />', () => {
+    it('Contains an ItemPage', () => {
         let itemData:QuestionTableData = {
             item: 'item',
             claim: 'claim',
@@ -14,9 +14,10 @@ describe('<QuestionDataTable />', () => {
             ccssMc: 'ccss mc',
             ccssMp: 'ccss mp'
         };
+        let pageTitle = 'Grade 5 Math';
 
-        // const wrapper = shallow(<QuestionDataTable tableData={itemData} />);
-        // expect(wrapper.find(QuestionDataTable)).toHaveLength(1);
+        // const wrapper = shallow(<ItemPage title={pageTitle} tableData={itemData} />);
+        // expect(wrapper.find(ItemPage)).toHaveLength(1);
     });
 
 
