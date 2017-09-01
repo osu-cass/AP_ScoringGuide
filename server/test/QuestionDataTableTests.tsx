@@ -15,8 +15,8 @@ describe('<QuestionDataTable />', () => {
             ccssMp: 'ccss mp'
         };
 
-        // const wrapper = shallow(<QuestionDataTable tableData={itemData} />);
-        // expect(wrapper.find(QuestionDataTable)).toHaveLength(1);
+        const wrapper = shallow(<QuestionDataTable tableData={itemData} />);
+        expect(wrapper.find(QuestionDataTable)).toHaveLength(1);
     });
 
 

@@ -16,8 +16,8 @@ describe('<ItemPage />', () => {
         };
         let pageTitle = 'Grade 5 Math';
 
-        // const wrapper = shallow(<ItemPage title={pageTitle} tableData={itemData} />);
-        // expect(wrapper.find(ItemPage)).toHaveLength(1);
+        const wrapper = shallow(<ItemPage title={pageTitle} tableData={itemData} />);
+        expect(wrapper.find(ItemPage)).toHaveLength(1);
     });
 
 
