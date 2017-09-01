@@ -30,26 +30,5 @@
     "ts-jest": "20.0.7",
     "typescript": "2.4.2",
     "webpack": "3.5.5"
-  },
-  "jest": {
-    "setupFiles": [
-      "test-env.js"
-    ],
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/test/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "test/tsconfig.json"
-      }
-    },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "ts",
-      "tsx"
-    ]
   }
 }

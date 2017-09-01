@@ -5,7 +5,7 @@ import { ItemSearchDropdown, SearchAPIParams } from '../src/ItemSearchDropdown';
 import { ItemCardViewModel } from '../src/ItemCard';
 
 import * as $ from 'jquery'
-window.$ = $;
+//window.$ = $;
 
 describe('<ScoringGuidePage />', () => {
 

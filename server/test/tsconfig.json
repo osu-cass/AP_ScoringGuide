@@ -3,11 +3,19 @@
         "target": "es2017",
         "outDir": "../../dist/server",
         "module": "commonjs",
+        "alwaysStrict": true,
         "noImplicitAny": true,
+        "noEmitOnError": false,
+        "removeComments": false,
+        "strictNullChecks": true,
         "sourceMap": true,
         "jsx": "react"
     },
     "include": [
         "**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "wwwroot"
     ]
-  }
+}
