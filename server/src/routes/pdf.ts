@@ -1,8 +1,8 @@
 const wkhtmltopdf = require('wkhtmltopdf');
 import { Request, Response } from 'express';
-import { HtmlRenderer } from "../pdf-generator";
-import { ItemCapture } from "../item-capture";
-import { ScreenshotManager } from "../screenshot-manager";
+import { HtmlRenderer } from "../PdfGenerator";
+import { ItemCapture } from "../ItemCapture";
+import { ScreenshotManager } from "../ScreenshotManager";
 
 
 let screenshotManager = new ScreenshotManager({

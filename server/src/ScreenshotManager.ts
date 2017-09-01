@@ -1,4 +1,4 @@
-import { ItemCapture } from "./item-capture";
+import { ItemCapture } from "./ItemCapture";
 import * as FileSystem from 'fs';
 import * as Path from 'path';
 import { PicturePath, PictureType, ItemPictures } from "./models";

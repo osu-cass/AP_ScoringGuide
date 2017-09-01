@@ -1,6 +1,6 @@
 import * as Path from 'path';
 import * as FileStructure from 'fs';
-import { PicturePath, ItemPictures, PictureType } from './models';
+import { PicturePath, ItemPictures, PictureType } from './Models';
 const puppeteer = require('puppeteer');
 
 export class ItemCapture {

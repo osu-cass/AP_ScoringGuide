@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Item } from '../models';
-import * as ItemPage from './item-page';
+import { Item } from '../Models';
+import * as ItemPage from './ItemPage';
 
 interface Props {
     items: Item[];

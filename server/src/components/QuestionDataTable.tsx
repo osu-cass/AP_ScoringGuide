@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { QuestionTableData } from "../models";
+import { QuestionTableData } from "../Models";
 
 interface Props {
     tableData: QuestionTableData;

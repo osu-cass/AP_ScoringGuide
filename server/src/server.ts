@@ -1,6 +1,6 @@
 import * as Express from 'express';
 import * as Path from 'path';
-import pdfRoute from './routes/pdf';
+import pdfRoute from './routes/Pdf';
 
 const port = process.env.PORT || 3000;
 const app = Express();
