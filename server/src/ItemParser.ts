@@ -46,7 +46,29 @@ export class ItemParser {
         $('img').map((i, el) => {
             el.attribs['src'] = 'http://ivs.smarterbalanced.org' + el.attribs['src'];
         });
+
+        this.shouldTakePicture($('.thePassage')) 
+            ? console.log('Take picture for passage') 
+            : console.log('Dont take picture for passage');
+
+        $('.theQuestions').children().each((i, el) => {
+            this.shouldTakePicture($(el)) 
+            ? console.log('Take picture for question ', el.attribs['id']) 
+            : console.log('Dont take picture for question', el.attribs['id']);
+        })
+        
+        
         return $.html();
+    }
+
+    shouldTakePicture(element: Cheerio) {
+        let initializing = element.filter((i, el) => {
+            if (el.children[0]) {
+                return (el.children[0] as any).data === 'Initializing';
+            }
+            return false;
+        }).length;
+        return initializing !== 0;
     }
 
     /** Items should be related to each other (have the same passage) and be in the form BANK-ITEM (ex: 187-1437). */
@@ -56,3 +78,4 @@ export class ItemParser {
         return this.parseHtml(xmlData);
     }
 }
+

@@ -26,6 +26,24 @@ export interface Question {
     path: PicturePath;
 }
 
+// export interface ItemGroup {
+//     passage?: ItemView;
+//     questions: Question[];
+// }
+
+// export interface Question {
+//     id: string;
+//     view: ItemView;
+//     tableData?: QuestionTableData;
+// }
+
+// export interface ItemView {
+//     id: string;
+//     html?: string;
+//     picturePath?: string;
+//     captured: boolean;
+// }
+
 export interface QuestionTableData {
     item: string;
     claim: string;
