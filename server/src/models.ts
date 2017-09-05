@@ -1,48 +1,54 @@
-export interface PicturePath {
-    item: string,
-    path: string,
-    type: PictureType,
-    captured: boolean
-}
+// export interface PicturePath {
+//     item: string,
+//     path: string,
+//     type: PictureType,
+//     captured: boolean
+// }
 
-export interface ItemPictures {
-    passage?: PicturePath,
-    questions: PicturePath[]
-}
+// export interface ItemPictures {
+//     passage?: PicturePath,
+//     questions: PicturePath[]
+// }
 
-export enum PictureType {
-    question,
-    passage
-}
+// export enum PictureType {
+//     question,
+//     passage
+// }
 
-export interface Item {
-    passage: PicturePath;
-    questions: Question[];
-}
-
-export interface Question {
-    id: string;
-    tableData: QuestionTableData;
-    path: PicturePath;
-}
-
-// export interface ItemGroup {
-//     passage?: ItemView;
+// export interface Item {
+//     passage: PicturePath;
 //     questions: Question[];
 // }
 
 // export interface Question {
 //     id: string;
-//     view: ItemView;
-//     tableData?: QuestionTableData;
+//     tableData: QuestionTableData;
+//     path: PicturePath;
 // }
 
-// export interface ItemView {
-//     id: string;
-//     html?: string;
-//     picturePath?: string;
-//     captured: boolean;
-// }
+export interface ItemGroup {
+    passage?: ItemView;
+    questions: Question[];
+}
+
+export interface Question {
+    id: string;
+    view: ItemView;
+    tableData?: QuestionTableData;
+}
+
+export interface ItemView {
+    id: string;
+    html?: string;
+    picturePath?: string;
+    captured: boolean;
+    type: ViewType;
+}
+
+export enum ViewType {
+    picture,
+    html
+}
 
 export interface QuestionTableData {
     item: string;

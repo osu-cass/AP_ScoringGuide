@@ -1,6 +1,7 @@
 import * as Request from 'request';
 import * as Xml from 'xml2js';
 import * as Cheerio from 'cheerio';
+import { ItemGroup, ViewType } from "./Models";
 
 export class ItemParser {
 
@@ -39,7 +40,7 @@ export class ItemParser {
         });
     }
 
-    parseHtml(xmlObject: any) {
+    parseHtml(xmlObject: any, itemIds: string[]) {
         let htmlString = xmlObject.contents.content[0].html[0] as string;
         let $ = Cheerio.load(htmlString);
         $('a').remove();
@@ -47,18 +48,35 @@ export class ItemParser {
             el.attribs['src'] = 'http://ivs.smarterbalanced.org' + el.attribs['src'];
         });
 
-        this.shouldTakePicture($('.thePassage')) 
-            ? console.log('Take picture for passage') 
-            : console.log('Dont take picture for passage');
+        let itemData: ItemGroup = {
+            questions: []
+        };
 
-        let questionsParent = $('.theQuestions').children().eq(0);
-        $(questionsParent).children().each((i, el) => {
-            this.shouldTakePicture($(el)) 
-                ? console.log('Take picture for question ', el.attribs['id']) 
-                : console.log('Dont take picture for question', el.attribs['id']);
+        if ($('.thePassage').length) {
+            const takePicture = this.shouldTakePicture($('.thePassage'))
+            itemData.passage = {
+                id: itemIds[0],
+                type: takePicture ? ViewType.picture : ViewType.html,
+                html: takePicture ? undefined : $('.thePassage').html(),
+                captured: takePicture ? false : true
+            }
+        }
+
+        itemIds.map(id => {
+            const selector = '#Item_' + id.split('-').pop();
+            const takePicture = this.shouldTakePicture($(selector));
+            itemData.questions.push({
+                id: id,
+                view: {
+                    id: id,
+                    type: takePicture ? ViewType.picture : ViewType.html,
+                    html: takePicture ? undefined : $(selector).html(),
+                    captured: takePicture ? false : true
+                } 
+            });
         });
-        
-        return $.html();
+
+        return itemData;
     }
 
     shouldTakePicture(element: Cheerio) {
@@ -75,7 +93,7 @@ export class ItemParser {
     async loadItemData(items: string[]) {
         const response = await this.load(items);
         const xmlData = await this.parseXml(response);
-        return this.parseHtml(xmlData);
+        return this.parseHtml(xmlData, items);
     }
 }
 
