@@ -82,15 +82,16 @@ export class ItemCapture {
         
         // questions
         const itemRects = await iframe.evaluate(() => {
+            const headerHeight = document.querySelector('.questionNumber').clientHeight;
             const elements = document.querySelector('.theQuestions').children;
             let rects = [];
             for (let i = 0; i < elements.length; i++) {
                 const boundingClientRect = elements[i].getBoundingClientRect();
                 var rect = {
                     x: scrollX + boundingClientRect.left,
-                    y: scrollY + boundingClientRect.top,
+                    y: scrollY + boundingClientRect.top + headerHeight,
                     width: boundingClientRect.width,
-                    height: boundingClientRect.height,
+                    height: boundingClientRect.height - headerHeight,
                     itemId: elements[i].id.match(/\d+/)[0]
                 };
                 rects.push(rect);
@@ -108,7 +109,7 @@ export class ItemCapture {
                 question.view.captured = true;
             }
         }
-        
+
         page.close(); // fire and forget
         return itemData;
     }

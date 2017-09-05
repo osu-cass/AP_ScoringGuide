@@ -30,7 +30,7 @@ export class ItemParser {
     }
 
     parseXml(xmlString: string) {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             Xml.parseString(xmlString, (err, result) => {
                 if (err) {
                     reject(err);
@@ -44,6 +44,7 @@ export class ItemParser {
         let htmlString = xmlObject.contents.content[0].html[0] as string;
         let $ = Cheerio.load(htmlString);
         $('a').remove();
+        $('.questionNumber').remove();
         $('img').map((i, el) => {
             el.attribs['src'] = 'http://ivs.smarterbalanced.org' + el.attribs['src'];
         });
@@ -94,6 +95,18 @@ export class ItemParser {
         const response = await this.load(items);
         const xmlData = await this.parseXml(response);
         return this.parseHtml(xmlData, items);
+    }
+
+    async loadPlainHtml(item: string) {
+        const response = await this.load([item]);
+        const xmlData = await this.parseXml(response);
+        let htmlString = xmlData.contents.content[0].html[0] as string;
+        let $ = Cheerio.load(htmlString);
+        $('a').remove();
+        $('img').map((i, el) => {
+            el.attribs['src'] = 'http://ivs.smarterbalanced.org' + el.attribs['src'];
+        });
+        return $.html();
     }
 }
 

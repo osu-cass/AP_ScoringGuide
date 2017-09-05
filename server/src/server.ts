@@ -13,10 +13,9 @@ app.get('/ScoringGuide', (req, res) => {
     res.sendFile(Path.join(__dirname, '../../client/dist/index.html'));
 });
 app.get('/item', (req, res) => {
-    const ids = req.param('ids', '') as string;
-    const idsArray = ids.split(',');
+    const id = req.param('id', '') as string;
     const ip = new ItemParser()
-    ip.loadItemData(idsArray)
+    ip.loadPlainHtml(id)
         .then(item => res.send(item))
         .catch(err => res.status(500).send(err));
     
