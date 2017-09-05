@@ -51,11 +51,12 @@ export class ItemParser {
             ? console.log('Take picture for passage') 
             : console.log('Dont take picture for passage');
 
-        $('.theQuestions').children().each((i, el) => {
+        let questionsParent = $('.theQuestions').children()[0];
+        $(questionsParent).children().each((i, el) => {
             this.shouldTakePicture($(el)) 
-            ? console.log('Take picture for question ', el.attribs['id']) 
-            : console.log('Dont take picture for question', el.attribs['id']);
-        })
+                ? console.log('Take picture for question ', el.attribs['id']) 
+                : console.log('Dont take picture for question', el.attribs['id']);
+        });
         
         
         return $.html();
