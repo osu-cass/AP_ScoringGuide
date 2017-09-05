@@ -7,7 +7,9 @@ const wkhtmltopdf = require('wkhtmltopdf');
 
 export class HtmlRenderer {
     static renderBody(items: ItemGroup[]) {
-        return ReactDOMServer.renderToString(<PdfComponent />);
+        return ReactDOMServer.renderToString(
+            <PdfComponent items={items}/>
+        );
     }
 }
 
