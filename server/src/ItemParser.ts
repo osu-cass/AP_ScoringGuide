@@ -51,19 +51,18 @@ export class ItemParser {
             ? console.log('Take picture for passage') 
             : console.log('Dont take picture for passage');
 
-        let questionsParent = $('.theQuestions').children()[0];
+        let questionsParent = $('.theQuestions').children().eq(0);
         $(questionsParent).children().each((i, el) => {
             this.shouldTakePicture($(el)) 
                 ? console.log('Take picture for question ', el.attribs['id']) 
                 : console.log('Dont take picture for question', el.attribs['id']);
         });
         
-        
         return $.html();
     }
 
     shouldTakePicture(element: Cheerio) {
-        let initializing = element.filter((i, el) => {
+        let initializing = element.find('span').filter((i, el) => {
             if (el.children[0]) {
                 return (el.children[0] as any).data === 'Initializing';
             }
