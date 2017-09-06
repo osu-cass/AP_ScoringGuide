@@ -1,6 +1,6 @@
 import * as Path from 'path';
 import * as FileStructure from 'fs';
-import { PicturePath, ItemPictures, PictureType } from './Models';
+import { ItemGroup, Question, ItemView, ViewType } from './Models';
 const puppeteer = require('puppeteer');
 
 export class ItemCapture {
@@ -16,17 +16,23 @@ export class ItemCapture {
         console.log('chrome url: ', this.browser.wsEndpoint());
     }
 
-    getIdString(paths: ItemPictures) {
-        let ids = paths.questions.map(p => p.item);
-        if (paths.passage) {
-            ids.push(paths.passage.item);
+    getIdString(paths: ItemGroup) {
+        let ids: string[] = [];
+        paths.questions.forEach(p => {
+            if (p.view.type === ViewType.picture) {
+                ids.push(p.id);
+            }
+        });
+
+        if (ids.length === 0 && paths.passage) {
+            ids.push(paths.passage.id);
         }
         return ids.join(',');
     }
 
-    async takeScreenshots(paths: ItemPictures) {
+    async takeScreenshots(itemData: ItemGroup) {
         const page = await this.browser.newPage();
-        const idsString = this.getIdString(paths);
+        const idsString = this.getIdString(itemData);
         await page.goto('http://ivs.smarterbalanced.org/items?ids=' + idsString + '&isaap=TDS_SLM1');
         await page.setViewport({
             width: this.pageWidth,
@@ -52,41 +58,40 @@ export class ItemCapture {
         });
     
         // passage
-        const passageRect = await iframe.evaluate(() => {
-            let passage = document.querySelector('.thePassage');
-            if (!passage) {
-                return undefined;
-            }
-            let rect = passage.getBoundingClientRect();
-            return {
-                x: scrollX + rect.left, 
-                y: scrollY + rect.top,
-                width: rect.width,
-                height: rect.height
-            }
-        });
-        
-        if (passageRect && paths.passage) {
+        if (itemData.passage 
+            && itemData.passage.type === ViewType.picture 
+            && !itemData.passage.captured) {
+            
+            const passageRect = await iframe.evaluate(() => {
+                let passage = document.querySelector('.thePassage');
+                let rect = passage.getBoundingClientRect();
+                return {
+                    x: scrollX + rect.left, 
+                    y: scrollY + rect.top,
+                    width: rect.width,
+                    height: rect.height
+                }
+            });
+
             await page.screenshot({
-                path: paths.passage.path,
+                path: itemData.passage.picturePath,
                 clip: passageRect
             });
-            paths.passage.captured = true
-        } else if (!passageRect) {
-            paths.passage = undefined;
+            itemData.passage.captured = true;
         }
         
         // questions
         const itemRects = await iframe.evaluate(() => {
+            const headerHeight = document.querySelector('.questionNumber').clientHeight;
             const elements = document.querySelector('.theQuestions').children;
             let rects = [];
             for (let i = 0; i < elements.length; i++) {
                 const boundingClientRect = elements[i].getBoundingClientRect();
                 var rect = {
                     x: scrollX + boundingClientRect.left,
-                    y: scrollY + boundingClientRect.top,
+                    y: scrollY + boundingClientRect.top + headerHeight,
                     width: boundingClientRect.width,
-                    height: boundingClientRect.height,
+                    height: boundingClientRect.height - headerHeight,
                     itemId: elements[i].id.match(/\d+/)[0]
                 };
                 rects.push(rect);
@@ -95,14 +100,17 @@ export class ItemCapture {
         });
     
         for (let i = 0; i < itemRects.length; i++) {
-            const question = paths.questions.find(q => q.item.includes(itemRects[i].itemId));
-            await page.screenshot({
-                path: question.path,
-                clip: itemRects[i]
-            });
-            question.captured = true;
+            const question = itemData.questions.find(q => q.id.includes(itemRects[i].itemId));
+            if (!question.view.captured && question.view.type === ViewType.picture) {
+                await page.screenshot({
+                    path: question.view.picturePath,
+                    clip: itemRects[i]
+                });
+                question.view.captured = true;
+            }
         }
+
         page.close(); // fire and forget
-        return paths;
+        return itemData;
     }
 }

@@ -1,24 +1,19 @@
 import * as React from 'react';
-import { Item } from '../Models';
+import { ItemGroup } from '../Models';
 import { ItemPage } from './ItemPage';
 
 interface Props {
-    items: Item[];
+    items: ItemGroup[];
 }
 
-export class PdfComponent extends React.Component<undefined, undefined> {
+export class PdfComponent extends React.Component<Props, undefined> {
     render() {
-        let itemData = {
-            item: 'item',
-            claim: 'claim',
-            domain: 'domain',
-            target: 'target',
-            depthOfKnowledge: 'depth',
-            ccssMc: 'ccss mc',
-            ccssMp: 'ccss mp'
-        };
-        let title = 'Grade 5 Math';
         const port = process.env.PORT || 3000;
+        
+        const itemPages = this.props.items.map(item => (
+            <ItemPage itemData={item} />
+        ));
+
         return (
             <html>
                 <head>
@@ -26,8 +21,7 @@ export class PdfComponent extends React.Component<undefined, undefined> {
                     <link rel='stylesheet' href='css/pdf.css' />
                 </head>
                 <body>
-                    <ItemPage tableData={itemData} title={title} />
-                    <ItemPage tableData={itemData} title={title} />
+                    {itemPages}
                 </body>
             </html>
         );

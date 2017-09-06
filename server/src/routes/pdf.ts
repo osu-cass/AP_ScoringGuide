@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { HtmlRenderer, PdfGenerator } from "../PdfGenerator";
 import { ItemCapture } from "../ItemCapture";
-import { ScreenshotManager } from "../ScreenshotManager";
+import { ItemDataManager } from "../ItemDataManager";
 
 
-let screenshotManager = new ScreenshotManager({
-    pageWidth: 640,
+let manager = new ItemDataManager({
+    pageWidth: 800,
     screenshotPath: 'client/dist/images/screenshots'
 })
 
@@ -13,10 +13,9 @@ export default async function post(req: Request, res: Response) {
     const ids = req.param('ids', '') as string;
     const idsArray = ids.split(',');
 
-    let pictures = await Promise.all(idsArray.map(id => screenshotManager.getScreenshots([id])));
-    console.log(pictures);
+    let itemData = await Promise.all(idsArray.map(id => manager.getItemData([id])));
 
-    const htmlString = HtmlRenderer.renderBody([]);
+    const htmlString = HtmlRenderer.renderBody(itemData);
     const title = 'Grade 5 Mathematics';
     res.type('application/pdf');
     PdfGenerator.generate(htmlString, title).pipe(res);
