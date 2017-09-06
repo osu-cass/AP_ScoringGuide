@@ -6,9 +6,9 @@ import { Stream } from "stream";
 const wkhtmltopdf = require('wkhtmltopdf');
 
 export class HtmlRenderer {
-    static renderBody(items: ItemGroup[]) {
+    static renderBody(items: ItemGroup[], subject: string, grade: string) {
         return ReactDOMServer.renderToString(
-            <PdfComponent items={items}/>
+            <PdfComponent items={items} subject={subject} grade={grade}/>
         );
     }
 }

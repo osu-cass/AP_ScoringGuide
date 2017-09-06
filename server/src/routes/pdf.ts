@@ -15,7 +15,7 @@ export default async function post(req: Request, res: Response) {
 
     let itemData = await Promise.all(idsArray.map(id => manager.getItemData([id])));
 
-    const htmlString = HtmlRenderer.renderBody(itemData);
+    const htmlString = HtmlRenderer.renderBody(itemData, 'Mathematics', 'Grade 5');
     const title = 'Grade 5 Mathematics';
     res.type('application/pdf');
     PdfGenerator.generate(htmlString, title).pipe(res);
