@@ -6,7 +6,7 @@ export interface ItemGroup {
 export interface Question {
     id: string;
     view: ItemView;
-    tableData?: QuestionTableData;
+    data?: ItemViewModel;
 }
 
 export interface ItemView {
@@ -22,12 +22,15 @@ export enum ViewType {
     html
 }
 
-export interface QuestionTableData {
-    item: string;
-    claim: string;
-    domain: string;
+export interface ItemViewModel {
+    bankKey: number;
+    itemKey: number;
+    title: string;
+    gradeLabel: string;
+    subjectLabel: string;
+    claimCode: string;
     target: string;
+    domain: string;
     depthOfKnowledge: string;
-    ccssMc: string;
-    ccssMp: string;
+    commonCoreStandardId: string;
 }
