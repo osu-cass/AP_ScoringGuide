@@ -1,4 +1,4 @@
-import * as Request from 'request';
+import * as RequestPromise from './RequestPromise';
 import * as Xml from 'xml2js';
 import * as Cheerio from 'cheerio';
 import { ItemGroup, ViewType } from "./Models";
@@ -14,20 +14,7 @@ export class ItemParser {
             }),
             accommodations: [] as any[]
         }
-        return new Promise<string>((resolve, reject) => {
-            Request.post(getConfig().api.itemViewerService + '/Pages/API/content/load', {
-                json: postData,
-                headers: {
-                    "Accept": "",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
-                }
-            }, (error, response, body) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(body);
-            });
-        });
+        return RequestPromise.post(getConfig().api.itemViewerService + '/Pages/API/content/load', postData);
     }
 
     parseXml(xmlString: string) {
