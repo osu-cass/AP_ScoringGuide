@@ -29,7 +29,7 @@ export interface ItemViewModel {
     gradeLabel: string;
     subjectLabel: string;
     claimCode: string;
-    target: string;
+    targetId: string;
     domain: string;
     depthOfKnowledge: string;
     commonCoreStandardId: string;
