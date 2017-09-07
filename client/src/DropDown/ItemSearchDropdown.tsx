@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
-import * as GradeLevels from "./GradeLevels";
-import { parseQueryString } from "./ApiModels";
+import * as GradeLevels from "../Models/GradeLevels";
+import * as ItemModels from '../Models/ItemModels';
+import { parseQueryString } from "../Models/ApiModels";
 
 export interface InteractionType {
     code: string;
@@ -28,24 +29,16 @@ export interface SearchAPIParams {
     performanceOnly: boolean;
 }
 
-//passed in props, all options
 export interface Props {
     interactionTypes: InteractionType[];
     subjects: Subject[];
-    onChange: (params: SearchAPIParams) => void;
-    selectSingleResult: () => void;
+    onChange: (params: ItemModels.ScoreSearchParams) => void;
     isLoading: boolean;
 }
-//selected items
-export interface State {
-    itemId: string;
-    gradeLevels: GradeLevels.GradeLevels;
-    subjects: string[];
-    claims: string[];
-    interactionTypes: string[];
-    performanceOnly: boolean;
-}
 
+export interface State extends SearchAPIParams{
+    
+}
 
 export class ItemSearchDropdown extends React.Component<Props, State>{
     timeoutToken?: number;
@@ -53,29 +46,17 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
     constructor(props: Props) {
         super(props);
 
-        const queryObject = parseQueryString(location.search);
-        const itemId = (queryObject["itemID"] || [])[0] || "";
-
-        const gradeString = (queryObject["gradeLevels"] || [])[0];
-        const gradeLevels: GradeLevels.GradeLevels = parseInt(gradeString, 10) || GradeLevels.GradeLevels.NA;
-
-        const subjects = queryObject["subjects"] || [];
-        const claims = queryObject["claims"] || [];
-        const interactionTypes = queryObject["interactionTypes"] || [];
-        const performanceOnly = (queryObject["performanceOnly"] || [])[0] === "true";
-
         this.state = {
-            itemId: itemId,
-            gradeLevels: gradeLevels,
-            subjects: subjects,
-            claims: claims,
-            interactionTypes: interactionTypes,
-            performanceOnly: performanceOnly
+            itemId: "",
+            gradeLevels: GradeLevels.GradeLevels.All,
+            subjects: [],
+            claims: [],
+            interactionTypes: [],
+            performanceOnly: false
         };
 
         this.onChange();
     }
-
     encodeQuery(): string {
         let pairs: string[] = [];
         if (this.state.claims && this.state.claims.length !== 0) {
@@ -112,7 +93,6 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
 
         this.timeoutToken = setTimeout(() => this.onChange(), 200);
     }
-
     onChange() {
         const params: SearchAPIParams = {
             itemId: this.state.itemId || "",
@@ -122,7 +102,14 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
             interactionTypes: this.state.interactionTypes || [],
             performanceOnly: this.state.performanceOnly || false
         };
-        this.props.onChange(params);
+        //TOOD: fix this 
+        const scoreParams: ItemModels.ScoreSearchParams = {
+            techType: [],
+            subjects: params.subjects,
+            gradeLevels: params.gradeLevels
+            
+        };
+        this.props.onChange(scoreParams);
     }
 
     onItemIDInput(e: React.FormEvent<HTMLInputElement>) {
@@ -132,12 +119,6 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
             this.setState({
                 itemId: newValue
             }, () => this.beginChangeTimeout());
-        }
-    }
-
-    onItemIDKeyUp(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.keyCode === 13) {
-            this.props.selectSingleResult();
         }
     }
 
@@ -244,7 +225,7 @@ export class ItemSearchDropdown extends React.Component<Props, State>{
 
         return (<option key={claim.code} value={claim.code}>{claim.label}</option>);
     }
-
+    
     renderClaims() {
         // If no subjects are selected, use the entire list of subjects
         const selectedSubjectCodes = this.state.subjects;

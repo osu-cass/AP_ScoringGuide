@@ -1,5 +1,4 @@
-import * as ItemCard from "./ItemCard";
-import * as ItemCardViewModel from './ItemCardViewModel';
+import * as ItemCardViewModel from '../Models/ItemCardViewModel';
 import * as React from "react";
 
 export type Header = "Item" | "Claim/Target" | "Subject" | "Grade" | "Item Type";
@@ -91,7 +90,7 @@ export const headerColumns: SortColumn[] = [
 ];
 
 export class HeaderTable extends React.Component<Props, State> {
-    constructor(props: Props){
+    constructor(props: Props) {
         super(props);
         this.state = {
             dirElem: undefined
@@ -109,7 +108,7 @@ export class HeaderTable extends React.Component<Props, State> {
         return 0;
     }
 
-    headerEventHandler(scol: SortColumn, hcol: HeaderSort|undefined) {
+    headerEventHandler(scol: SortColumn, hcol: HeaderSort | undefined) {
         this.props.onHeaderClick(scol);
     }
 
@@ -132,12 +131,14 @@ export class HeaderTable extends React.Component<Props, State> {
 
     renderHeader(col: SortColumn): JSX.Element {
         const headerSort = this.props.sorts.find(hs => hs.col.header === col.header);
-        this.setDirElem(headerSort);
+        if (headerSort) {
+            this.setDirElem(headerSort); 
+        }
 
         return (
             <th key={col.header}
                 className={col.className}
-                onClick={() => this.headerEventHandler(col,headerSort)}>
+                onClick={() => this.headerEventHandler(col, headerSort)}>
                 <div className={col.className}>
                     {this.state.dirElem} {col.header}
                 </div>
@@ -150,7 +151,6 @@ export class HeaderTable extends React.Component<Props, State> {
             <table className="item-table table mapcomponent-table">
                 <thead>
                     <tr className="primary">
-                        <th></th>
                         {this.props.columns.map(col => this.renderHeader(col))}
                     </tr>
                 </thead>

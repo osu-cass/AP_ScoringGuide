@@ -62,3 +62,4 @@ screenshots/
 client/dist/js/
 server/dist/
 client/dist/css/
+node_modules/
