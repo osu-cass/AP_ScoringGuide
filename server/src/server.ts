@@ -2,8 +2,9 @@ import * as Express from 'express';
 import * as Path from 'path';
 import pdfRoute from './routes/Pdf';
 import { ItemParser } from './ItemParser';
+import { getConfig } from "./Config";
 
-const port = process.env.PORT || 3000;
+const port = getConfig().port;
 const app = Express();
 app.use(Express.static(Path.join(__dirname, '../../client/dist')));
 
@@ -21,4 +22,4 @@ app.get('/item', (req, res) => {
     
 })
 
-app.listen(port, () => console.log('Server started on port ', port));
+app.listen(port, () => console.log('Server started on port', port));
