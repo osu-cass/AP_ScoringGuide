@@ -1,0 +1,7 @@
+{
+    "api": {
+        "sampleItems": "http://is-score.cass.oregonstate.edu",
+        "itemViewerService": "http://ivs.smarterbalanced.org"
+    },
+    "screenshotPageWidth": 700
+}

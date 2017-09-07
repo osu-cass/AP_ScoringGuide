@@ -2,6 +2,7 @@ import * as Request from 'request';
 import * as Xml from 'xml2js';
 import * as Cheerio from 'cheerio';
 import { ItemGroup, ViewType } from "./Models";
+import { getConfig } from './Config';
 
 export class ItemParser {
 
@@ -14,7 +15,7 @@ export class ItemParser {
             accommodations: [] as any[]
         }
         return new Promise<string>((resolve, reject) => {
-            Request.post('http://ivs.smarterbalanced.org/Pages/API/content/load', {
+            Request.post(getConfig().api.itemViewerService + '/Pages/API/content/load', {
                 json: postData,
                 headers: {
                     "Accept": "",
@@ -42,11 +43,12 @@ export class ItemParser {
 
     parseHtml(xmlObject: any, itemIds: string[]) {
         let htmlString = xmlObject.contents.content[0].html[0] as string;
+        let baseUrl = getConfig().api.itemViewerService;
         let $ = Cheerio.load(htmlString);
         $('a').remove();
         $('.questionNumber').remove();
         $('img').map((i, el) => {
-            el.attribs['src'] = 'http://ivs.smarterbalanced.org' + el.attribs['src'];
+            el.attribs['src'] = baseUrl + el.attribs['src'];
         });
 
         let itemData: ItemGroup = {
@@ -99,12 +101,14 @@ export class ItemParser {
 
     async loadPlainHtml(item: string) {
         const response = await this.load([item]);
+        const baseUrl = getConfig().api.itemViewerService;
         const xmlData = await this.parseXml(response);
         let htmlString = xmlData.contents.content[0].html[0] as string;
         let $ = Cheerio.load(htmlString);
+        
         $('a').remove();
         $('img').map((i, el) => {
-            el.attribs['src'] = 'http://ivs.smarterbalanced.org' + el.attribs['src'];
+            el.attribs['src'] = baseUrl + el.attribs['src'];
         });
         return $.html();
     }
