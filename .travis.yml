@@ -7,10 +7,6 @@ install:
   - npm install
   - cd ../client
   - npm install
-  - npm install -g typescript@2.4.2
-  - npm install -g jest@20.0.4
-  - npm install -g lessc-each@1.1.0
-
 script: 
   # Client
   - npm run build
