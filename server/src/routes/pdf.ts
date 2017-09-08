@@ -22,10 +22,16 @@ export default async function post(req: Request, res: Response) {
     const idsArray = ids.split(',');
 
     let itemViews = await Promise.all(idsArray.map(id => manager.getItemData([id])));
+
+    let questionNum = 1;
     itemViews.forEach(iv => 
-        iv.questions.forEach(q => 
+        iv.questions.forEach(q => {
             q.data = itemData.find(item => 
-                item.bankKey + '-' + item.itemKey === q.id)));
+                item.bankKey + '-' + item.itemKey === q.id
+            );
+            q.questionNumber = questionNum++;
+        })
+    );
     
     const htmlString = HtmlRenderer.renderBody(itemViews, 'Mathematics', 'Grade 5');
     const title = 'Grade 5 Mathematics';

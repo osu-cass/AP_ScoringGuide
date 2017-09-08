@@ -7,6 +7,7 @@ export interface Question {
     id: string;
     view: ItemView;
     data?: ItemViewModel;
+    questionNumber?: number;
 }
 
 export interface ItemView {
