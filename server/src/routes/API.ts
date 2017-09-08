@@ -17,12 +17,7 @@ export class APIRoute {
             screenshotPath: 'client/dist/images/screenshots'
         });
         RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/Search')
-            .then(items => {
-                this.itemData = JSON.parse(items);
-                console.log(this.itemData);
-            }
-                
-        );
+            .then(items => this.itemData = JSON.parse(items));
 
         this.router = Express.Router();
         this.router.get('/pdf', this.pdf);
