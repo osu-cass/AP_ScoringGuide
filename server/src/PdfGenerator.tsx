@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOMServer from 'react-dom/server';
-import { ItemGroup } from './models';
+import { ItemGroup } from './Models';
 import { PdfComponent } from './components/PdfComponent';
 import { Stream } from "stream";
 const wkhtmltopdf = require('wkhtmltopdf');

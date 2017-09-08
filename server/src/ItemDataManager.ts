@@ -1,7 +1,7 @@
 import { ItemCapture } from "./ItemCapture";
 import * as FileSystem from 'fs';
 import * as Path from 'path';
-import { ItemGroup, Question, ItemView, ViewType } from "./models";
+import { ItemGroup, Question, ItemView, ViewType } from "./Models";
 import { ItemParser } from "./ItemParser";
 
 export interface ScreenshotOptions {
