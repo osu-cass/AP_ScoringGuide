@@ -3,7 +3,7 @@
         "target": "es2017",
         "outDir": "../dist",
         "module": "commonjs",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "sourceMap": true,
         "jsx": "react"
     },
