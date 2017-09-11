@@ -43,7 +43,7 @@ export class ItemCapture {
             timeout: 5000
         });
 
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise(resolve => setTimeout(resolve, 200));
         
         const headerHeight: number = await iframe.evaluate(() => {
             return document.querySelector('#topBar').scrollHeight;
