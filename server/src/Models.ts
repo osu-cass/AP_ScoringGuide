@@ -26,7 +26,6 @@ export enum ViewType {
 export interface ItemViewModel {
     bankKey: number;
     itemKey: number;
-    title: string;
     gradeLabel: string;
     subjectLabel: string;
     claimCode: string;
