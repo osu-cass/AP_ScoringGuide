@@ -1,17 +1,11 @@
-version: "3"
+version: "3.2"
 
-# Intended for development use only
 services:
   server:
     build: .
+    image: scoring-guide:stage
     ports:
       - 3000:3000
     volumes:
       - ".:/usr/src"
-    command: ["yarn", "nodemon", "--", "dist/server.js"]
-
-  tsc:
-    build: .
-    volumes:
-      - ".:/usr/src"
-    command: ["yarn", "tsc", "--", "-w", "-p", "src"]
+    command: ["yarn", "start"]

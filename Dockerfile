@@ -13,7 +13,7 @@ WORKDIR /usr/src
 COPY . .
 RUN cd /usr/src/server && yarn run build
 RUN cd /usr/src/client && yarn run build && yarn run less
-ENV PORT=3000
+ENV NODE_ENV="production"
 EXPOSE 3000:3000
 
 # Run
