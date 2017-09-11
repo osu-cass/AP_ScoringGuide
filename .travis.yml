@@ -16,3 +16,20 @@ script:
   - cd ../server
   - npm run build
 #  - npm run test
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: docker-push
+    on:
+      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: docker-push
+    on:
+      branch: dev
+  - provider: script
+    skip_cleanup: true
+    script: docker-push
+    on:
+      tags: true
