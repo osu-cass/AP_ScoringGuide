@@ -1,0 +1,17 @@
+version: "3"
+
+# Intended for development use only
+services:
+  server:
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ".:/usr/src"
+    command: ["yarn", "nodemon", "--", "dist/server.js"]
+
+  tsc:
+    build: .
+    volumes:
+      - ".:/usr/src"
+    command: ["yarn", "tsc", "--", "-w", "-p", "src"]
