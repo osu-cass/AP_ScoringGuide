@@ -3,33 +3,34 @@ node_js:
   - "8"
 
 install: 
-  - cd server
+  - cd $TRAVIS_BUILD_DIR/server
   - npm install
-  - cd ../client
+  - cd $TRAVIS_BUILD_DIR/client
   - npm install
 script: 
   # Client
+  - cd $TRAVIS_BUILD_DIR/client
   - npm run build
   - npm run less
 #  - npm run test
   # Server
-  - cd ../server
+  - cd $TRAVIS_BUILD_DIR/server
   - npm run build
 #  - npm run test
 
 deploy:
   - provider: script
     skip_cleanup: true
-    script: ./docker-push
+    script: $TRAVIS_BUILD_DIR/docker-push
     on:
       branch: master
   - provider: script
     skip_cleanup: true
-    script: ./docker-push
+    script: $TRAVIS_BUILD_DIR/docker-push
     on:
       branch: dev
   - provider: script
     skip_cleanup: true
-    script: ./docker-push
+    script: $TRAVIS_BUILD_DIR/docker-push
     on:
       branch: feat/docker-compose #testing
