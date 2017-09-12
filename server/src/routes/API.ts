@@ -4,11 +4,12 @@ import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
 import { getConfig } from "../Config";
-import { ItemViewModel } from "../Models";
+import { ItemViewModel, AboutItemViewModel } from "../Models";
 
 export class APIRoute {
     manager: ItemDataManager;
     itemData: ItemViewModel[];
+    aboutItems: AboutItemViewModel[];
     router: Express.Router;
 
     constructor() {
@@ -16,12 +17,16 @@ export class APIRoute {
             pageWidth: getConfig().screenshotPageWidth,
             screenshotPath: 'client/dist/images/screenshots'
         });
-        RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/Search')
-            .then(items => this.itemData = JSON.parse(items));
+        RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/AboutAllItems')
+            .then(items => {
+                this.aboutItems = JSON.parse(items);
+                this.itemData = this.aboutItems.map(i => i.itemCardViewModel);
+            });
 
         this.router = Express.Router();
         this.router.get('/pdf', this.pdf);
         this.router.get('/search', this.search);
+        this.router.get('/aboutItem', this.getAboutItem);
     }
 
     pdf = async (req: Express.Request, res: Express.Response) => {
@@ -50,5 +55,22 @@ export class APIRoute {
         res.status(200);
         res.type('application/json');
         res.send(JSON.stringify(this.itemData));
+    }
+
+    getAboutItem = (req: Express.Request, res: Express.Response) => {
+        const id = (req.query.id as string || '').split('-') || [];
+        const itemKey = Number(id[1]) || 0;
+        const bankKey = Number(id[0]) || 0;
+        const about = this.aboutItems.find(i => 
+            i.itemCardViewModel  
+            && i.itemCardViewModel.itemKey === itemKey
+            && i.itemCardViewModel.bankKey === bankKey);
+        if (about) {
+            res.status(200);
+            res.type('application/json');
+            res.send(JSON.stringify(about));
+        } else {
+            res.sendStatus(400);
+        }
     }
 }
