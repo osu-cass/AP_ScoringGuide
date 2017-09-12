@@ -37,4 +37,4 @@ deploy:
     skip_cleanup: true
     script: ./docker-push.sh
     on:
-      branch: feat/docker-compose #testing
+      tags: true
