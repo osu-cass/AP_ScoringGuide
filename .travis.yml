@@ -4,19 +4,19 @@ node_js:
 
 install: 
   - cd $TRAVIS_BUILD_DIR/server
-  - npm install
+  - yarn install
   - cd $TRAVIS_BUILD_DIR/client
-  - npm install
+  - yarn install
 script: 
   # Client
   - cd $TRAVIS_BUILD_DIR/client
-  - npm run build
-  - npm run less
-#  - npm run test
+  - yarn run build
+  - yarn run less
+#  - yarn run test
   # Server
   - cd $TRAVIS_BUILD_DIR/server
-  - npm run build
-#  - npm run test
+  - yarn run build
+#  - yarn run test
 
 after_success:
   - cd $TRAVIS_BUILD_DIR
