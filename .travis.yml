@@ -20,16 +20,16 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: docker-push
+    script: ./docker-push
     on:
       branch: master
   - provider: script
     skip_cleanup: true
-    script: docker-push
+    script: ./docker-push
     on:
       branch: dev
   - provider: script
     skip_cleanup: true
-    script: docker-push
+    script: ./docker-push
     on:
-      branch: feat/docker-compose #testing1
+      branch: feat/docker-compose #testing
