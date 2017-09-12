@@ -3,16 +3,40 @@ node_js:
   - "8"
 
 install: 
-  - cd server
-  - npm install
-  - cd ../client
-  - npm install
+  - cd $TRAVIS_BUILD_DIR/server
+  - yarn install
+  - cd $TRAVIS_BUILD_DIR/client
+  - yarn install
 script: 
   # Client
-  - npm run build
-  - npm run less
-#  - npm run test
+  - cd $TRAVIS_BUILD_DIR/client
+  - yarn run build
+  - yarn run less
+#  - yarn run test
   # Server
-  - cd ../server
-  - npm run build
-#  - npm run test
+  - cd $TRAVIS_BUILD_DIR/server
+  - yarn run build
+#  - yarn run test
+
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - chmod ugo+x ./docker-push.sh
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "CURRENT_BRANCH=$BRANCH"
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: ./docker-push.sh
+    on:
+      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: ./docker-push.sh
+    on:
+      branch: dev
+  - provider: script
+    skip_cleanup: true
+    script: ./docker-push.sh
+    on:
+      tags: true
