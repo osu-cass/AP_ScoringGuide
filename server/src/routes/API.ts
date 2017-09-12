@@ -38,8 +38,9 @@ export class APIRoute {
         let questionNum = 1;
         itemViews.forEach(iv => 
             iv.questions.forEach(q => {
-                q.data = this.itemData.find(item => 
-                    item.bankKey + '-' + item.itemKey === q.id
+                q.data = this.aboutItems.find(item => 
+                    item.itemCardViewModel 
+                    && item.itemCardViewModel.bankKey + '-' + item.itemCardViewModel.itemKey === q.id
                 );
                 q.questionNumber = questionNum++;
             })

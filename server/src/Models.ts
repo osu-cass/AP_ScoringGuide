@@ -6,7 +6,7 @@ export interface ItemGroup {
 export interface Question {
     id: string;
     view: ItemView;
-    data?: ItemViewModel;
+    data?: AboutItemViewModel;
     questionNumber?: number;
 }
 
