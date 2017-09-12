@@ -20,6 +20,8 @@ export class APIRoute {
         RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/AboutAllItems')
             .then(items => {
                 this.aboutItems = JSON.parse(items);
+                //TODO: Fix data instead of filtering
+                this.aboutItems = this.aboutItems.filter(i => i.rubrics.length !== 0);
                 this.itemData = this.aboutItems.map(i => i.itemCardViewModel);
             });
 
