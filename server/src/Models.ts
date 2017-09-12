@@ -48,10 +48,24 @@ export interface AboutItemViewModel {
 export interface Rubric {
     language: string;
     rubricEntries: RubricEntry[]
+    samples: Sample[]
 }
 
 export interface RubricEntry {
     scorepoint: string;
     name: string;
     value: string;
+}
+
+export interface Sample {
+    maxValue: string;
+    minValue: string;
+    sampleResponses: SampleResponse[];
+}
+
+export interface SampleResponse {
+    purpose: string;
+    scorePoint: string;
+    name: string;
+    sampleContent: string;
 }
