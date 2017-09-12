@@ -21,6 +21,8 @@ script:
 after_success:
   - cd $TRAVIS_BUILD_DIR
   - chmod ugo+x ./docker-push.sh
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "CURRENT_BRANCH=$BRANCH"
 
 deploy:
   - provider: script
