@@ -30,11 +30,13 @@ deploy:
     script: ./docker-push.sh
     on:
       branch: master
+      condition: $TRAVIS_PULL_REQUEST=false
   - provider: script
     skip_cleanup: true
     script: ./docker-push.sh
     on:
       branch: dev
+      condition: $TRAVIS_PULL_REQUEST=false
   - provider: script
     skip_cleanup: true
     script: ./docker-push.sh
