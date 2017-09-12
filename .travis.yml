@@ -18,19 +18,23 @@ script:
   - npm run build
 #  - npm run test
 
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - chmod ugo+x ./docker-push.sh
+
 deploy:
   - provider: script
     skip_cleanup: true
-    script: $TRAVIS_BUILD_DIR/docker-push
+    script: ./docker-push.sh
     on:
       branch: master
   - provider: script
     skip_cleanup: true
-    script: $TRAVIS_BUILD_DIR/docker-push
+    script: ./docker-push.sh
     on:
       branch: dev
   - provider: script
     skip_cleanup: true
-    script: $TRAVIS_BUILD_DIR/docker-push
+    script: ./docker-push.sh
     on:
       branch: feat/docker-compose #testing
