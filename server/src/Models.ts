@@ -34,3 +34,24 @@ export interface ItemViewModel {
     depthOfKnowledge: string;
     commonCoreStandardId: string;
 }
+
+export interface AboutItemViewModel {
+    itemCardViewModel: ItemViewModel;
+    rubrics: Rubric[];
+    targetDescription: string;
+    depthOfKnowledge: string;
+    commonCoreStandardsDescription: string;
+    educationalDifficulty: string;
+    evidenceStatement: string;
+}
+
+export interface Rubric {
+    language: string;
+    rubricEntries: RubricEntry[]
+}
+
+export interface RubricEntry {
+    scorepoint: string;
+    name: string;
+    value: string;
+}
