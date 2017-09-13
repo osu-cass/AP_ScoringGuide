@@ -9,7 +9,11 @@
             "request": "launch",
             "name": "Launch Program",
             "preLaunchTask": "build-all",
-            "program": "${workspaceRoot}\\server\\dist\\server"
+            "program": "${workspaceRoot}\\server\\dist\\server",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}\\server\\dist\\**\\*.js"
+            ]
         }
     ]
 }
