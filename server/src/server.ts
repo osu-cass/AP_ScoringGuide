@@ -1,15 +1,16 @@
 import * as Express from 'express';
 import * as Path from 'path';
-import pdfRoute from './routes/Pdf';
+import { APIRoute } from './routes/API';
 import { ItemParser } from './ItemParser';
 import { getConfig } from "./Config";
 
 const port = getConfig().port;
+const apiRoute = new APIRoute();
 const app = Express();
 app.use(Express.static(Path.join(__dirname, '../../client/dist')));
 
 //TODO: change to post and add body-parser
-app.get('/pdf', pdfRoute);
+app.use('/api', apiRoute.router);
 app.get('/ScoringGuide', (req, res) => {
     res.sendFile(Path.join(__dirname, '../../client/dist/index.html'));
 });

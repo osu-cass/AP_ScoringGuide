@@ -6,7 +6,7 @@ export interface ItemGroup {
 export interface Question {
     id: string;
     view: ItemView;
-    data?: ItemViewModel;
+    data?: AboutItemViewModel;
     questionNumber?: number;
 }
 
@@ -26,7 +26,6 @@ export enum ViewType {
 export interface ItemViewModel {
     bankKey: number;
     itemKey: number;
-    title: string;
     gradeLabel: string;
     subjectLabel: string;
     claimCode: string;
@@ -34,4 +33,39 @@ export interface ItemViewModel {
     domain: string;
     depthOfKnowledge: string;
     commonCoreStandardId: string;
+}
+
+export interface AboutItemViewModel {
+    itemCardViewModel: ItemViewModel;
+    rubrics: Rubric[];
+    targetDescription: string;
+    depthOfKnowledge: string;
+    commonCoreStandardsDescription: string;
+    educationalDifficulty: string;
+    evidenceStatement: string;
+}
+
+export interface Rubric {
+    language: string;
+    rubricEntries: RubricEntry[]
+    samples: Sample[]
+}
+
+export interface RubricEntry {
+    scorepoint: string;
+    name: string;
+    value: string;
+}
+
+export interface Sample {
+    maxValue: string;
+    minValue: string;
+    sampleResponses: SampleResponse[];
+}
+
+export interface SampleResponse {
+    purpose: string;
+    scorePoint: string;
+    name: string;
+    sampleContent: string;
 }
