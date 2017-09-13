@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -p src",
     "test": "jest -c=test/jest.json",
-    "start": "node dist/server.js",
+    "start": "node dist/Server.js",
     "dev": "npm run build && npm run start"
   },
   "keywords": [],
