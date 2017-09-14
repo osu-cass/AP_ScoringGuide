@@ -1,32 +1,16 @@
-FROM node:8-alpine
+FROM debian:9
 ENV NODE_ENV="production"
 
+# Install node
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y gnupg
+RUN apt-get install -y libfontconfig1 libxrender1
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
+RUN apt-get install -y nodejs
+
 # Install wkhtmltopdf
-RUN apk add --no-cache \
-            xvfb \
-            # Additional dependencies for better rendering
-            ttf-freefont \
-            fontconfig \
-            dbus \
-            bash \
-    && \
-
-    # Install wkhtmltopdf from `testing` repository
-    apk add qt5-qtbase-dev \
-            wkhtmltopdf \
-            --no-cache \
-            --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
-            --allow-untrusted \
-    && \
-
-    # Wrapper for xvfb
-    mv /usr/bin/wkhtmltopdf /usr/bin/wkhtmltopdf-origin && \
-    echo $'#!/usr/bin/env sh\n\
-Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset & \n\
-DISPLAY=:0.0 wkhtmltopdf-origin $@ \n\
-killall Xvfb\
-' > /usr/bin/wkhtmltopdf && \
-    chmod +x /usr/bin/wkhtmltopdf
+COPY wkhtmltopdf /usr/bin/
 
 # Install server deps
 COPY server/package.json /usr/src/server/
