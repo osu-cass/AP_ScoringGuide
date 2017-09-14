@@ -62,9 +62,8 @@ export class APIRoute {
     }
 
     getAboutItem = (req: Express.Request, res: Express.Response) => {
-        const id = (req.query.id as string || '').split('-') || [];
-        const itemKey = Number(id[1]) || 0;
-        const bankKey = Number(id[0]) || 0;
+        const itemKey = Number(req.query.itemKey || 0) || 0;
+        const bankKey = Number(req.query.bankKey || 0) || 0;
         const about = this.aboutItems.find(i => 
             i.itemCardViewModel  
             && i.itemCardViewModel.itemKey === itemKey
