@@ -1,13 +1,5 @@
-FROM debian:9
+FROM node:8.4
 ENV NODE_ENV="production"
-
-# Install node
-RUN apt-get update
-RUN apt-get install -y curl
-RUN apt-get install -y gnupg
-RUN apt-get install -y libfontconfig1 libxrender1
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
-RUN apt-get install -y nodejs
 
 # Install wkhtmltopdf
 COPY wkhtmltopdf /usr/bin/
