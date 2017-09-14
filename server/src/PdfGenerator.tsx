@@ -19,11 +19,14 @@ export class PdfGenerator {
         const urlTitle = encodeURIComponent(title);
         const port = getConfig().port;
         const options = {
-            headerHtml: 'http://localhost:' + port + '/pdf-header.html?title=' + urlTitle,
+            headerHtml: 'http://www.example.com/',//'http://localhost:' + port + '/pdf-header.html?title=' + urlTitle,
             headerSpacing: 5,
             footerSpacing: 5,
-            footerHtml: 'http://localhost:' + port + '/pdf-footer.html?title=' + urlTitle,
-            marginBottom: '13mm'
+            //footerHtml: 'http://localhost:' + port + '/pdf-footer.html?title=' + urlTitle,
+            marginBottom: '.75in',
+            marginTop: '1.25in',
+            marginLeft: '.5in',
+            marginRight: '.5in'
         };
         return wkhtmltopdf(html, options) as Stream;
     }
