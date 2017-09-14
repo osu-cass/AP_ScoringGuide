@@ -23,7 +23,10 @@ export class PdfGenerator {
             headerSpacing: 5,
             footerSpacing: 5,
             footerHtml: 'http://localhost:' + port + '/pdf-footer.html?title=' + urlTitle,
-            marginBottom: '13mm'
+            marginBottom: '.75in',
+            marginTop: '1.25in',
+            marginLeft: '.5in',
+            marginRight: '.5in'
         };
         return wkhtmltopdf(html, options) as Stream;
     }

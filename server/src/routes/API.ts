@@ -5,6 +5,7 @@ import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
 import { getConfig } from "../Config";
 import { ItemViewModel, AboutItemViewModel } from "../Models";
+import * as Path from 'path';
 
 export class APIRoute {
     manager: ItemDataManager;
@@ -13,15 +14,15 @@ export class APIRoute {
     router: Express.Router;
 
     constructor() {
+        const path = Path.join(__dirname, '../../../client/dist/images/screenshots');
         this.manager = new ItemDataManager({
             pageWidth: getConfig().screenshotPageWidth,
-            screenshotPath: 'client/dist/images/screenshots'
+            screenshotPath: path
         });
         RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/AboutAllItems')
             .then(items => {
                 this.aboutItems = JSON.parse(items);
-                //TODO: Fix data instead of filtering
-                this.aboutItems = this.aboutItems.filter(i => i.rubrics.length !== 0);
+                //this.aboutItems = this.aboutItems.filter(i => i.rubrics.length !== 0);
                 this.itemData = this.aboutItems.map(i => i.itemCardViewModel);
             });
 
