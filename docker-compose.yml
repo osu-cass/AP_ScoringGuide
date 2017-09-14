@@ -1,0 +1,11 @@
+version: "3.2"
+
+services:
+  server:
+    build: .
+    image: scoring-guide:stage
+    ports:
+      - 3000:3000
+    volumes:
+      - ".:/usr/src"
+    command: ["yarn", "start"]

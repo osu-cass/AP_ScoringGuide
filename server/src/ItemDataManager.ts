@@ -39,6 +39,17 @@ export class ItemDataManager {
             FileSystem.mkdirSync(this.screenshotPath); 
         }
 
+        takePictures = this.getPassagePaths(itemData, ids, takePictures);
+        takePictures = this.getQuestionPaths(itemData, takePictures);
+
+        if (takePictures) {
+            await this.openChromeIfNeeded();
+            itemData = await this.chrome.takeScreenshots(itemData);
+        }
+        return itemData
+    }
+
+    private getPassagePaths(itemData: ItemGroup, ids: string[], takePictures: boolean) {
         if (itemData.passage && itemData.passage.type === ViewType.picture) {
             const possiblePassagePaths = ids.map(id => {
                 const pth = Path.join(this.screenshotPath, id + '-passage.png');
@@ -58,7 +69,10 @@ export class ItemDataManager {
                 takePictures = true;
             }
         }
+        return takePictures;
+    }
 
+    private getQuestionPaths(itemData: ItemGroup, takePictures: boolean) {
         itemData.questions.forEach(q => {
             if (q.view.type === ViewType.picture) {
                 const pth = Path.join(this.screenshotPath, q.id + '-question.png');
@@ -70,11 +84,6 @@ export class ItemDataManager {
                 q.view.captured = captured;
             }
         });
-
-        if (takePictures) {
-            await this.openChromeIfNeeded();
-            itemData = await this.chrome.takeScreenshots(itemData);
-        }
-        return itemData
+        return takePictures;
     }
 }

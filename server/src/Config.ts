@@ -16,6 +16,8 @@ export function getConfig(env?: string) {
             return development;
         case 'production':
             return production;
+        default: 
+            return production;
     }
 }
 
