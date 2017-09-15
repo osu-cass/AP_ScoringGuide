@@ -1,84 +1,89 @@
 import * as React from 'react'
-import * as ApiModels from '../Models/ApiModels'
 import * as ItemSearchDropdown from '../DropDown/ItemSearchDropDown'
 import * as ItemCardViewModel from '../Models/ItemCardViewModel'
 import * as ItemModels from '../Models/ItemModels'
-import * as ItemTable from '../ItemTable/ItemTable'
 import * as ItemPageTable from '../ItemTable/ItemPageTable'
 import * as Api from "../Models/ApiModels"
+import { FilterHelper } from "../Models/FilterHelper";
 
-const SearchClient = (params: ItemModels.ScoreSearchParams) => Api.get<ItemCardViewModel.ItemCardViewModel[]>("http://is-score.cass.oregonstate.edu/ScoringGuide/Search", params);
+const SearchClient = () => Api.get<ItemCardViewModel.ItemCardViewModel[]>("api/search");
 
 export interface Props {
-    scoringGuideViewModel?: ItemsSearchViewModel;
     onRowSelection: (item: {itemKey: number; bankKey: number}) => void;
-    searchParams: ItemModels.ScoreSearchParams;
-    
+    filterOptions: ItemModels.FilterOptions;
 }
 
 export interface State {
     itemSearchResult: Api.Resource<ItemCardViewModel.ItemCardViewModel[]>;
+    visibleItems?: ItemCardViewModel.ItemCardViewModel[];
+    itemFilter: ItemModels.ItemFilter;
 }
 
 export interface ItemsSearchViewModel {
-    interactionTypes: ItemSearchDropdown.InteractionType[];
-    subjects: ItemSearchDropdown.Subject[];
+    subjects: ItemModels.Subject[];
 }
 
 export class ItemSearchContainer extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props); 
         this.state = {
-            itemSearchResult: { kind: "none" }
-        }
+            itemSearchResult: { kind: "none" },
+            itemFilter: FilterHelper.readUrl(props.filterOptions)
+        };
 
-        this.callSearch(props.searchParams);
+        this.callSearch();
     }
  
-    callSearch(params: ItemModels.ScoreSearchParams){
-        SearchClient(params)
+    callSearch(){
+        SearchClient()
          .then((data) => this.onSearchSuccess(data))
          .catch((err) => this.onSearchFailure(err));
     }
 
     onSearchSuccess(data: ItemCardViewModel.ItemCardViewModel[]): void{
         this.setState({
-            itemSearchResult: { kind: "success", content: data }
-        })
+            itemSearchResult: { kind: "success", content: data },
+            visibleItems: data
+        });
     }
 
     onSearchFailure(err: any){
         console.error(err);
         this.setState({
             itemSearchResult: { kind: "failure" } 
-        })
+        });
+    }
+
+    onFilterApplied = (filter: ItemModels.ItemFilter) => {
+        if(this.state.itemSearchResult.kind == "success" || this.state.itemSearchResult.kind == "reloading") {
+            const filtered = FilterHelper.filter(this.state.itemSearchResult.content || [], filter);
+            this.setState({
+                visibleItems: filtered
+            });
+            FilterHelper.updateUrl(filter);
+        }
     }
 
     renderDropDownComponent(){
-        const scoringVM = this.props.scoringGuideViewModel;
-        if ( scoringVM != undefined) {
-            return (
-               < ItemSearchDropdown.ItemSearchDropdown
-                interactionTypes={scoringVM.interactionTypes}
-                subjects={scoringVM.subjects}
-                onChange={(params) => this.callSearch(params)}
-                isLoading={false} />
-            );
-    
-        }
+        return (
+            <ItemSearchDropdown.ItemSearchDropdown
+                filterOptions={this.props.filterOptions}
+                onChange={this.onFilterApplied}
+                isLoading={false}
+                itemFilter={this.state.itemFilter} />
+        );
     }
 
     renderTableComponent(){
-        const cardsResult = this.state.itemSearchResult;
-        if(cardsResult.kind == "success" || cardsResult.kind == "reloading"){
+        if(this.state.visibleItems){
             return (
                 <ItemPageTable.ItemPageTable 
-                onRowSelection={this.props.onRowSelection} 
-                itemCards={cardsResult.content}/>
+                    onRowSelection={this.props.onRowSelection} 
+                    itemCards={this.state.visibleItems}/>
             ); 
             
         }
-        else if(cardsResult.kind == "failure"){
+        else if(this.state.itemSearchResult.kind == "failure"){
             return <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div>
         }
         else{

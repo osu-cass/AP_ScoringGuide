@@ -1,74 +1,53 @@
 ﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as ItemViewerFrame from '../AboutItem/ItemViewerFrame';
 import * as ItemModels from '../Models/ItemModels';
 import * as ApiModels from '../Models/ApiModels';
 import * as GradeLevels from '../Models/GradeLevels';
 import * as ItemCardViewer from '../AboutItem/ItemCardViewer';
 import * as AboutItemVM from '../Models/AboutItemVM';
-import * as ItemTable from '../ItemTable/ItemTable';
-import * as ItemSearchDropdown from '../DropDown/ItemSearchDropDown';
-import * as PageTabs from '../PageTabs/PageTabs';
-import * as ItemCardViewModel from '../Models/ItemCardViewModel';
-import * as ItemTableHeader from '../ItemTable/ItemTableHeader';
 import * as ItemSearchContainer from './ItemSearchContainer';
-import * as ItemPageTable from '../ItemTable/ItemPageTable';
 import { get } from "../Models/ApiModels";
-import { parseQueryString } from "../Models/ApiModels";
+import { FilterHelper } from "../Models/FilterHelper";
 
-
+//TODO: Change this to a relative url, add to API
 const ScoreGuideViewModelClient = () => get<ItemsSearchViewModel>("http://is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel");
 
 export interface State {
     item: ApiModels.Resource<AboutItemVM.AboutThisItem>;
     scoringGuideViewModel: ApiModels.Resource<ItemsSearchViewModel>;
-    searchParams: ItemModels.ScoreSearchParams;
+    filterOptions: ItemModels.FilterOptions;
 }
 
 export interface ItemsSearchViewModel {
-    interactionTypes: ItemSearchDropdown.InteractionType[];
-    subjects: ItemSearchDropdown.Subject[];
+    subjects: ItemModels.Subject[];
 }
 
 export class ScoringGuidePage extends React.Component<{}, State> {
     constructor() {
         super();
 
-        const queryObject = parseQueryString(location.search);
-        const gradeString = (queryObject["gradeLevels"] || [])[0];
-        const gradeLevels: GradeLevels.GradeLevels = parseInt(gradeString, 10) || GradeLevels.GradeLevels.NA;
-        const subjects = queryObject["subjects"] || [];
-        const techType = queryObject["techType"] || [];
-
-        const paramsDefault = {
-            gradeLevels: gradeLevels,
-            subjects: subjects,
-            techType: techType
-        };
-
         this.state = {
             scoringGuideViewModel: { kind: "loading" },
-            searchParams: paramsDefault,
+            filterOptions: FilterHelper.getFilterOptions(),
             item: {kind:"none"}
         }
 
         this.loadScoringGuideViewModel();
-
     }
 
     getAboutItem(item: { itemKey: number; bankKey: number }) {
         AboutItemVM.ScoreSearchClient(item)
-            .then((data) => this.onSearchSuccess(data))
-            .catch((err) => this.onSearchError(err));
+            .then((data) => this.onAboutItemSuccess(data))
+            .catch((err) => this.onAboutItemError(err));
     }
 
-    onSearchSuccess(data: AboutItemVM.AboutThisItem) {
+    onAboutItemSuccess(data: AboutItemVM.AboutThisItem) {
         this.setState({
             item: { kind: "success", content: data }
         });
     }
 
-    onSearchError(err: any) {
+    onAboutItemError(err: any) {
         console.error(err);
         this.setState({
             item: { kind: "failure" }
@@ -84,17 +63,18 @@ export class ScoringGuidePage extends React.Component<{}, State> {
 
     onSuccessLoadScoringGuideViewModel(result: ItemsSearchViewModel) {
         this.setState({
-            scoringGuideViewModel: { kind: "success", content: result }
-        })
+            scoringGuideViewModel: { kind: "success", content: result },
+            filterOptions: {
+                ...this.state.filterOptions,
+                subjects: result.subjects
+            }
+        });
     }
 
     onErrorLoadScoringGuideViewModel(err: any) {
         console.error(err);
-    }
-
-    onSearchParamsChange(params: ItemModels.ScoreSearchParams) {
         this.setState({
-            searchParams: params
+            scoringGuideViewModel: { kind: "failure" }
         });
     }
 
@@ -127,9 +107,8 @@ export class ScoringGuidePage extends React.Component<{}, State> {
                 <div className="search-page">
                     <div className="search-container">
                         <ItemSearchContainer.ItemSearchContainer
-                            scoringGuideViewModel={scoringVMState.content}
                             onRowSelection={(item) => this.onRowSelection(item)}
-                            searchParams={this.state.searchParams}
+                            filterOptions={this.state.filterOptions}
                         />
                     </div>
                     {this.renderTabsContainer()}
