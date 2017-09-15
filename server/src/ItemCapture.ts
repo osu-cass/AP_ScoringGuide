@@ -12,7 +12,7 @@ export class ItemCapture {
     }
 
     async launchBrowser(){
-        this.browser = await puppeteer.launch();
+        this.browser = await puppeteer.launch({args: ['--no-sandbox']});
         console.log('chrome url: ', this.browser.wsEndpoint());
     }
 
