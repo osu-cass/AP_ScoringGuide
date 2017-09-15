@@ -39,4 +39,4 @@ deploy:
     skip_cleanup: true
     script: ./docker-push.sh
     on:
-      tags: true
+      branch: feat/docker-fix #t0d0: CHANGE THIS
