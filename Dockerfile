@@ -3,14 +3,18 @@ ENV NODE_ENV="production"
 
 # Install wkhtmltopdf
 COPY wkhtmltopdf /usr/bin/
+WORKDIR /usr/bin
+RUN chmod a+x wkhtmltopdf
 
 # Install server deps
 COPY server/package.json /usr/src/server/
-RUN cd /usr/src/server && npm install --production
+WORKDIR /usr/src/server
+RUN npm install --production
 
 # Install client deps
 COPY client/package.json /usr/src/client/
-RUN cd /usr/src/client && npm install --production
+WORKDIR /usr/src/client
+RUN npm install --production
 
 # Copy files (already compiled)
 WORKDIR /usr/src
