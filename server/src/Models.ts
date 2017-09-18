@@ -43,6 +43,7 @@ export interface AboutItemViewModel {
     commonCoreStandardsDescription: string;
     educationalDifficulty: string;
     evidenceStatement: string;
+    associatedItems: string;
 }
 
 export interface Rubric {
