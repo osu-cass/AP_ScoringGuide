@@ -34,9 +34,23 @@ export class APIRoute {
 
     pdf = async (req: Express.Request, res: Express.Response) => {
         const ids = req.query.ids as string || '';
-        const idsArray = ids.split(',');
+        const requestedIds = ids.split(',');
     
-        let itemViews = await Promise.all(idsArray.map(id => this.manager.getItemData([id])));
+        const idsArray = requestedIds.map(reqId => 
+            this.aboutItems
+                .find(ai => ai.associatedItems.includes(reqId))
+                .associatedItems
+        );
+
+        idsArray.filter((idGroup, index) => 
+            idsArray.indexOf(idGroup) === index
+        );
+
+        let itemViews = await Promise.all(
+            idsArray.map(idGroup => 
+                this.manager.getItemData(idGroup.split(','))
+            )
+        );
     
         let questionNum = 1;
         itemViews.forEach(iv => 
