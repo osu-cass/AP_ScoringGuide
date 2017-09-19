@@ -70,9 +70,13 @@ export class APIRoute {
     }
     
     search = (req: Express.Request, res: Express.Response) => {
-        res.status(200);
-        res.type('application/json');
-        res.send(JSON.stringify(this.itemData));
+        if (this.itemData) {
+            res.status(200);
+            res.type('application/json');
+            res.send(JSON.stringify(this.itemData));
+        } else {
+            res.sendStatus(400);
+        }
     }
 
     getAboutItem = (req: Express.Request, res: Express.Response) => {
