@@ -140,7 +140,7 @@ export class HeaderTable extends React.Component<Props, State> {
                 className={col.className}
                 onClick={() => this.headerEventHandler(col, headerSort)}>
                 <div className={col.className}>
-                    {this.state.dirElem} {col.header}
+                    {col.header} {this.state.dirElem} 
                 </div>
             </th>
         );
@@ -148,9 +148,10 @@ export class HeaderTable extends React.Component<Props, State> {
 
     render() {
         return (
-            <table className="item-table table mapcomponent-table">
+            <table className="item-table mapcomponent-table item-table-header">
                 <thead>
                     <tr className="primary">
+                        <th></th>
                         {this.props.columns.map(col => this.renderHeader(col))}
                     </tr>
                 </thead>
