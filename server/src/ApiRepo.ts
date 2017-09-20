@@ -10,7 +10,7 @@ export class PdfRepo {
     aboutItems: AboutItemViewModel[];
 
     constructor() {
-        const path = Path.join(__dirname, '../../../client/dist/images/screenshots');
+        const path = Path.join(__dirname, '../../client/dist/images/screenshots');
         this.manager = new ItemDataManager({
             pageWidth: getConfig().screenshotPageWidth,
             screenshotPath: path
@@ -61,5 +61,23 @@ export class PdfRepo {
             )
         );
         return itemGroups;
+    }
+
+    async getItemData() {
+        if (!this.itemData) {
+            await this.loadDataFromSiw();
+        } 
+        return this.itemData;
+    }
+
+    async getAboutItem(itemKey: number, bankKey: number) {
+        if (!this.aboutItems) {
+            await this.loadDataFromSiw();
+        }
+        const about = this.aboutItems.find(i => 
+            i.itemCardViewModel  
+            && i.itemCardViewModel.itemKey === itemKey
+            && i.itemCardViewModel.bankKey === bankKey);
+        return about;
     }
 }

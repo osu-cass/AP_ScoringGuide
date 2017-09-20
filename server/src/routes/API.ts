@@ -40,36 +40,40 @@ export class APIRoute {
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
             })
-            .catch(error => res.sendStatus(500));
+            .catch(error => {
+                console.error('/api/pdf: ', error);
+                res.sendStatus(500);
+            });
     }
     
     search = (req: Express.Request, res: Express.Response) => {
-        if (this.pdfRepo.itemData) {
-            res.type('application/json');
-            res.send(JSON.stringify(this.pdfRepo.itemData));
-        } else {
-            res.sendStatus(400);
-        }
+        this.pdfRepo.getItemData()
+            .then(searchResult => {
+                res.type('application/json');
+                res.send(JSON.stringify(this.pdfRepo.itemData));
+            })
+            .catch(err => {
+                console.error('/api/search/: ', err);
+                res.sendStatus(500);
+            });
     }
 
     getAboutItem = (req: Express.Request, res: Express.Response) => {
         const itemKey = Number(req.query.itemKey || 0) || 0;
         const bankKey = Number(req.query.bankKey || 0) || 0;
 
-        if (!this.pdfRepo.aboutItems) {
-            res.sendStatus(500);
-            return;
-        } 
-
-        const about = this.pdfRepo.aboutItems.find(i => 
-            i.itemCardViewModel  
-            && i.itemCardViewModel.itemKey === itemKey
-            && i.itemCardViewModel.bankKey === bankKey);
-        if (about) {
-            res.type('application/json');
-            res.send(JSON.stringify(about));
-        } else {
-            res.sendStatus(400);
-        }
+        this.pdfRepo.getAboutItem(itemKey, bankKey)
+            .then(about => {
+                if (about) {
+                    res.type('application/json');
+                    res.send(JSON.stringify(about));
+                } else {
+                    res.sendStatus(400);
+                }
+            })
+            .catch(err => {
+                console.error(`/api/aboutItem for ${bankKey}-${itemKey}: `, err);
+                res.sendStatus(500);
+            });
     }
 }
