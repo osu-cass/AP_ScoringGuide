@@ -56,13 +56,14 @@
 table.item-table {
     width: 100%;
     display: flex;
-    margin: 8px;
-    background-color: #E7E7E7;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #D9D9D9;
-    margin-bottom:0px;
-    margin-top:0px;
+    background-color: #D5D5D5;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-spacing: 1px;
+}
+table.item-table-header {
+    border-radius: 5px 5px 0 0;
 }
 
 .ItemNumber {
@@ -105,11 +106,6 @@ table.item-table {
     color: white;
 }
 
-table.item-table > thead {
-    background-color: #E7E7E7;
-    border-radius: 5px;
-}
-
 table.item-table > tbody {
     display: block;
     height: 280px;
@@ -119,6 +115,7 @@ table.item-table > tbody {
 table.item-table > thead > tr > th:first-child,
 table.item-table > tbody > tr > td:first-child {
     width: 50px;
+    min-width: 50px;
     text-align: center;
 }
 
@@ -132,10 +129,27 @@ table.item-table > tbody > tr:nth-child(odd) {
     border: 1px solid #D9D9D9;
 }
 
-table.item-table > thead > tr > th,
+table.item-table > tbody > tr:hover {
+    background-color: #FFFFFF;
+}
+
+table.item-table > thead > tr > th {
+    border-right: 1px solid hsla(220,3%,40%,.17);
+    width: 200px;
+    min-width: 100px;
+    background-color: #E3E3E3;
+    text-align: left;
+    white-space: nowrap;
+    border: none;
+}
+
+table.item-table > thead > tr > th:hover {
+    background-color: #EFEFEF;
+}
+
 table.item-table > tbody > tr > td {
-    width: 250px;
-    padding: 5px;
+    width: 200px;
+    min-width: 100px;
 }
 
 .search-controls {
@@ -152,4 +166,5 @@ table.item-table > tbody > tr > td {
     border-radius: 0px 0px 10px 10px;
     margin-top: -20px;
     background-color: #ffffff;
+    box-shadow: 0 3px 6px rgba(0,0,0,.16);
 }

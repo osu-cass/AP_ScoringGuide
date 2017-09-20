@@ -11,8 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/enzyme": "2.8.6",
     "@types/jest": "20.0.8",
