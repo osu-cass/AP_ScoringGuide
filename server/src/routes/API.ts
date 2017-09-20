@@ -35,6 +35,7 @@ export class APIRoute {
         let idGroups = this.pdfRepo.getAssociatedItems(requestedIds);
         this.pdfRepo.loadViewData(idGroups)
             .then(itemViews => {
+                this.pdfRepo.addDataToViews(itemViews);
                 const htmlString = HtmlRenderer.renderBody(itemViews, 'Mathematics', 'Grade 5');
                 const title = 'Grade 5 Mathematics';
                 res.type('application/pdf');
@@ -50,7 +51,7 @@ export class APIRoute {
         this.pdfRepo.getItemData()
             .then(searchResult => {
                 res.type('application/json');
-                res.send(JSON.stringify(this.pdfRepo.itemData));
+                res.send(JSON.stringify(searchResult));
             })
             .catch(err => {
                 console.error('/api/search/: ', err);

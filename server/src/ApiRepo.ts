@@ -6,7 +6,7 @@ import * as RequestPromise from './RequestPromise';
 
 export class PdfRepo {
     manager: ItemDataManager;
-    itemData: ItemViewModel[];
+    itemCards: ItemViewModel[];
     aboutItems: AboutItemViewModel[];
 
     constructor() {
@@ -20,7 +20,7 @@ export class PdfRepo {
     async loadDataFromSiw() {
         const items = await RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/AboutAllItems')
         this.aboutItems = JSON.parse(items);
-        this.itemData = this.aboutItems.map(i => i.itemCardViewModel);
+        this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }
 
     getAssociatedItems(requestedIds: string[]) {
@@ -38,7 +38,7 @@ export class PdfRepo {
         return splitIdsArray;
     }
 
-    addDataToView(itemViews: ItemGroup[]) {
+    addDataToViews(itemViews: ItemGroup[]) {
         let questionNum = 1;
         itemViews.forEach(iv => 
             iv.questions.forEach(q => {
@@ -64,10 +64,10 @@ export class PdfRepo {
     }
 
     async getItemData() {
-        if (!this.itemData) {
+        if (!this.itemCards) {
             await this.loadDataFromSiw();
         } 
-        return this.itemData;
+        return this.itemCards;
     }
 
     async getAboutItem(itemKey: number, bankKey: number) {
