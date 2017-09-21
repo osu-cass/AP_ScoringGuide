@@ -18,7 +18,7 @@ export class PdfRepo {
     }
 
     async loadDataFromSiw() {
-        const items = await RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/AboutAllItems')
+        const items = await RequestPromise.get(getConfig().sampleItemsApi + '/ScoringGuide/AboutAllItems')
         this.aboutItems = JSON.parse(items);
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }

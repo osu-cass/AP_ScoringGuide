@@ -3,7 +3,6 @@ import { HtmlRenderer, PdfGenerator } from "../PdfGenerator";
 import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
-import { getConfig } from "../Config";
 import { ItemViewModel, AboutItemViewModel } from "../Models";
 import * as Path from 'path';
 import { PdfRepo } from '../ApiRepo';
