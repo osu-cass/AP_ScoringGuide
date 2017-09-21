@@ -1,5 +1,4 @@
 import * as RequestPromise from './RequestPromise';
-import * as Xml from 'xml2js';
 import * as Cheerio from 'cheerio';
 import { ItemGroup, ViewType } from "./Models";
 import { getConfig } from './Config';
@@ -18,18 +17,14 @@ export class ItemParser {
     }
 
     parseXml(xmlString: string) {
-        return new Promise<any>((resolve, reject) => {
-            Xml.parseString(xmlString, (err, result) => {
-                if (err) {
-                    reject(err);
-                }
-                resolve(result);
-            })
+        const $ = Cheerio.load(xmlString, {
+            xmlMode: true
         });
+        const text = $('html').text();
+        return text;
     }
 
-    parseHtml(xmlObject: any, itemIds: string[]) {
-        let htmlString = xmlObject.contents.content[0].html[0] as string;
+    parseHtml(htmlString: string, itemIds: string[]) {
         let baseUrl = getConfig().api.itemViewerService;
         let $ = Cheerio.load(htmlString);
         $('a').remove();
@@ -82,15 +77,14 @@ export class ItemParser {
     /** Items should be related to each other (have the same passage) and be in the form BANK-ITEM (ex: 187-1437). */
     async loadItemData(items: string[]) {
         const response = await this.load(items);
-        const xmlData = await this.parseXml(response);
-        return this.parseHtml(xmlData, items);
+        const htmlString = await this.parseXml(response);
+        return this.parseHtml(htmlString, items);
     }
 
     async loadPlainHtml(item: string) {
         const response = await this.load([item]);
         const baseUrl = getConfig().api.itemViewerService;
-        const xmlData = await this.parseXml(response);
-        let htmlString = xmlData.contents.content[0].html[0] as string;
+        const htmlString = await this.parseXml(response);
         let $ = Cheerio.load(htmlString);
         
         $('a').remove();

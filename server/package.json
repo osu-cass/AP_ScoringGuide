@@ -20,8 +20,7 @@
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "request": "2.81.0",
-    "wkhtmltopdf": "0.3.4",
-    "xml2js": "0.4.19"
+    "wkhtmltopdf": "0.3.4"
   },
   "devDependencies": {
     "@types/cheerio": "0.22.2",
@@ -33,7 +32,6 @@
     "@types/react": "16.0.5",
     "@types/react-dom": "15.5.4",
     "@types/request": "2.0.3",
-    "@types/xml2js": "0.4.0",
     "enzyme": "2.9.1",
     "jest": "20.0.4",
     "react-test-renderer": "15.6.1",
