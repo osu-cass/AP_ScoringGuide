@@ -1,11 +1,25 @@
 version: "3.2"
 
 services:
-  server:
+  sg:
     build: .
-    image: scoring-guide:stage
+    image: osucass/scoring-guide:dev
+    environment: 
+      - sampleItemsApi=http://localhost:5000
+      - itemViewerServiceApi:http://localhost:8174
     ports:
-      - 3000:3000
-    volumes:
-      - ".:/usr/src"
-    command: ["yarn", "start"]
+      - "3000:3000"
+  siw: 
+    image: osucass/sampleitemscode:scoreguide
+    ports: 
+      - "5000:5000"
+    volumes: 
+      - /c/content:/app/content
+    environment:
+      - SettingsConfig:ItemViewerServiceURL=http://localhost:8174
+  ivs: 
+    image: osucass/itemviewerservicecode:1.1.3
+    ports: 
+      - "8174:8080"
+    volumes: 
+      - /c/content:/home/tomcat7/content
