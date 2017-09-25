@@ -6,11 +6,9 @@ import { EvidenceStatement } from './EvidenceStatement';
 
 interface Props {
     view: ItemView;
-    data?: AboutItemViewModel;
 }
 
-export class ItemComponent extends React.Component<Props, undefined> {
-
+export class ItemViewComponent extends React.Component<Props, undefined> {
     render() {
         let item, evidence: JSX.Element;
         if (this.props.view.type === ViewType.html) {
@@ -20,17 +18,6 @@ export class ItemComponent extends React.Component<Props, undefined> {
             item = (<img src={'images/screenshots/' + fileName} />);
         }
 
-        if (this.props.data && this.props.data.evidenceStatement) {
-            evidence = (<EvidenceStatement statement={this.props.data.evidenceStatement} />)
-        }
-        return (
-            <div className='item'>
-                {this.props.data 
-                    ? (<QuestionDataTable tableData={this.props.data.itemCardViewModel}/>) 
-                    : null}
-                {evidence}
-                {item}
-            </div>
-        );
+        return item;
     }
 }
