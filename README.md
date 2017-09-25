@@ -36,7 +36,7 @@ $ npm install -g typescript
 </details>
 
 ### Building the project
-Scoreing Guide uses typescript and less files for both the server and the client, so these need to be compiled before running the app. 
+Scoring Guide uses typescript and less files for both the server and the client, so these need to be compiled before running the app. 
 
 In Visual Studio Code, you can run the launch configuration `Launch Program` (or press F5). This will build all of the necessary components before running the server. 
 
@@ -46,8 +46,24 @@ $ ./build all
 ```
 
 ### Running the project
-
 If you're not using Visual Studio Code or don't want to rebuild, you can run the project by starting the Node server in the server directory.
 ```
 $ node server/dist/server.js
 ```
+
+### Testing
+To run tests:
+```
+$ ./test
+```
+
+To run tests with code coverage:
+```
+$./test  -u
+```
+
+To update snapshot tests:
+```
+$./test  -u
+```
+
