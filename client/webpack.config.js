@@ -1,10 +1,10 @@
 ﻿var path = require('path');
 
 module.exports = {
-  entry: './ScoreGuide/ScoringGuidePage',
+  entry: './src/ScoreGuide/ScoringGuidePage',
 
   output: {
-    path: path.join(__dirname, "../dist/js"),
+    path: path.join(__dirname, "./dist/js"),
     filename: "bundle.js",
     libraryTarget: "var",
     library: "EntryPoint"
