@@ -52,6 +52,7 @@ $ node server/dist/server.js
 ```
 
 ### Testing
+There is a script in the root directory of the project named 'test'. 
 To run tests:
 ```
 $ ./test
@@ -59,7 +60,7 @@ $ ./test
 
 To run tests with code coverage:
 ```
-$./test  -u
+$./test  -c
 ```
 
 To update snapshot tests:
