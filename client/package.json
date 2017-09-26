@@ -40,6 +40,14 @@
     "globals": {
       "ts-jest": {
         "tsConfigFile": "./tsconfig.json"
+      },
+      "babelConfig": {
+        "presets": [
+          "env"
+        ],
+        "plugins": [
+          "transform-es2015-modules-commonjs"
+        ]
       }
     },
     "moduleFileExtensions": [
