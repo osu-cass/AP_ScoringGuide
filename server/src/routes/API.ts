@@ -6,6 +6,7 @@ import * as RequestPromise from '../RequestPromise';
 import { ItemViewModel, AboutItemViewModel } from "../Models";
 import * as Path from 'path';
 import { PdfRepo } from '../ApiRepo';
+import { getConfig } from '../Config';
 
 export class APIRoute {
     router: Express.Router;
@@ -14,7 +15,7 @@ export class APIRoute {
     constructor() {
         this.pdfRepo = new PdfRepo();
         this.pdfRepo.loadDataFromSiw()
-            .then(() => console.log("Data recieved from SampleItemsWebsite API"))
+            .then(() => console.log("Data recieved from SampleItemsWebsite API:", getConfig().sampleItemsApi))
             .catch(err => console.error("Error loading data from SampleItemsWebsite API: ", err));
 
         this.router = Express.Router();

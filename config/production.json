@@ -1,6 +1,6 @@
 {
-    "sampleItemsApi": "http://is-score.cass.oregonstate.edu",
-    "itemViewerServiceApi": "http://ivs.smarterbalanced.org",
+    "sampleItemsApi": "http://localhost:5000",
+    "itemViewerServiceApi": "http://localhost:8174",
     "screenshotPageWidth": 700,
     "port": 3000
 }
