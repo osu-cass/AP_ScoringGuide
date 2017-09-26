@@ -42,7 +42,7 @@ In Visual Studio Code, you can run the launch configuration `Launch Program` (or
 
 In any other editor or IDE, you can run the build-all bash script.
 ```
-$ ./build all
+$ ./build-all
 ```
 
 ### Running the project
