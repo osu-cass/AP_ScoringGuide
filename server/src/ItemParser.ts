@@ -13,7 +13,7 @@ export class ItemParser {
             }),
             accommodations: [] as any[]
         }
-        return RequestPromise.post(getConfig().api.itemViewerService + '/Pages/API/content/load', postData);
+        return RequestPromise.post(getConfig().itemViewerServiceApi + '/Pages/API/content/load', postData);
     }
 
     parseXml(xmlString: string) {
@@ -25,7 +25,7 @@ export class ItemParser {
     }
 
     parseHtml(htmlString: string, itemIds: string[]) {
-        let baseUrl = getConfig().api.itemViewerService;
+        let baseUrl = getConfig().itemViewerServiceApi;
         let $ = Cheerio.load(htmlString);
         $('a').remove();
         $('.questionNumber').remove();
@@ -83,7 +83,7 @@ export class ItemParser {
 
     async loadPlainHtml(item: string) {
         const response = await this.load([item]);
-        const baseUrl = getConfig().api.itemViewerService;
+        const baseUrl = getConfig().itemViewerServiceApi;
         const htmlString = await this.parseXml(response);
         let $ = Cheerio.load(htmlString);
         

@@ -3,10 +3,10 @@ import { HtmlRenderer, PdfGenerator } from "../PdfGenerator";
 import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
-import { getConfig } from "../Config";
 import { ItemViewModel, AboutItemViewModel } from "../Models";
 import * as Path from 'path';
 import { PdfRepo } from '../ApiRepo';
+import { getConfig } from '../Config';
 
 export class APIRoute {
     router: Express.Router;
@@ -14,10 +14,6 @@ export class APIRoute {
 
     constructor() {
         this.pdfRepo = new PdfRepo();
-        this.pdfRepo.loadDataFromSiw()
-            .then(() => console.log("Data recieved from SampleItemsWebsite API"))
-            .catch(err => console.error("Error loading data from SampleItemsWebsite API: ", err));
-
         this.router = Express.Router();
         this.router.get('/pdf', this.pdf);
         this.router.get('/search', this.search);
