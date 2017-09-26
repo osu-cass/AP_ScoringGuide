@@ -18,22 +18,21 @@ export class PdfRepo {
     }
 
     async loadDataFromSiw() {
-        const items = await RequestPromise.get(getConfig().api.sampleItems + '/ScoringGuide/AboutAllItems')
+        const items = await RequestPromise.get(getConfig().sampleItemsApi + '/ScoringGuide/AboutAllItems')
+        console.log("Data recieved from SampleItemsWebsite API:", getConfig().sampleItemsApi)
         this.aboutItems = JSON.parse(items);
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }
 
     getAssociatedItems(requestedIds: string[]) {
-        let idsArray = requestedIds.map(reqId => 
-            this.aboutItems
-                .find(ai => ai.associatedItems.includes(reqId))
-                .associatedItems
-        );
-
-        idsArray = idsArray.filter((idGroup, index) => 
-            idsArray.indexOf(idGroup) === index
-        );
-
+        let idsArray: string[] = [];
+        requestedIds.forEach(reqId => {
+            const item = this.aboutItems.find(ai => ai.associatedItems.split(',').includes(reqId));
+            if (item && !idsArray.includes(item.associatedItems)) {
+                idsArray.push(item.associatedItems);
+            }
+        });
+        
         const splitIdsArray = idsArray.map(idGroup => idGroup.split(','));
         return splitIdsArray;
     }
