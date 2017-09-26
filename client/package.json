@@ -37,6 +37,10 @@
       ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "/__tests__/.*\\.(ts|tsx?)$",
+    "collectCoverageFrom": [
+      "src/**/*.tsx",
+      "!src/**/__tests__/*"
+    ],
     "globals": {
       "ts-jest": {
         "tsConfigFile": "./tsconfig.json"
