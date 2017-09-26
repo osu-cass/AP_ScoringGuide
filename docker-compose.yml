@@ -13,7 +13,7 @@ services:
       - "siw"
       - "ivs"
     networks: 
-      - new
+      - itemsampler
   siw: 
     image: osucass/sampleitemscode:scoreguide
     ports: 
@@ -25,7 +25,7 @@ services:
     depends_on: 
       - "ivs"
     networks: 
-      new:
+      itemsampler:
         aliases: 
           - siw
   ivs: 
@@ -36,4 +36,4 @@ services:
       - /c/content:/home/tomcat7/content
 
 networks: 
-  new:
+  itemsampler:

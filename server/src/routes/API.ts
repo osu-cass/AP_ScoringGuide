@@ -14,10 +14,6 @@ export class APIRoute {
 
     constructor() {
         this.pdfRepo = new PdfRepo();
-        this.pdfRepo.loadDataFromSiw()
-            .then(() => console.log("Data recieved from SampleItemsWebsite API:", getConfig().sampleItemsApi))
-            .catch(err => console.error("Error loading data from SampleItemsWebsite API: ", err));
-
         this.router = Express.Router();
         this.router.get('/pdf', this.pdf);
         this.router.get('/search', this.search);
