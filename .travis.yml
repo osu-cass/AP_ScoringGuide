@@ -12,7 +12,7 @@ script:
   - cd $TRAVIS_BUILD_DIR/client
   - yarn run build
   - yarn run less
-#  - yarn run test
+  - yarn run test
   # Server
   - cd $TRAVIS_BUILD_DIR/server
   - yarn run build
