@@ -39,7 +39,8 @@
     "testRegex": "/__tests__/.*\\.(ts|tsx?)$",
     "collectCoverageFrom": [
       "src/**/*.tsx",
-      "!src/**/__tests__/*"
+      "!src/**/__tests__/*",
+      "!src/index.tsx"
     ],
     "globals": {
       "ts-jest": {
