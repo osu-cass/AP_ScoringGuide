@@ -45,8 +45,26 @@ export class APIRoute {
     }
 
     postPdf = (req: Express.Request, res: Express.Response) => {
-        const items = req.body.items;
-        res.send(items);
+        const ids = req.body.items;
+        const requestedIds = ids.split(',');
+        
+        if (requestedIds.length === 0) {
+            res.sendStatus(400);
+        }
+    
+        let idGroups = this.pdfRepo.getAssociatedItems(requestedIds);
+        this.pdfRepo.loadViewData(idGroups)
+            .then(itemViews => {
+                this.pdfRepo.addDataToViews(itemViews);
+                const htmlString = HtmlRenderer.renderBody(itemViews, 'Mathematics', 'Grade 5');
+                const title = 'Grade 5 Mathematics';
+                res.type('application/pdf');
+                PdfGenerator.generate(htmlString, title).pipe(res);
+            })
+            .catch(error => {
+                console.error('/api/pdf: ', error);
+                res.sendStatus(500);
+            });
     }
     
     search = (req: Express.Request, res: Express.Response) => {
