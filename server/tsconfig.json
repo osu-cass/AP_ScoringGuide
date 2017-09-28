@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "outDir": "../../dist/server",
+        "module": "commonjs",
+        "alwaysStrict": true,
+        "noImplicitAny": true,
+        "noEmitOnError": false,
+        "removeComments": false,
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "jsx": "react",
+        "lib": [
+            "es5",
+            "es6",
+            "dom"
+          ],
+        "types": [
+            "jest"
+          ],
+          "typeRoots": [
+            "./node_modules/@types"
+          ]
+    },
+    "include": [
+        "**/*",
+        "**/__tests__/*.test.tsx",  
+        "**/__tests__/*.test.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "wwwroot"
+    ],
+    "jest": {
+        "moduleDirectories": [
+          "node_modules"
+        ]
+    }
+}
