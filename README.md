@@ -7,10 +7,13 @@ The Scoreing Guide website is a Typescript, Node, and Express Application. It al
 This project was developed using VS Code, but any editor would work. If you are using VS Code, make sure your integrated terminal is set to bash. [This link](https://code.visualstudio.com/docs/editor/integrated-terminal#_configuration) shows you how to change your integrated terminal. 
 
 ### Installation
-You can install all the necessary dependencies with the install bash script. Note that you must have Node installed on your machine (version 8 is required for puppeteer). 
+You can install most of the necessary dependencies with the install bash script. Note that you must have Node installed on your machine (version 8 is required for puppeteer). 
 ```
 $ ./install
 ```
+
+You also need to install [wkhtmltopdf](https://wkhtmltopdf.org/downloads.html) and add it to your path. 
+
 <details> 
   <summary>Installing by hand</summary>
 
@@ -39,7 +42,7 @@ In Visual Studio Code, you can run the launch configuration `Launch Program` (or
 
 In any other editor or IDE, you can run the build-all bash script.
 ```
-$ ./build all
+$ ./build-all
 ```
 
 ### Running the project

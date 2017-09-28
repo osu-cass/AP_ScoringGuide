@@ -1,8 +1,6 @@
 interface Config {
-    api: {
-        sampleItems: string;
-        itemViewerService: string;
-    };
+    sampleItemsApi: string;
+    itemViewerServiceApi: string;
     screenshotPageWidth: number;
     port: number;
 }
@@ -13,11 +11,20 @@ let development = require('../../config/development.json') as Config;
 export function getConfig(env?: string) {
     switch(env || process.env.NODE_ENV || 'production') {
         case 'development': 
-            return development;
+            return overrideProps(development);
         case 'production':
-            return production;
+            return overrideProps(production);
         default: 
-            return production;
+            return overrideProps(production);
     }
 }
 
+function overrideProps(config: Config) {
+    const configObject = config as any;
+    Object.keys(configObject).forEach(key => {
+        if (process.env[key]) {
+            configObject[key] = process.env[key];
+        }
+    });
+    return configObject as Config;
+}
