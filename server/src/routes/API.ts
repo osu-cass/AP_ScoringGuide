@@ -27,12 +27,13 @@ export class APIRoute {
             });
 
         this.router = Express.Router();
-        this.router.get('/pdf', this.pdf);
+        this.router.get('/pdf', this.getPdf); //TODO: Remove this after testing
         this.router.get('/search', this.search);
         this.router.get('/aboutItem', this.getAboutItem);
+        this.router.post('/pdf', this.postPdf);
     }
 
-    pdf = async (req: Express.Request, res: Express.Response) => {
+    getPdf = async (req: Express.Request, res: Express.Response) => {
         const ids = req.query.ids as string || '';
         const idsArray = ids.split(',');
     
@@ -53,6 +54,11 @@ export class APIRoute {
         const title = 'Grade 5 Mathematics';
         res.type('application/pdf');
         PdfGenerator.generate(htmlString, title).pipe(res);
+    }
+
+    postPdf = (req: Express.Request, res: Express.Response) => {
+        const items = req.body.items;
+        res.send(items);
     }
     
     search = (req: Express.Request, res: Express.Response) => {

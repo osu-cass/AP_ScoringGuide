@@ -9,7 +9,13 @@ const port = getConfig().port;
 const apiRoute = new APIRoute();
 const app = Express();
 app.use(Express.static(Path.join(__dirname, '../../client/dist')));
-app.use(BodyParser.json());
+app.use(BodyParser.urlencoded({
+    extended: true,
+    limit: '1mb'
+}));
+app.use(BodyParser.json({
+    limit: '1mb'
+}));
 
 //TODO: change to post and add body-parser
 app.use('/api', apiRoute.router);
