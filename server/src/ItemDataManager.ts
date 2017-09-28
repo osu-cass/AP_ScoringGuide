@@ -16,6 +16,7 @@ export class ItemDataManager {
     constructor(options: ScreenshotOptions) {
         this.chrome = new ItemCapture(options.pageWidth);
         this.screenshotPath = options.screenshotPath
+        this.openChromeIfNeeded();
     }
 
     async openChromeIfNeeded() {
@@ -43,7 +44,6 @@ export class ItemDataManager {
         takePictures = this.getQuestionPaths(itemData, takePictures);
 
         if (takePictures) {
-            await this.openChromeIfNeeded();
             itemData = await this.chrome.takeScreenshots(itemData);
         }
         return itemData

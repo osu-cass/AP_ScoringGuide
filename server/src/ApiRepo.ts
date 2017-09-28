@@ -24,10 +24,11 @@ export class PdfRepo {
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }
 
-    getAssociatedItems(requestedIds: string[]) {
+    async getAssociatedItems(requestedIds: string[]) {
         let idsArray: string[] = [];
+        const aboutItems = await this.getAboutAllItems();
         requestedIds.forEach(reqId => {
-            const item = this.aboutItems.find(ai => ai.associatedItems.split(',').includes(reqId));
+            const item = aboutItems.find(ai => ai.associatedItems.split(',').includes(reqId));
             if (item && !idsArray.includes(item.associatedItems)) {
                 idsArray.push(item.associatedItems);
             }
@@ -37,11 +38,12 @@ export class PdfRepo {
         return splitIdsArray;
     }
 
-    addDataToViews(itemViews: ItemGroup[]) {
+    async addDataToViews(itemViews: ItemGroup[]) {
         let questionNum = 1;
+        const aboutItems = await this.getAboutAllItems();
         itemViews.forEach(iv => 
             iv.questions.forEach(q => {
-                q.data = this.aboutItems.find(item => 
+                q.data = aboutItems.find(item => 
                     item.itemCardViewModel 
                     && item.itemCardViewModel.bankKey + '-' + item.itemCardViewModel.itemKey === q.id
                 );
@@ -78,5 +80,19 @@ export class PdfRepo {
             && i.itemCardViewModel.itemKey === itemKey
             && i.itemCardViewModel.bankKey === bankKey);
         return about;
+    }
+
+    private async getAboutAllItems() {
+        if (!this.aboutItems) {
+            await this.loadDataFromSiw();
+        }
+        return this.aboutItems;
+    }
+
+    async getPdfData(requestedIds: string[]) {
+        const idGroups = await this.getAssociatedItems(requestedIds);
+        const views = await this.loadViewData(idGroups);
+        await this.addDataToViews(views);
+        return views;
     }
 }

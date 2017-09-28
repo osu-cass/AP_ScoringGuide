@@ -29,10 +29,8 @@ export class APIRoute {
             res.sendStatus(400);
         }
     
-        let idGroups = this.pdfRepo.getAssociatedItems(requestedIds);
-        this.pdfRepo.loadViewData(idGroups)
+        this.pdfRepo.getPdfData(requestedIds)
             .then(itemViews => {
-                this.pdfRepo.addDataToViews(itemViews);
                 const htmlString = HtmlRenderer.renderBody(itemViews, 'Mathematics', 'Grade 5');
                 const title = 'Grade 5 Mathematics';
                 res.type('application/pdf');
@@ -42,6 +40,7 @@ export class APIRoute {
                 console.error('/api/pdf: ', error);
                 res.sendStatus(500);
             });
+        
     }
 
     postPdf = (req: Express.Request, res: Express.Response) => {
@@ -52,10 +51,8 @@ export class APIRoute {
             res.sendStatus(400);
         }
     
-        let idGroups = this.pdfRepo.getAssociatedItems(requestedIds);
-        this.pdfRepo.loadViewData(idGroups)
+        this.pdfRepo.getPdfData(requestedIds)
             .then(itemViews => {
-                this.pdfRepo.addDataToViews(itemViews);
                 const htmlString = HtmlRenderer.renderBody(itemViews, 'Mathematics', 'Grade 5');
                 const title = 'Grade 5 Mathematics';
                 res.type('application/pdf');
