@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p src",
-    "test": "jest -c=test/jest.json",
+    "test": "jest",
     "start": "node dist/Server.js",
     "dev": "npm run build && npm run start"
   },
@@ -39,5 +39,36 @@
     "react-test-renderer": "15.6.1",
     "ts-jest": "20.0.7",
     "typescript": "2.4.2"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/__tests__/.*\\.(ts|tsx?)$",
+    "collectCoverageFrom": [
+      "src/**/*.tsx",
+      "!src/**/__tests__/*",
+      "!src/index.tsx"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "./tsconfig.json"
+      },
+      "babelConfig": {
+        "presets": [
+          "env"
+        ],
+        "plugins": [
+          "transform-es2015-modules-commonjs"
+        ]
+      }
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "ts",
+      "tsx"
+    ]
   }
 }

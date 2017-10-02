@@ -52,11 +52,11 @@
     "@types/cheerio" "*"
     "@types/react" "*"
 
-"@types/jest@20.0.8":
+"@types/jest@^20.0.8":
   version "20.0.8"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-20.0.8.tgz#7f8c97f73d20d3bf5448fbe33661a342002b5954"
 
-"@types/jquery@^3.2.12":
+"@types/jquery@3.2.12":
   version "3.2.12"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.12.tgz#f496823108c3874c97c9a822e675a3926ee64b46"
 
