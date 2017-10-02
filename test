@@ -3,10 +3,10 @@ if [[ $# -eq  1 ]]; then
     if [ $1 == -u ]; then
         echo "updating tests in client/..."
         cd client/
-        yarn test -- -u
+        yarn test -u
         echo "updating tests in server/..."
         cd ../server
-        yarn test -- -u
+        yarn test -u
     elif [ $1 == -c ]; then
         echo "running tests in server/ with coverage..."
         cd client/

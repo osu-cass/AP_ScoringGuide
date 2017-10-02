@@ -60,11 +60,11 @@ $ ./test
 
 To run tests with code coverage:
 ```
-$./test  -c
+$ ./test -c
 ```
 
 To update snapshot tests:
 ```
-$./test  -u
+$ ./test -u
 ```
 
