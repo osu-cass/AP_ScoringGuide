@@ -45,6 +45,9 @@ export class APIRoute {
 
     postPdf = (req: Express.Request, res: Express.Response) => {
         const ids = req.body.items;
+        const grade = req.body.grade as string || "";
+        const subject = req.body.subject as string || "";
+
         const requestedIds = ids.split(',');
         
         if (requestedIds.length === 0) {
@@ -53,8 +56,8 @@ export class APIRoute {
     
         this.pdfRepo.getPdfData(requestedIds)
             .then(itemViews => {
-                const htmlString = HtmlRenderer.renderBody(itemViews, 'Mathematics', 'Grade 5');
-                const title = 'Grade 5 Mathematics';
+                const htmlString = HtmlRenderer.renderBody(itemViews, subject, grade);
+                const title = grade + " " + subject;
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
             })
