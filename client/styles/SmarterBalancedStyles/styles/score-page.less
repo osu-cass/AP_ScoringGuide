@@ -55,15 +55,11 @@
 
 table.item-table {
     width: 100%;
-    display: flex;
     background-color: #D5D5D5;
     margin: 0;
     padding: 0;
     border: 0;
     border-spacing: 1px;
-}
-table.item-table-header {
-    border-radius: 5px 5px 0 0;
 }
 
 .ItemNumber {
@@ -107,9 +103,12 @@ table.item-table-header {
 }
 
 table.item-table > tbody {
-    display: block;
-    height: 280px;
+    height: 500px;
     overflow: auto;
+}
+
+table.item-table > thead {
+    display: table-header-group;
 }
 
 table.item-table > thead > tr > th:first-child,
@@ -141,6 +140,7 @@ table.item-table > thead > tr > th {
     text-align: left;
     white-space: nowrap;
     border: none;
+    padding:4px 8px;
 }
 
 table.item-table > thead > tr > th:hover {
@@ -150,6 +150,7 @@ table.item-table > thead > tr > th:hover {
 table.item-table > tbody > tr > td {
     width: 200px;
     min-width: 100px;
+    padding: 8px;
 }
 
 .search-controls {
