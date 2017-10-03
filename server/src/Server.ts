@@ -25,7 +25,7 @@ app.get('/item', (req, res) => {
 })
 
 app.get('*', (req, res) => {
-    res.status(400).sendFile(Path.join(__dirname, '../../client/dist/404.html'));
+    res.status(404).sendFile(Path.join(__dirname, '../../client/dist/404.html'));
 })
 
 app.listen(port, () => console.log('Server started on port', port));
