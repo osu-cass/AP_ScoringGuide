@@ -1,3 +1,5 @@
+import * as GradeLevels from '../../client/src/Models/GradeLevels';
+
 export interface ItemGroup {
     passage?: ItemView;
     questions: Question[];
@@ -26,10 +28,18 @@ export enum ViewType {
 export interface ItemViewModel {
     bankKey: number;
     itemKey: number;
+    title: string;
+    grade: GradeLevels.GradeLevels;
     gradeLabel: string;
+    subjectCode: string;
     subjectLabel: string;
     claimCode: string;
+    claimLabel: string;
+    target: string;
     targetId: string;
+    interactionTypeCode: string;
+    interactionTypeLabel: string;
+    isPerformanceItem: boolean;
     domain: string;
     depthOfKnowledge: string;
     commonCoreStandardId: string;
@@ -69,4 +79,10 @@ export interface SampleResponse {
     scorePoint: string;
     name: string;
     sampleContent: string;
+}
+
+export interface Subject {
+    code: string;
+    label: string;
+    shortLabel: string;
 }
