@@ -20,17 +20,36 @@ module.exports = {
 
   module: {
     rules: [
-        // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-        {
-            test: /\.tsx?$/,
-            loader: "awesome-typescript-loader",
-            options: { 
-              configFileName: path.join(__dirname, 'tsconfig.json')
-          } 
-        },
+      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+      {
+        test: /\.tsx?$/,
+        loader: "awesome-typescript-loader",
+        options: {
+          configFileName: path.join(__dirname, 'tsconfig.json')
+        }
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader?sourceMap'
+      }, {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+      }, {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+      }, {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=application/octet-stream"
+      }, {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file-loader"
+      }, {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=image/svg+xml"
+      },
 
-        // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-        { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
     ]
   },
 
