@@ -8,7 +8,7 @@ import * as BodyParser from 'body-parser';
 const port = getConfig().port;
 const apiRoute = new APIRoute();
 const app = Express();
-app.use(Express.static(Path.join(__dirname, '../../client/dist')));
+app.use(Express.static(Path.join(__dirname, '../../../../client/dist')));
 app.use(BodyParser.urlencoded({
     extended: true,
     limit: '1mb'
@@ -20,7 +20,7 @@ app.use(BodyParser.json({
 //TODO: change to post and add body-parser
 app.use('/api', apiRoute.router);
 app.get('/ScoringGuide', (req, res) => {
-    res.sendFile(Path.join(__dirname, '../../client/dist/index.html'));
+    res.sendFile(Path.join(__dirname, '../../../../client/dist/index.html'));
 });
 app.get('/item', (req, res) => {
     const id = req.param('id', '') as string;
