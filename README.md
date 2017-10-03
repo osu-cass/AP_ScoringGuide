@@ -48,8 +48,14 @@ $ ./build-all
 ### Running the project
 If you're not using Visual Studio Code or don't want to rebuild, you can run the project by starting the Node server in the server directory.
 ```
-$ node server/dist/server.js
+$ node server/dist/server/src/server.js
 ```
+
+You could also run 
+```
+$ npm start
+```
+From server folder
 
 ### Testing
 There is a script in the root directory of the project named 'test'. 
