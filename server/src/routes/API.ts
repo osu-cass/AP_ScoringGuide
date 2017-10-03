@@ -25,35 +25,27 @@ export class APIRoute {
 
     getPdf = (req: Express.Request, res: Express.Response) => {
         const subject = req.query.subject as string || '';
-        const grade = req.query.grade as number || -1;
+        const grade = Number(req.query.grade) || -1;
 
         if (subject === '' || grade === -1) {
             res.status(400).send('Invalid subject or grade.');
         }
 
         const gradeString = GradeLevels.caseToString(grade)
-        let subjectString: string;
-        const subjectPromise = this.repo.getSubjectByCode(subject)
-            .then(s => subjectString = s.label)
-            .catch(err => {
-                console.error('/api/pdf:', err);
-                res.sendStatus(500);
-                return;
-            });
-        
-        this.repo.getPdfDataByGradeSubject(grade, subject)
-            .then(itemViews => {
-                const htmlString = HtmlRenderer.renderBody(itemViews, subjectString, gradeString);
+        const subjectPromise = this.repo.getSubjectByCode(subject);
+        const pdfDataPromise = this.repo.getPdfDataByGradeSubject(grade, subject);
+
+        Promise.all([subjectPromise, pdfDataPromise])
+            .then(value => {
+                const subjectString = value[0].label;
+                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString);
                 const title = gradeString + ' ' + subjectString;
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
-            })
-            .catch(error => {
+            }).catch(error => {
                 console.error('/api/pdf:', error);
                 res.sendStatus(500);
             });
-
-        
     }
 
     postPdf = (req: Express.Request, res: Express.Response) => {

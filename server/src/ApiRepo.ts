@@ -11,7 +11,7 @@ export class ApiRepo {
     subjects: Subject[];
 
     constructor() {
-        const path = Path.join(__dirname, '../../client/dist/images/screenshots');
+        const path = Path.join(__dirname, '../../../../client/dist/images/screenshots');
         this.manager = new ItemDataManager({
             pageWidth: getConfig().screenshotPageWidth,
             screenshotPath: path
@@ -21,7 +21,7 @@ export class ApiRepo {
     private async loadSubjectsFromSiw() {
         const subjects = await RequestPromise.get(getConfig().sampleItemsApi + '/ScoringGuide/ScoringGuideViewModel');
         console.log("Subjects received from SampleItemsWebsite API:", getConfig().sampleItemsApi);
-        this.subjects = JSON.parse(subjects).subjects.forEach((s: any) => {
+        this.subjects = JSON.parse(subjects).subjects.map((s: any) => {
             return {
                 code: s.code,
                 label: s.label,
@@ -124,12 +124,19 @@ export class ApiRepo {
     async getPdfDataByGradeSubject(gradeCode: number, subjectCode: string) {
         const subjects = await this.getSubjects();
 
-        const idGroups = (await this.getAboutAllItems()).filter(ai => 
+        let associatedItems: string[] = []; 
+        (await this.getAboutAllItems())
+            .filter(ai => 
                 ai.itemCardViewModel 
                 && ai.itemCardViewModel.grade === gradeCode
                 && ai.itemCardViewModel.subjectCode.toLowerCase() === subjectCode.toLowerCase()
-            ).map(ai => ai.associatedItems.split(','));
-        
+            ).forEach(ai => {
+                if (!associatedItems.includes(ai.associatedItems)) {
+                    associatedItems.push(ai.associatedItems);
+                }
+            });
+        const idGroups = associatedItems.map(ai => ai.split(','));
+
         const views = await this.loadViewData(idGroups);
         await this.addDataToViews(views); //TODO: Optimize this by adding data first!
         return views;
