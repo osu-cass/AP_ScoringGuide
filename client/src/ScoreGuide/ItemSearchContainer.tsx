@@ -5,6 +5,7 @@ import * as ItemModels from '../Models/ItemModels'
 import * as ItemPageTable from '../ItemTable/ItemPageTable'
 import * as Api from "../Models/ApiModels"
 import { FilterHelper } from "../Models/FilterHelper";
+import * as GradeLevels from '../Models/GradeLevels';
 
 export interface Props {
     onRowSelection: (item: {itemKey: number; bankKey: number}) => void;
@@ -42,7 +43,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     onSearchSuccess(data: ItemCardViewModel.ItemCardViewModel[]): void{
         this.setState({
             itemSearchResult: { kind: "success", content: data },
-            visibleItems: data
+            visibleItems: FilterHelper.filter(data, this.state.itemFilter)
         });
     }
 
@@ -57,7 +58,8 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         if(this.state.itemSearchResult.kind == "success" || this.state.itemSearchResult.kind == "reloading") {
             const filtered = FilterHelper.filter(this.state.itemSearchResult.content || [], filter);
             this.setState({
-                visibleItems: filtered
+                visibleItems: filtered,
+                itemFilter: filter
             });
             FilterHelper.updateUrl(filter);
         }
@@ -91,14 +93,26 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
  
     render() {
-    
+        const itemsValue = (this.state.visibleItems || [])
+            .map(card => card.bankKey + "-"+ card.itemKey)
+            .join(',');
+        const subjectCode = this.state.itemFilter.subject 
+            ? this.state.itemFilter.subject.code
+            : "";
+        const gradeCode = this.state.itemFilter.grade 
+            ? this.state.itemFilter.grade.toString()
+            : "";
+        
         return (
             <div className="search-controls">
-                <a>Print Items</a>
                 {this.renderDropDownComponent()}
+                <form action="/api/pdf" method="get" id="print-items-form">
+                    <input type="hidden" name="grade" value={gradeCode} />
+                    <input type="hidden" name="subject" value={subjectCode} />
+                    <input type="submit" value="Print Items" />
+                </form>
                 {this.renderTableComponent()}
             </div>
         );
     }
-
 }
