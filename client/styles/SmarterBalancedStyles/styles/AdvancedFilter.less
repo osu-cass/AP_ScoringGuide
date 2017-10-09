@@ -1,6 +1,8 @@
-div.advanced-filter {
+div.advanced-filter-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+
+    width: 60%;
 
     padding: 20px;
     margin: 20px;
@@ -11,15 +13,45 @@ div.advanced-filter {
     box-shadow: 0 3px 6px rgba(0,0,0,.16);
 }
 
-.filter-header {}
+.filter-header {
+    display: flex;
+    flex-direction: column;
+}
 
-.filter-status {}
+.filter-status {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
-.filter-body {}
+.filter-body {
+    display: inline-flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
 
-.filter-selection {}
+    padding: 10px;
+}
+
+.filter-indicator{
+    padding: 5px;
+    margin: 2px;
+
+    border: 1px solid #D5D5D5;
+    border-radius: 6px;
+}
+
+.filter-indicator > span {
+    padding: 2px;
+}
+
+.filter-selection {
+    padding: 10px;
+}
 
 .child-filter-options{
+    display: flex;
+    flex-direction: column;
 }
 
 [data-tooltip] {
