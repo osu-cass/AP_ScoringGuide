@@ -1,4 +1,4 @@
-import {startServer} from '../server';
+import {startServer} from '../Server';
 import * as Express from 'express'; 
 import * as http from 'http';
 const request = require('supertest')
