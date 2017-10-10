@@ -21,8 +21,9 @@ app.use(BodyParser.json({
 app.use('/api', apiRoute.router);
 
 app.get('/ScoringGuide', (req, res) => {
-    res.sendFile(Path.join(__dirname, '../../../../client/dist/index.html'));
+    res.status(200).sendFile(Path.join(__dirname, '../../client/dist/index.html'));
 });
+
 app.get('/item', (req, res) => {
     const id = req.param('id', '') as string;
     const ip = new ItemParser();
