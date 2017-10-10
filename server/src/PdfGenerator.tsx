@@ -7,7 +7,7 @@ import { getConfig } from "./Config";
 const wkhtmltopdf = require('wkhtmltopdf');
 
 export class HtmlRenderer {
-    static renderBody(items: ItemGroup[], subject: string, grade: string) {
+    static renderBody(items: ItemGroup[], subject: string, grade: string, titlePage: boolean) {
         const baseUrl = "http://localhost:" + getConfig().port;
         return ReactDOMServer.renderToString(
             <PdfComponent 
@@ -15,7 +15,8 @@ export class HtmlRenderer {
                 subject={subject} 
                 grade={grade} 
                 pageBaseUrl={baseUrl} 
-                ivsBaseUrl={getConfig().itemViewerServiceApi}/>
+                ivsBaseUrl={getConfig().itemViewerServiceApi}
+                displayTitlePage={titlePage} />
         );
     }
 }
