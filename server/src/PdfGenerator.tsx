@@ -10,7 +10,12 @@ export class HtmlRenderer {
     static renderBody(items: ItemGroup[], subject: string, grade: string) {
         const baseUrl = "http://localhost:" + getConfig().port;
         return ReactDOMServer.renderToString(
-            <PdfComponent items={items} subject={subject} grade={grade} baseUrl={baseUrl} />
+            <PdfComponent 
+                items={items} 
+                subject={subject} 
+                grade={grade} 
+                pageBaseUrl={baseUrl} 
+                ivsBaseUrl={getConfig().itemViewerServiceApi}/>
         );
     }
 }
