@@ -55,15 +55,12 @@
 
 table.item-table {
     width: 100%;
-    display: flex;
     background-color: #D5D5D5;
     margin: 0;
     padding: 0;
     border: 0;
+    border-radius: 5px;
     border-spacing: 1px;
-}
-table.item-table-header {
-    border-radius: 5px 5px 0 0;
 }
 
 .ItemNumber {
@@ -107,9 +104,7 @@ table.item-table-header {
 }
 
 table.item-table > tbody {
-    display: block;
-    height: 280px;
-    overflow: auto;
+    overflow-y: scroll;
 }
 
 table.item-table > thead > tr > th:first-child,
@@ -117,6 +112,11 @@ table.item-table > tbody > tr > td:first-child {
     width: 50px;
     min-width: 50px;
     text-align: center;
+    padding: 0px;
+}
+
+table.item-table > tbody > tr > td{
+    text-align: left;
 }
 
 table.item-table > tbody > tr:nth-child(even) {
@@ -141,6 +141,13 @@ table.item-table > thead > tr > th {
     text-align: left;
     white-space: nowrap;
     border: none;
+    padding:4px 8px;
+}
+
+table.item-table > thead > tr > th > div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
 }
 
 table.item-table > thead > tr > th:hover {
@@ -150,6 +157,19 @@ table.item-table > thead > tr > th:hover {
 table.item-table > tbody > tr > td {
     width: 200px;
     min-width: 100px;
+    padding: 8px;
+}
+
+.search-categories {
+    display: flex;
+    width: 75%;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin: 2px;
+}
+
+.search-categories > select {
+    margin-right: 5px;
 }
 
 .search-controls {

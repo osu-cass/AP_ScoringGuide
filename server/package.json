@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p src",
-    "test": "jest -c=test/jest.json",
-    "start": "node dist/Server.js",
+    "test": "jest",
+    "start": "node dist/server/src/Server.js",
     "dev": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "1.18.1",
     "cheerio": "1.0.0-rc.2",
     "express": "4.15.4",
     "html-pdf-chrome": "0.3.0",
@@ -23,6 +24,7 @@
     "wkhtmltopdf": "0.3.4"
   },
   "devDependencies": {
+    "@types/body-parser": "1.16.5",
     "@types/cheerio": "0.22.2",
     "@types/enzyme": "2.8.6",
     "@types/express": "4.0.37",
@@ -36,6 +38,38 @@
     "jest": "20.0.4",
     "react-test-renderer": "15.6.1",
     "ts-jest": "20.0.7",
-    "typescript": "2.4.2"
+    "typescript": "2.4.2",
+    "supertest": "^3.0.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/__tests__/.*\\.(ts|tsx?)$",
+    "collectCoverageFrom": [
+      "src/**/*.tsx",
+      "!src/**/__tests__/*",
+      "!src/index.tsx"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "./tsconfig.json"
+      },
+      "babelConfig": {
+        "presets": [
+          "env"
+        ],
+        "plugins": [
+          "transform-es2015-modules-commonjs"
+        ]
+      }
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "ts",
+      "tsx"
+    ]
   }
 }
