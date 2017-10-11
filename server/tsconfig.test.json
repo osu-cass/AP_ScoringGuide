@@ -14,20 +14,26 @@
             "es5",
             "es6",
             "dom"
-          ],
+        ],
         "types": [
             "jest"
         ],
         "typeRoots": [
-        "./node_modules/@types"
+            "./node_modules/@types"
         ]
     },
     "include": [
-        "**/*"
+        "**/*",
+        "**/__tests__/*.test.tsx",  
+        "**/__tests__/*.test.ts"
     ],
     "exclude": [
         "node_modules",
-        "wwwroot",
-        "**/*.test.*"
-    ]
+        "wwwroot"
+    ],
+    "jest": {
+        "moduleDirectories": [
+          "node_modules"
+        ]
+    }
 }
