@@ -3,6 +3,8 @@ interface Config {
     itemViewerServiceApi: string;
     screenshotPageWidth: number;
     port: number;
+    catCode: string;
+    performanceItemsCode: string;
 }
 
 let production = require('../../../../config/production.json') as Config;

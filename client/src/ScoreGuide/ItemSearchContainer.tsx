@@ -102,13 +102,16 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         const gradeCode = this.state.itemFilter.grade 
             ? this.state.itemFilter.grade.toString()
             : "";
-        
+        const techType = this.state.itemFilter.techType 
+            ? this.state.itemFilter.techType.code
+            : "";
         return (
             <div className="search-controls">
                 {this.renderDropDownComponent()}
                 <form action="/api/pdf" method="get" id="print-items-form">
                     <input type="hidden" name="grade" value={gradeCode} />
                     <input type="hidden" name="subject" value={subjectCode} />
+                    <input type="hidden" name="techType" value={techType} />
                     <input type="submit" value="Print Items" />
                 </form>
                 {this.renderTableComponent()}

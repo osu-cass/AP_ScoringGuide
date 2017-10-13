@@ -121,16 +121,24 @@ export class ApiRepo {
         return subjects.find(s => s.code === code);
     }
 
-    async getPdfDataByGradeSubject(gradeCode: number, subjectCode: string) {
+    async getPdfDataByGradeSubject(gradeCode: number, subjectCode: string, type: string) {
         const subjects = await this.getSubjects();
+        const config = getConfig();
 
         let associatedItems: string[] = []; 
         (await this.getAboutAllItems())
-            .filter(ai => 
-                ai.itemCardViewModel 
-                && ai.itemCardViewModel.grade === gradeCode
-                && ai.itemCardViewModel.subjectCode.toLowerCase() === subjectCode.toLowerCase()
-            ).forEach(ai => {
+            .filter(ai => {
+                if (!ai.itemCardViewModel) { return false; }
+                let match = ai.itemCardViewModel.grade === gradeCode
+                    && ai.itemCardViewModel.subjectCode.toLowerCase() === subjectCode.toLowerCase();
+                if (type === config.catCode && ai.itemCardViewModel.isPerformanceItem) {
+                    match = false;
+                } else if (type.toLowerCase() === config.performanceItemsCode.toLowerCase()
+                           && !ai.itemCardViewModel.isPerformanceItem) {
+                    match = false;
+                }
+                return match;
+            }).forEach(ai => {
                 if (!associatedItems.includes(ai.associatedItems)) {
                     associatedItems.push(ai.associatedItems);
                 }
