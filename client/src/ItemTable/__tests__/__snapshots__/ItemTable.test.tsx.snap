@@ -8,21 +8,13 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <table
-    className="item-table mapcomponent-table"
->
-    <tbody>
-        
-    </tbody>
-</table>,
+  "node": <tbody>
+    
+</tbody>,
   "nodes": Array [
-    <table
-      className="item-table mapcomponent-table"
->
-      <tbody>
-            
-      </tbody>
-</table>,
+    <tbody>
+      
+</tbody>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -32,6 +24,34 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <DataTable
         columns={Array []}
+        item={
+                Object {
+                        "content": Object {
+                          "commonCoreStandardsDescription": "commonCoreStandardsDescription",
+                          "depthOfKnowledge": "depthOfKnowledge",
+                          "educationalDifficulty": "educationalDifficulty",
+                          "evidenceStatement": "evidenceStatement",
+                          "itemCardViewModel": Object {
+                            "bankKey": 1,
+                            "claimCode": "",
+                            "claimLabel": "",
+                            "grade": 1023,
+                            "gradeLabel": "",
+                            "interactionTypeCode": "",
+                            "interactionTypeLabel": "",
+                            "isPerformanceItem": true,
+                            "itemKey": 3,
+                            "subjectCode": "",
+                            "subjectLabel": "",
+                            "target": "",
+                            "title": "",
+                          },
+                          "rubrics": Array [],
+                          "targetDescription": "targetDescription",
+                        },
+                        "kind": "none",
+                      }
+        }
         mapRows={Array []}
         rowOnClick={[Function]}
         selectedRow={
@@ -60,8 +80,35 @@ ShallowWrapper {
       "_instance": DataTable {
         "_reactInternalInstance": [Circular],
         "context": Object {},
+        "handleRowClick": [Function],
         "props": Object {
           "columns": Array [],
+          "item": Object {
+            "content": Object {
+              "commonCoreStandardsDescription": "commonCoreStandardsDescription",
+              "depthOfKnowledge": "depthOfKnowledge",
+              "educationalDifficulty": "educationalDifficulty",
+              "evidenceStatement": "evidenceStatement",
+              "itemCardViewModel": Object {
+                "bankKey": 1,
+                "claimCode": "",
+                "claimLabel": "",
+                "grade": 1023,
+                "gradeLabel": "",
+                "interactionTypeCode": "",
+                "interactionTypeLabel": "",
+                "isPerformanceItem": true,
+                "itemKey": 3,
+                "subjectCode": "",
+                "subjectLabel": "",
+                "target": "",
+                "title": "",
+              },
+              "rubrics": Array [],
+              "targetDescription": "targetDescription",
+            },
+            "kind": "none",
+          },
           "mapRows": Array [],
           "rowOnClick": [Function],
           "selectedRow": Object {
@@ -102,21 +149,13 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <table
-          className="item-table mapcomponent-table"
->
-          <tbody>
-                    
-          </tbody>
-</table>,
+        "_currentElement": <tbody>
+          
+</tbody>,
         "_debugID": 2,
-        "_renderedOutput": <table
-          className="item-table mapcomponent-table"
->
-          <tbody>
-                    
-          </tbody>
-</table>,
+        "_renderedOutput": <tbody>
+          
+</tbody>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -130,6 +169,34 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <DataTable
     columns={Array []}
+    item={
+        Object {
+            "content": Object {
+              "commonCoreStandardsDescription": "commonCoreStandardsDescription",
+              "depthOfKnowledge": "depthOfKnowledge",
+              "educationalDifficulty": "educationalDifficulty",
+              "evidenceStatement": "evidenceStatement",
+              "itemCardViewModel": Object {
+                "bankKey": 1,
+                "claimCode": "",
+                "claimLabel": "",
+                "grade": 1023,
+                "gradeLabel": "",
+                "interactionTypeCode": "",
+                "interactionTypeLabel": "",
+                "isPerformanceItem": true,
+                "itemKey": 3,
+                "subjectCode": "",
+                "subjectLabel": "",
+                "target": "",
+                "title": "",
+              },
+              "rubrics": Array [],
+              "targetDescription": "targetDescription",
+            },
+            "kind": "none",
+          }
+    }
     mapRows={Array []}
     rowOnClick={[Function]}
     selectedRow={
