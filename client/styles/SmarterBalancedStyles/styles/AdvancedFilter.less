@@ -3,22 +3,19 @@ div.advanced-filter-container {
     flex-flow: column nowrap;
     align-items: center;
     width: 100%;
-    border-top: 1px solid lightgray;
-    border-bottom:  1px solid lightgray;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid lightgray;
+    box-shadow: 0 3px 6px rgba(0,0,0,.16);
     margin-bottom: 1em;
 }
 
 div.advanced-filter-container-expanded {
     display: flex;
     flex-direction: column;
-
-    padding: 20px;
-    margin: 20px;
-
-    border: 1px solid #D5D5D5;
-    border-radius: 6px;
-    background-color: #ffffff;
-    box-shadow: 0 3px 6px rgba(0,0,0,.16);
+    width: 100%;
+    padding: 5px;
+    background-color: #e6e6e6;
 }
 
 .filter-header {
@@ -43,6 +40,8 @@ div.advanced-filter-container-expanded {
 .filter-indicator{
     padding: 5px;
     margin: 2px;
+    color: #fff;
+    background-color: #1f67a1;
     border: 1px solid #D5D5D5;
     border-radius: 6px;
 }
@@ -58,20 +57,24 @@ div.advanced-filter-container-expanded {
 .filter-button {
     margin: 1px;
     border-radius: 3px;
+    border: 1px solid #d5d5d5;
     padding: 8px;
-    border: 0;
     height: 30px;
+    background-color: #fff;
+    outline: #d5d5d5;
 }
 
 .filter-button:hover {
     background-color: #63666A;
     color: white;
     box-shadow: 1px 1px 2px black;
+    border: 0;
 }
 
 .filter-button:active {
     background-color: #1f67a1;
     color:white;
+    border: 0;
 }
 
 .selected-button {
