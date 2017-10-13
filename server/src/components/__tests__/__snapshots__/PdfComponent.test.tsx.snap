@@ -13,8 +13,19 @@ ShallowWrapper {
         <base
             href="http://example.com"
         />
+        <meta
+            charSet="UTF-8"
+        />
         <link
             href="css/pdf.css"
+            rel="stylesheet"
+        />
+        <link
+            href="http://example.com/Shared/CSS/Universal/items.css"
+            rel="stylesheet"
+        />
+        <link
+            href="http://example.com/Projects/SBAC/css/modernItems.css"
             rel="stylesheet"
         />
     </head>
@@ -104,8 +115,19 @@ ShallowWrapper {
             <base
                   href="http://example.com"
             />
+            <meta
+                  charSet="UTF-8"
+            />
             <link
                   href="css/pdf.css"
+                  rel="stylesheet"
+            />
+            <link
+                  href="http://example.com/Shared/CSS/Universal/items.css"
+                  rel="stylesheet"
+            />
+            <link
+                  href="http://example.com/Projects/SBAC/css/modernItems.css"
                   rel="stylesheet"
             />
       </head>
@@ -197,7 +219,7 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <PdfComponent
-        baseUrl="http://example.com"
+        displayTitlePage={true}
         grade="3"
         items={
                 Array [
@@ -272,6 +294,8 @@ ShallowWrapper {
                         },
                       ]
         }
+        ivsBaseUrl="http://example.com"
+        pageBaseUrl="http://example.com"
         subject="math"
 />,
       "_debugID": 1,
@@ -281,7 +305,7 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
-          "baseUrl": "http://example.com",
+          "displayTitlePage": true,
           "grade": "3",
           "items": Array [
             Object {
@@ -354,6 +378,8 @@ ShallowWrapper {
               ],
             },
           ],
+          "ivsBaseUrl": "http://example.com",
+          "pageBaseUrl": "http://example.com",
           "subject": "math",
         },
         "refs": Object {},
@@ -381,8 +407,19 @@ ShallowWrapper {
                     <base
                               href="http://example.com"
                     />
+                    <meta
+                              charSet="UTF-8"
+                    />
                     <link
                               href="css/pdf.css"
+                              rel="stylesheet"
+                    />
+                    <link
+                              href="http://example.com/Shared/CSS/Universal/items.css"
+                              rel="stylesheet"
+                    />
+                    <link
+                              href="http://example.com/Projects/SBAC/css/modernItems.css"
                               rel="stylesheet"
                     />
           </head>
@@ -472,8 +509,19 @@ ShallowWrapper {
                     <base
                               href="http://example.com"
                     />
+                    <meta
+                              charSet="UTF-8"
+                    />
                     <link
                               href="css/pdf.css"
+                              rel="stylesheet"
+                    />
+                    <link
+                              href="http://example.com/Shared/CSS/Universal/items.css"
+                              rel="stylesheet"
+                    />
+                    <link
+                              href="http://example.com/Projects/SBAC/css/modernItems.css"
                               rel="stylesheet"
                     />
           </head>
@@ -569,7 +617,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <PdfComponent
-    baseUrl="http://example.com"
+    displayTitlePage={true}
     grade="3"
     items={
         Array [
@@ -644,6 +692,8 @@ ShallowWrapper {
             },
           ]
     }
+    ivsBaseUrl="http://example.com"
+    pageBaseUrl="http://example.com"
     subject="math"
 />,
 }

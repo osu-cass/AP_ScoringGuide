@@ -79,7 +79,9 @@ const props = {
     items:  [itemGroup],
     grade: "3",
     subject: "math",
-    baseUrl: "http://example.com"
+    pageBaseUrl: "http://example.com",
+    ivsBaseUrl: "http://example.com",
+    displayTitlePage: true
 }
 
 describe("PdfComponent", () => {
