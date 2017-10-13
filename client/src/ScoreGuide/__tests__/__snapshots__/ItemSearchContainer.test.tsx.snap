@@ -11,6 +11,16 @@ ShallowWrapper {
   "node": <div
     className="search-controls"
 >
+    <button
+        style={
+            Object {
+                "margin": "2px",
+                "paddingRight": "5px",
+              }
+        }
+    >
+        Print Items
+    </button>
     <ItemSearchDropdown
         filterOptions={
             Object {
@@ -36,26 +46,6 @@ ShallowWrapper {
         }
         onChange={[Function]}
     />
-    <form
-        action="/api/pdf"
-        id="print-items-form"
-        method="get"
-    >
-        <input
-            name="grade"
-            type="hidden"
-            value=""
-        />
-        <input
-            name="subject"
-            type="hidden"
-            value=""
-        />
-        <input
-            type="submit"
-            value="Print Items"
-        />
-    </form>
     <div>
         Loading...
     </div>
@@ -64,6 +54,16 @@ ShallowWrapper {
     <div
       className="search-controls"
 >
+      <button
+            style={
+                  Object {
+                        "margin": "2px",
+                        "paddingRight": "5px",
+                      }
+            }
+      >
+            Print Items
+      </button>
       <ItemSearchDropdown
             filterOptions={
                   Object {
@@ -89,26 +89,6 @@ ShallowWrapper {
             }
             onChange={[Function]}
       />
-      <form
-            action="/api/pdf"
-            id="print-items-form"
-            method="get"
-      >
-            <input
-                  name="grade"
-                  type="hidden"
-                  value=""
-            />
-            <input
-                  name="subject"
-                  type="hidden"
-                  value=""
-            />
-            <input
-                  type="submit"
-                  value="Print Items"
-            />
-      </form>
       <div>
             Loading...
       </div>
@@ -135,6 +115,11 @@ ShallowWrapper {
                         "techTypes": Array [],
                       }
         }
+        item={
+                Object {
+                        "kind": "none",
+                      }
+        }
         onRowSelection={[Function]}
         searchClient={[Function]}
 />,
@@ -157,6 +142,9 @@ ShallowWrapper {
               },
             ],
             "techTypes": Array [],
+          },
+          "item": Object {
+            "kind": "none",
           },
           "onRowSelection": [Function],
           "searchClient": [Function],
@@ -193,6 +181,16 @@ ShallowWrapper {
         "_currentElement": <div
           className="search-controls"
 >
+          <button
+                    style={
+                              Object {
+                                        "margin": "2px",
+                                        "paddingRight": "5px",
+                                      }
+                    }
+          >
+                    Print Items
+          </button>
           <ItemSearchDropdown
                     filterOptions={
                               Object {
@@ -218,26 +216,6 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
-          <form
-                    action="/api/pdf"
-                    id="print-items-form"
-                    method="get"
-          >
-                    <input
-                              name="grade"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              name="subject"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              type="submit"
-                              value="Print Items"
-                    />
-          </form>
           <div>
                     Loading...
           </div>
@@ -246,6 +224,16 @@ ShallowWrapper {
         "_renderedOutput": <div
           className="search-controls"
 >
+          <button
+                    style={
+                              Object {
+                                        "margin": "2px",
+                                        "paddingRight": "5px",
+                                      }
+                    }
+          >
+                    Print Items
+          </button>
           <ItemSearchDropdown
                     filterOptions={
                               Object {
@@ -271,26 +259,6 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
-          <form
-                    action="/api/pdf"
-                    id="print-items-form"
-                    method="get"
-          >
-                    <input
-                              name="grade"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              name="subject"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              type="submit"
-                              value="Print Items"
-                    />
-          </form>
           <div>
                     Loading...
           </div>
@@ -321,6 +289,11 @@ ShallowWrapper {
             "techTypes": Array [],
           }
     }
+    item={
+        Object {
+            "kind": "none",
+          }
+    }
     onRowSelection={[Function]}
     searchClient={[Function]}
 />,
@@ -338,6 +311,16 @@ ShallowWrapper {
   "node": <div
     className="search-controls"
 >
+    <button
+        style={
+            Object {
+                "margin": "2px",
+                "paddingRight": "5px",
+              }
+        }
+    >
+        Print Items
+    </button>
     <ItemSearchDropdown
         filterOptions={
             Object {
@@ -363,26 +346,6 @@ ShallowWrapper {
         }
         onChange={[Function]}
     />
-    <form
-        action="/api/pdf"
-        id="print-items-form"
-        method="get"
-    >
-        <input
-            name="grade"
-            type="hidden"
-            value=""
-        />
-        <input
-            name="subject"
-            type="hidden"
-            value=""
-        />
-        <input
-            type="submit"
-            value="Print Items"
-        />
-    </form>
     <div>
         Loading...
     </div>
@@ -391,6 +354,16 @@ ShallowWrapper {
     <div
       className="search-controls"
 >
+      <button
+            style={
+                  Object {
+                        "margin": "2px",
+                        "paddingRight": "5px",
+                      }
+            }
+      >
+            Print Items
+      </button>
       <ItemSearchDropdown
             filterOptions={
                   Object {
@@ -416,26 +389,6 @@ ShallowWrapper {
             }
             onChange={[Function]}
       />
-      <form
-            action="/api/pdf"
-            id="print-items-form"
-            method="get"
-      >
-            <input
-                  name="grade"
-                  type="hidden"
-                  value=""
-            />
-            <input
-                  name="subject"
-                  type="hidden"
-                  value=""
-            />
-            <input
-                  type="submit"
-                  value="Print Items"
-            />
-      </form>
       <div>
             Loading...
       </div>
@@ -462,6 +415,11 @@ ShallowWrapper {
                         "techTypes": Array [],
                       }
         }
+        item={
+                Object {
+                        "kind": "none",
+                      }
+        }
         onRowSelection={[Function]}
         searchClient={[Function]}
 />,
@@ -484,6 +442,9 @@ ShallowWrapper {
               },
             ],
             "techTypes": Array [],
+          },
+          "item": Object {
+            "kind": "none",
           },
           "onRowSelection": [Function],
           "searchClient": [Function],
@@ -520,6 +481,16 @@ ShallowWrapper {
         "_currentElement": <div
           className="search-controls"
 >
+          <button
+                    style={
+                              Object {
+                                        "margin": "2px",
+                                        "paddingRight": "5px",
+                                      }
+                    }
+          >
+                    Print Items
+          </button>
           <ItemSearchDropdown
                     filterOptions={
                               Object {
@@ -545,26 +516,6 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
-          <form
-                    action="/api/pdf"
-                    id="print-items-form"
-                    method="get"
-          >
-                    <input
-                              name="grade"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              name="subject"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              type="submit"
-                              value="Print Items"
-                    />
-          </form>
           <div>
                     Loading...
           </div>
@@ -573,6 +524,16 @@ ShallowWrapper {
         "_renderedOutput": <div
           className="search-controls"
 >
+          <button
+                    style={
+                              Object {
+                                        "margin": "2px",
+                                        "paddingRight": "5px",
+                                      }
+                    }
+          >
+                    Print Items
+          </button>
           <ItemSearchDropdown
                     filterOptions={
                               Object {
@@ -598,26 +559,6 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
-          <form
-                    action="/api/pdf"
-                    id="print-items-form"
-                    method="get"
-          >
-                    <input
-                              name="grade"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              name="subject"
-                              type="hidden"
-                              value=""
-                    />
-                    <input
-                              type="submit"
-                              value="Print Items"
-                    />
-          </form>
           <div>
                     Loading...
           </div>
@@ -646,6 +587,11 @@ ShallowWrapper {
               },
             ],
             "techTypes": Array [],
+          }
+    }
+    item={
+        Object {
+            "kind": "none",
           }
     }
     onRowSelection={[Function]}

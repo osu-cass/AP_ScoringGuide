@@ -7,8 +7,8 @@ interface Config {
     performanceItemsCode: string;
 }
 
-let production = require('../../../../config/production.json') as Config;
-let development = require('../../../../config/development.json') as Config;
+let production = require('../../config/production.json') as Config;
+let development = require('../../config/development.json') as Config;
 
 export function getConfig(env?: string) {
     switch(env || process.env.NODE_ENV || 'production') {
