@@ -20,17 +20,23 @@ module.exports = {
 
   module: {
     rules: [
-        // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-        {
-            test: /\.tsx?$/,
-            loader: "awesome-typescript-loader",
-            options: { 
-              configFileName: path.join(__dirname, 'tsconfig.json')
-          } 
-        },
+      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+      {
+        test: /\.tsx?$/,
+        loader: "awesome-typescript-loader",
+        options: {
+          configFileName: path.join(__dirname, 'tsconfig.json')
+        }
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader?sourceMap'
+      },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
 
-        // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-        { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
     ]
   },
 

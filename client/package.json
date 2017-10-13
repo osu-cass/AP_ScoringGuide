@@ -12,7 +12,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "css-loader": "^0.28.7",
+    "file-loader": "^1.1.4",
+    "font-awesome": "^4.7.0",
+    "style-loader": "^0.19.0",
+    "url-loader": "^0.5.9"
+  },
   "devDependencies": {
     "@types/enzyme": "2.8.6",
     "@types/jest": "^20.0.8",
