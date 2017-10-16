@@ -1,5 +1,7 @@
 @btn-bgcolor-hover: #63666A;
 @grey-border-color: #D5D5D5;
+@btn-txtcolor: #ffffff;
+
 
 div.advanced-filter-container {
     display: flex;
@@ -84,7 +86,6 @@ div.filter-header > div > span {
     border: 1px solid @grey-border-color;
     border-radius: 6px;
     background-color: #2d7bbd;
-    color: white;
 }
 .filter-indicator:hover{
     background-color: @btn-bgcolor-hover;
@@ -104,26 +105,26 @@ div.filter-header > div > span {
     border: 1px solid @grey-border-color;
     padding: 8px;
     height: 30px;
-    background-color: #ffffff;
+    background-color: @btn-txtcolor;
     outline: @grey-border-color;
 }
 
 .filter-button:hover {
     background-color: @btn-bgcolor-hover;
-    color: #ffffff;
-    box-shadow: 1px 1px 1px black;
+    color: @btn-txtcolor;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.333);
     border: 0;
 }
 
 .filter-button:active {
     background-color: #1f67a1;
-    color:#ffffff;
+    color:@btn-txtcolor;
     border: 0;
 }
 
 .selected-button {
     background-color: #2d7bbd;
-    color:#ffffff;
+    color:@btn-txtcolor;
 }
 
 .filter-button-container {
