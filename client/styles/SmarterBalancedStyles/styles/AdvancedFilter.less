@@ -1,3 +1,5 @@
+@btn-bgcolor-hover: #63666A;
+
 div.advanced-filter-container {
     display: flex;
     flex-flow: column nowrap;
@@ -25,7 +27,7 @@ button.filter-reset-btn {
     height: 30px;
 }
 button.filter-reset-btn:hover {
-    background-color: #63666A;
+    background-color: @btn-bgcolor-hover;
     color:white;
 }
 
@@ -47,7 +49,7 @@ div.filter-header {
 div.filter-header > div {
     display: flex;
     flex-flow: row nowrap;
-    color: gray;
+    color: #63666A;
     align-items: center; 
 }
 div.filter-header > div > h2 {
@@ -86,7 +88,7 @@ div.filter-header > div > h2 {
     color: white;
 }
 .filter-indicator:hover{
-    background-color: #63666A;
+    background-color: @btn-bgcolor-hover;
 }
 
 .filter-indicator > span {
@@ -108,7 +110,7 @@ div.filter-header > div > h2 {
 }
 
 .filter-button:hover {
-    background-color: #63666A;
+    background-color: @btn-bgcolor-hover;
     color: white;
     box-shadow: 1px 1px 2px black;
     border: 0;
@@ -124,8 +126,6 @@ div.filter-header > div > h2 {
     background-color: #2d7bbd;
     color:white;
 }
-
-
 
 .filter-button-container {
     display: flex;
