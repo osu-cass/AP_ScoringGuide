@@ -37,7 +37,26 @@ div.advanced-filter-container-expanded {
     background-color: #e6e6e6;
 }
 
-.filter-header {
+div.filter-header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; 
+}
+div.filter-header > div {
+    display: flex;
+    flex-flow: row nowrap;
+    color: gray;
+    align-items: center; 
+}
+div.filter-header > div > h2 {
+    color: #63666A;
+}
+
+
+
+.filter-subheader {
     display: flex;
     flex-direction: column;
 }
