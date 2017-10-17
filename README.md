@@ -58,7 +58,18 @@ $ npm start
 From server folder
 
 ### Testing
-There is a script in the root directory of the project named 'test'. 
+There is a script in the root directory of the project named 'test'. We're using Jest as our test framework and run two types of tests.  
+The first is a deterministic snapshot test. Jest takes a snapshot of the component in it's rendered form and compares it to the 
+last known snapshot. When you make changes to a component, the test for that component is DESIGNED TO FAIL. It is your responsibility to 
+examine the differences in the snapshots, which will be displayed for you by Jest. If the changes to the snapshot are correct you must 
+UPDATE the tests and check in the updated snapshot files into source control WITH YOUR COMMIT.
+
+We are also running unit tests where we render the component in a virtual DOM and simulate click event on buttons and functional pieces 
+of the UI. These tests will fail when making changes to the component, it is your responsibility to update these tests to reflect the 
+expected behavior, and check them in WITH YOUR COMMIT.
+
+Do not push your changes until you have run and updated the tests.
+
 To run tests:
 ```
 $ ./test
