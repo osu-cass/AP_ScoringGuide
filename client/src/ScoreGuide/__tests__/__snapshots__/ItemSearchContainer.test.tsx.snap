@@ -46,6 +46,31 @@ ShallowWrapper {
         }
         onChange={[Function]}
     />
+    <form
+        action="/api/pdf"
+        id="print-items-form"
+        method="get"
+    >
+        <input
+            name="grade"
+            type="hidden"
+            value=""
+        />
+        <input
+            name="subject"
+            type="hidden"
+            value=""
+        />
+        <input
+            name="techType"
+            type="hidden"
+            value=""
+        />
+        <input
+            type="submit"
+            value="Print Items"
+        />
+    </form>
     <div>
         Loading...
     </div>
@@ -89,6 +114,31 @@ ShallowWrapper {
             }
             onChange={[Function]}
       />
+      <form
+            action="/api/pdf"
+            id="print-items-form"
+            method="get"
+      >
+            <input
+                  name="grade"
+                  type="hidden"
+                  value=""
+            />
+            <input
+                  name="subject"
+                  type="hidden"
+                  value=""
+            />
+            <input
+                  name="techType"
+                  type="hidden"
+                  value=""
+            />
+            <input
+                  type="submit"
+                  value="Print Items"
+            />
+      </form>
       <div>
             Loading...
       </div>
@@ -216,6 +266,31 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
+          <form
+                    action="/api/pdf"
+                    id="print-items-form"
+                    method="get"
+          >
+                    <input
+                              name="grade"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="subject"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="techType"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              type="submit"
+                              value="Print Items"
+                    />
+          </form>
           <div>
                     Loading...
           </div>
@@ -259,6 +334,31 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
+          <form
+                    action="/api/pdf"
+                    id="print-items-form"
+                    method="get"
+          >
+                    <input
+                              name="grade"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="subject"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="techType"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              type="submit"
+                              value="Print Items"
+                    />
+          </form>
           <div>
                     Loading...
           </div>
@@ -346,6 +446,31 @@ ShallowWrapper {
         }
         onChange={[Function]}
     />
+    <form
+        action="/api/pdf"
+        id="print-items-form"
+        method="get"
+    >
+        <input
+            name="grade"
+            type="hidden"
+            value=""
+        />
+        <input
+            name="subject"
+            type="hidden"
+            value=""
+        />
+        <input
+            name="techType"
+            type="hidden"
+            value=""
+        />
+        <input
+            type="submit"
+            value="Print Items"
+        />
+    </form>
     <div>
         Loading...
     </div>
@@ -389,6 +514,31 @@ ShallowWrapper {
             }
             onChange={[Function]}
       />
+      <form
+            action="/api/pdf"
+            id="print-items-form"
+            method="get"
+      >
+            <input
+                  name="grade"
+                  type="hidden"
+                  value=""
+            />
+            <input
+                  name="subject"
+                  type="hidden"
+                  value=""
+            />
+            <input
+                  name="techType"
+                  type="hidden"
+                  value=""
+            />
+            <input
+                  type="submit"
+                  value="Print Items"
+            />
+      </form>
       <div>
             Loading...
       </div>
@@ -516,6 +666,31 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
+          <form
+                    action="/api/pdf"
+                    id="print-items-form"
+                    method="get"
+          >
+                    <input
+                              name="grade"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="subject"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="techType"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              type="submit"
+                              value="Print Items"
+                    />
+          </form>
           <div>
                     Loading...
           </div>
@@ -559,6 +734,31 @@ ShallowWrapper {
                     }
                     onChange={[Function]}
           />
+          <form
+                    action="/api/pdf"
+                    id="print-items-form"
+                    method="get"
+          >
+                    <input
+                              name="grade"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="subject"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              name="techType"
+                              type="hidden"
+                              value=""
+                    />
+                    <input
+                              type="submit"
+                              value="Print Items"
+                    />
+          </form>
           <div>
                     Loading...
           </div>
