@@ -1,17 +1,18 @@
 {
-  "compilerOptions": {
+  "compilerOptions": {   
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noEmitOnError": false,
     "removeComments": false,
     "sourceMap": true,
     "module": "commonjs",
-    "target": "es6",
+    "target": "es5",
     "outDir": "./dist/public/js",
     "jsx": "react",
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "lib": [
+      "es5",
       "es6",
       "dom"
     ],
@@ -22,9 +23,8 @@
       "./node_modules/@types"
     ]
   },
-  "include": [ "**/__tests__/*.test.tsx",  "**/__tests__/*.test.ts" ],
+  "include": [ "**/__tests__/*.test.tsx",  "**/__tests__/*.test.ts"],
   "exclude": [
-    "node_modules",
     "wwwroot"
   ],
   "jest": {
