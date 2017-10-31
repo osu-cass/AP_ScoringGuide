@@ -1,13 +1,19 @@
+import 'jsdom-global/register';
 import * as React from 'react';
 import * as $ from 'jquery'
 import * as ReactDOM from 'react-dom';
 import { ItemSearchContainer } from '../ItemSearchContainer';
 import { ItemCardViewModel } from '../../Models/ItemCardViewModel';
+import { AdvancedFilters, AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
+import {FilterHelper} from "../../Models/FilterHelper"
 import { DataTable } from '../../ItemTable/ItemTable';
 import * as AboutItemVM from '../../Models/AboutItemVM';
 import * as ApiModels from '../../Models/ApiModels';
 import * as GradeLevels from '../../Models/GradeLevels';
-import { shallow, mount } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const subject = {
     code: "subjectCode",
@@ -43,22 +49,35 @@ const searchClientErr = jest.fn(() => {
     })
 })
 
+const onRowSelection = jest.fn((item: { itemKey: number, bankKey: number }, reset: boolean) => {
+    return null;
+})
+
 const item: ApiModels.Resource<AboutItemVM.AboutThisItem> = {
     kind: "none"
 }
 
+const advancedFilterCategory: AdvancedFilterCategory ={
+    disabled: false,
+    isMultiSelect: false,
+    label: "filter category",
+    helpText: "you need help?",
+    filterOptions: FilterHelper.getFilterOptions().grades.filterOptions,
+    displayAllButton: true
+}
 
+const advancedFilters: AdvancedFilters = {
+    subjects: advancedFilterCategory,
+    grades: advancedFilterCategory,
+    techTypes: advancedFilterCategory,
+}
 
 describe("ItemSearchContainer", () => {
 
     const props = {
-        onRowSelection: jest.fn((item: { itemKey: number; bankKey: number }) => { return null; }),
+        onRowSelection,
         searchClient,
-        filterOptions: {
-            subjects: [subject],
-            grades: [GradeLevels.GradeLevels.Grade3],
-            techTypes: []
-        },
+        filterOptions: advancedFilters,
         item
     }
 

@@ -1,22 +1,23 @@
 import * as React from 'react';
-import * as ItemSearchDropdown from '../DropDown/ItemSearchDropDown';
 import * as ItemCardViewModel from '../Models/ItemCardViewModel';
 import * as ItemModels from '../Models/ItemModels';
 import * as ItemPageTable from '../ItemTable/ItemPageTable';
-import * as Api from '../Models/ApiModels';
-import { FilterHelper } from '../Models/FilterHelper';
+import * as ApiModels from "../Models/ApiModels";
+import { FilterHelper } from "../Models/FilterHelper";
+import {AdvancedFilterContainer ,AdvancedFilterCategory, AdvancedFilters} from "@osu-cass/react-advanced-filter";
 import * as AboutItemVM from '../Models/AboutItemVM';
-import * as ApiModels from '../Models/ApiModels';
+
+const SearchClient = () => ApiModels.get<ItemCardViewModel.ItemCardViewModel[]>("api/search");
 
 export interface Props {
     onRowSelection: (item: { itemKey: number; bankKey: number }, reset: boolean) => void;
-    filterOptions: ItemModels.FilterOptions;
+    filterOptions: AdvancedFilters;
     searchClient: () => Promise<ItemCardViewModel.ItemCardViewModel[]>;
     item: ApiModels.Resource<AboutItemVM.AboutThisItem>;
 }
 
 export interface State {
-    itemSearchResult: Api.Resource<ItemCardViewModel.ItemCardViewModel[]>;
+    itemSearchResult: ApiModels.Resource<ItemCardViewModel.ItemCardViewModel[]>;
     visibleItems?: ItemCardViewModel.ItemCardViewModel[];
     itemFilter: ItemModels.ItemFilter;
 }
@@ -56,8 +57,8 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         });
     }
 
-    onFilterApplied = (filter: ItemModels.ItemFilter) => {
-        if (this.state.itemSearchResult.kind == "success" || this.state.itemSearchResult.kind == "reloading") {
+    onFilterApplied = (filter: AdvancedFilterCategory[]) => {
+        if(this.state.itemSearchResult.kind == "success" || this.state.itemSearchResult.kind == "reloading") {
             const filtered = FilterHelper.filter(this.state.itemSearchResult.content || [], filter);
             this.setState({
                 visibleItems: filtered
@@ -66,13 +67,15 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         }
     }
 
-    renderDropDownComponent() {
+    renderfilterComponent(){
+        // TODO: refactor for more elegant solution. 
+        const propfil = this.props.filterOptions;
+        const filterOpt = [propfil.grades, propfil.subjects, propfil.techTypes]; 
+
         return (
-            <ItemSearchDropdown.ItemSearchDropdown
-                filterOptions={this.props.filterOptions}
-                onChange={this.onFilterApplied}
-                isLoading={false}
-                itemFilter={this.state.itemFilter} />
+            <AdvancedFilterContainer
+                filterOptions={[...filterOpt]}
+                onClick={this.onFilterApplied} />
         );
     }
 
@@ -97,13 +100,14 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     render() {
         const style = {
             paddingRight: "5px",
-            margin: "2px"
+            margin: "2px",
+            height: "20%"
         }
 
         return (
             <div className="search-controls">
                 <button style={style}>Print Items</button>
-                {this.renderDropDownComponent()}
+                {this.renderfilterComponent()}
                 {this.renderTableComponent()}
             </div>
         );
