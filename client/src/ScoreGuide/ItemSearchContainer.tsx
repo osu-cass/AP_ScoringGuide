@@ -60,7 +60,8 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         if (this.state.itemSearchResult.kind == "success" || this.state.itemSearchResult.kind == "reloading") {
             const filtered = FilterHelper.filter(this.state.itemSearchResult.content || [], filter);
             this.setState({
-                visibleItems: filtered
+                visibleItems: filtered,
+                itemFilter: filter
             });
             FilterHelper.updateUrl(filter);
         }
@@ -95,6 +96,18 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
 
     render() {
+        const itemsValue = (this.state.visibleItems || [])
+            .map(card => card.bankKey + "-"+ card.itemKey)
+            .join(',');
+        const subjectCode = this.state.itemFilter.subject 
+            ? this.state.itemFilter.subject.code
+            : "";
+        const gradeCode = this.state.itemFilter.grade 
+            ? this.state.itemFilter.grade.toString()
+            : "";
+        const techType = this.state.itemFilter.techType 
+            ? this.state.itemFilter.techType.code
+            : "";
         const style = {
             paddingRight: "5px",
             margin: "2px"
@@ -104,9 +117,14 @@ export class ItemSearchContainer extends React.Component<Props, State> {
             <div className="search-controls">
                 <button style={style}>Print Items</button>
                 {this.renderDropDownComponent()}
+                <form action="/api/pdf" method="get" id="print-items-form">
+                    <input type="hidden" name="grade" value={gradeCode} />
+                    <input type="hidden" name="subject" value={subjectCode} />
+                    <input type="hidden" name="techType" value={techType} />
+                    <input type="submit" value="Print Items" />
+                </form>
                 {this.renderTableComponent()}
             </div>
         );
     }
-
 }

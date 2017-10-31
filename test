@@ -3,17 +3,17 @@ if [[ $# -eq  1 ]]; then
     if [ $1 == -u ]; then
         echo "updating tests in client/..."
         cd client/
-        yarn test -u
+        npm test -u
         echo "updating tests in server/..."
         cd ../server
-        yarn test -u
+        npm test -u
     elif [ $1 == -c ]; then
         echo "running tests in server/ with coverage..."
         cd client/
-        yarn run coverage
+        npm run coverage
         echo "running tests in server/ with coverage..."
         cd ../server
-        yarn test --coverage
+        npm test --coverage
     else
         echo "./test {-u|-c} => update | coverage"
         exit 1
@@ -21,8 +21,8 @@ if [[ $# -eq  1 ]]; then
 elif [[ $# -eq  0 ]]; then
     echo "running tests in client/..."
     cd client/
-    yarn test
+    npm test
     echo "running tests in server/..."
     cd ../server
-    yarn test  
+    npm test  
 fi

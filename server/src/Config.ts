@@ -1,12 +1,14 @@
+import development from '../../config/development';
+import production from '../../config/production';
+
 interface Config {
     sampleItemsApi: string;
     itemViewerServiceApi: string;
     screenshotPageWidth: number;
     port: number;
+    catCode: string;
+    performanceItemsCode: string;
 }
-
-let production = require('../../config/production.json') as Config;
-let development = require('../../config/development.json') as Config;
 
 export function getConfig(env?: string) {
     switch(env || process.env.NODE_ENV || 'production') {
