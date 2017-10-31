@@ -13,8 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@osu-cass/react-advanced-filter": "^1.0.3-beta",
-    "@osu-cass/smarter-balanced-styles": "^1.0.2",
+    "@osu-cass/react-advanced-filter": "^1.0.4",
+    "@osu-cass/smarter-balanced-styles": "^1.0.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "css-loader": "^0.28.7",
