@@ -1,7 +1,7 @@
 ﻿var path = require('path');
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: path.join(__dirname, 'src', 'index.tsx'),
 
   output: {
     path: path.join(__dirname, "./dist/js"),
@@ -15,12 +15,19 @@ module.exports = {
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
+
+    modules: [
+      path.join(__dirname,'node_modules'),
+      path.join(__dirname,'./src')
+     ]
   },
+
 
   module: {
     rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+      { test: /\.js$/, loader: 'babel-loader'},
       {
         test: /\.tsx?$/,
         loader: "awesome-typescript-loader",
@@ -29,8 +36,8 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader?sourceMap'
+        test: /\.(css|less)$/,
+        loader: 'style-loader!css-loader!less-loader?sourceMap'
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
