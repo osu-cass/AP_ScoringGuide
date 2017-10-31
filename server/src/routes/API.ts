@@ -16,16 +16,17 @@ export class APIRoute {
     constructor() {
         this.repo = new ApiRepo();
         this.router = Express.Router();
+        this.router.get('/pdf/items', this.getPdfById);
         this.router.get('/pdf', this.getPdf);
         this.router.get('/search', this.search);
         this.router.get('/aboutItem', this.getAboutItem);
         this.router.get('/scoringGuideViewModel', this.getSubjects);
-        this.router.post('/pdf', this.postPdf);  //TODO: Remove this after testing
     }
 
     getPdf = (req: Express.Request, res: Express.Response) => {
         const subject = req.query.subject as string || '';
         const grade = Number(req.query.grade) || -1;
+        const titlePage = (req.query.titlePage as string || 'true') == "true";
 
         if (subject === '' || grade === -1) {
             res.status(400).send('Invalid subject or grade.');
@@ -38,7 +39,7 @@ export class APIRoute {
         Promise.all([subjectPromise, pdfDataPromise])
             .then(value => {
                 const subjectString = value[0].label;
-                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString);
+                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage);
                 const title = gradeString + ' ' + subjectString;
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
@@ -48,11 +49,8 @@ export class APIRoute {
             });
     }
 
-    postPdf = (req: Express.Request, res: Express.Response) => {
-        const ids = req.body.items;
-        const grade = req.body.grade as string || "";
-        const subject = req.body.subject as string || "";
-
+    getPdfById = (req: Express.Request, res: Express.Response) => {
+        const ids = req.query.ids;
         const requestedIds = ids.split(',');
         
         if (requestedIds.length === 0) {
@@ -61,10 +59,9 @@ export class APIRoute {
     
         this.repo.getPdfDataByIds(requestedIds)
             .then(itemViews => {
-                const htmlString = HtmlRenderer.renderBody(itemViews, subject, grade);
-                const title = grade + " " + subject;
+                const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false);
                 res.type('application/pdf');
-                PdfGenerator.generate(htmlString, title).pipe(res);
+                PdfGenerator.generate(htmlString, "Custom Item Sequence").pipe(res);
             })
             .catch(error => {
                 console.error('/api/pdf:', error);
