@@ -5,7 +5,9 @@
   "main": "index.tsx",
   "scripts": {
     "less": "lessc-each styles/ dist/css/",
-    "build": "webpack",
+    "less:dev": "lessc-each SmarterBalancedStyles/styles dist/css",
+    "build": "cross-env NODE_ENV=production webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
     "test": "jest",
     "coverage": "jest --coverage"
   },
@@ -17,6 +19,7 @@
     "@osu-cass/smarter-balanced-styles": "^1.0.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
     "font-awesome": "^4.7.0",
