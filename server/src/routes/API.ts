@@ -31,6 +31,7 @@ export class APIRoute {
 
         if (subject === '' || grade === -1 || !techType) {
             res.status(400).send('Invalid subject, grade, or tech type.');
+            return;
         }
 
         const gradeString = GradeLevels.caseToString(grade)
@@ -56,6 +57,7 @@ export class APIRoute {
         
         if (requestedIds.length === 0) {
             res.sendStatus(400);
+            return;
         }
     
         this.repo.getPdfDataByIds(requestedIds)
