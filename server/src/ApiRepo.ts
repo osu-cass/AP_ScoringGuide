@@ -147,28 +147,37 @@ export class ApiRepo {
 
         const views = await this.loadViewData(idGroups);
         await this.addDataToViews(views); //TODO: Optimize this by adding data first!
-        return this.combinelikePassages(views);
+        const combied = this.combinelikePassages(views);
+        return combied;
     }
 
     /**
      * Finds all items with the same passage and combines the items into one passage with multiple questions
      */
     combinelikePassages(itemGroups: ItemGroup[]) {
-        itemGroups.forEach((itemGroup, index) => {
-            const samePassageQuestions = itemGroups
-                .filter((ig, filterIdx) => 
+        let combinedItems: ItemGroup[] = [];
+        let addedIds: string[] = [];
+
+        for (let i = 0; i < itemGroups.length; i++) {
+            if (itemGroups[i].passage) {
+                
+                const samePassageItems = itemGroups.filter((ig, filterIdx) => 
                     ig.passage && ig.passage.type === ViewType.html 
-                    && ig.passage.html === itemGroup.passage.html 
-                    && index !== filterIdx)
-                .map(ig => ig.questions)
-                .reduce((prev, curr) => prev.concat(curr), []);
-            itemGroup.questions.concat(samePassageQuestions);
-        });
+                    && ig.passage.html === itemGroups[i].passage.html);
+                const samePassageQuestions = samePassageItems
+                    .map(ig => ig.questions)
+                    .reduce((prev, curr) => prev.concat(curr), []);
+                if (samePassageQuestions.map(q => addedIds.includes(q.id)).every(bool => bool === false)) {
+                    combinedItems.push({passage: itemGroups[i].passage, questions: samePassageQuestions});
+                    addedIds = addedIds.concat(samePassageQuestions.map(q => q.id));
+                }
+                
+                //itemGroups = itemGroups.filter(ig => !samePassageItems.includes(ig));
+            } else {
+                combinedItems.push(itemGroups[i]);
+            }
+        }
 
-        const uniqueItemGroups = itemGroups.filter((itemGroup, idx, arr) => 
-            idx !== arr.findIndex(ig => 
-                ig.passage && ig.passage.type === ViewType.html && ig.passage.html === itemGroup.passage.html));
-
-        return uniqueItemGroups;
+        return combinedItems;
     }
 }
