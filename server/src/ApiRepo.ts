@@ -143,12 +143,13 @@ export class ApiRepo {
                     associatedItems.push(ai.associatedItems);
                 }
             });
-        const idGroups = associatedItems.map(ai => ai.split(','));
 
-        const views = await this.loadViewData(idGroups);
+        const idGroups = associatedItems.map(ai => ai.split(','));
+        let views = await this.loadViewData(idGroups);
+        views = this.combinelikePassages(views);
         await this.addDataToViews(views); //TODO: Optimize this by adding data first!
-        const combied = this.combinelikePassages(views);
-        return combied;
+
+        return views;
     }
 
     /**
