@@ -1,33 +1,31 @@
-﻿var path = require('path');
+﻿const path = require('path');
 
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
 
   output: {
-    path: path.join(__dirname, "./dist/js"),
-    filename: "bundle.js",
+    path: path.join(__dirname, "dist"),
+    filename: "js/bundle.js",
     libraryTarget: "var",
     library: "EntryPoint"
   },
 
   // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
-
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
 
     modules: [
-      path.join(__dirname,'node_modules'),
-      path.join(__dirname,'./src')
-     ]
+      path.join(__dirname, 'node_modules'),
+      path.join(__dirname, './src')
+    ]
   },
 
 
   module: {
     rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.js$/, loader: 'babel-loader'},
+      { test: /\.js$/, loader: 'babel-loader' },
       {
         test: /\.tsx?$/,
         loader: "awesome-typescript-loader",
@@ -53,3 +51,8 @@ module.exports = {
     "jquery": "jQuery"
   }
 };
+
+if(process.env.NODE_ENV === "development"){
+  //load styles from from git submodule
+  module.exports.devtool = "source-map";
+}
