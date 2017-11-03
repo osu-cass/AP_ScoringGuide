@@ -1,13 +1,12 @@
+import * as path from 'path';
 import * as Express from 'express';
 import { HtmlRenderer, PdfGenerator } from "../PdfGenerator";
 import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
 import { ItemViewModel, AboutItemViewModel } from "../Models";
-import * as Path from 'path';
 import { ApiRepo } from '../ApiRepo';
-import { getConfig } from '../Config';
-import * as GradeLevels from '../../../client/src/Models/GradeLevels';
+import * as GradeLevels from '../GradeLevels';
 
 export class APIRoute {
     router: Express.Router;
@@ -52,11 +51,11 @@ export class APIRoute {
     getPdfById = (req: Express.Request, res: Express.Response) => {
         const ids = req.query.ids;
         const requestedIds = ids.split(',');
-        
+
         if (requestedIds.length === 0) {
             res.sendStatus(400);
         }
-    
+
         this.repo.getPdfDataByIds(requestedIds)
             .then(itemViews => {
                 const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false);
@@ -68,7 +67,7 @@ export class APIRoute {
                 res.sendStatus(500);
             });
     }
-    
+
     getSubjects = (req: Express.Request, res: Express.Response) => {
         this.repo.getSubjects()
             .then(subjects => {
@@ -96,7 +95,7 @@ export class APIRoute {
     getAboutItem = (req: Express.Request, res: Express.Response) => {
         const itemKey = Number(req.query.itemKey || 0) || 0;
         const bankKey = Number(req.query.bankKey || 0) || 0;
-        
+
         this.repo.getAboutItem(itemKey, bankKey)
             .then(about => {
                 if (about) {

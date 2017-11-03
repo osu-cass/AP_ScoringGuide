@@ -44,7 +44,7 @@ export class ItemCapture {
         });
 
         await new Promise(resolve => setTimeout(resolve, 200));
-        
+
         const headerHeight: number = await iframe.evaluate(() => {
             return document.querySelector('#topBar').scrollHeight;
         });
@@ -56,17 +56,17 @@ export class ItemCapture {
             width: this.pageWidth,
             height: groupingHeight + headerHeight
         });
-    
+
         // passage
-        if (itemData.passage 
-            && itemData.passage.type === ViewType.picture 
+        if (itemData.passage
+            && itemData.passage.type === ViewType.picture
             && !itemData.passage.captured) {
-            
+
             const passageRect = await iframe.evaluate(() => {
                 let passage = document.querySelector('.thePassage');
                 let rect = passage.getBoundingClientRect();
                 return {
-                    x: scrollX + rect.left, 
+                    x: scrollX + rect.left,
                     y: scrollY + rect.top,
                     width: rect.width,
                     height: rect.height
@@ -79,7 +79,7 @@ export class ItemCapture {
             });
             itemData.passage.captured = true;
         }
-        
+
         // questions
         const itemRects = await iframe.evaluate(() => {
             const headerHeight = document.querySelector('.questionNumber').clientHeight;
@@ -98,7 +98,7 @@ export class ItemCapture {
             }
             return rects;
         });
-    
+
         for (let i = 0; i < itemRects.length; i++) {
             const question = itemData.questions.find(q => q.id.includes(itemRects[i].itemId));
             if (!question.view.captured && question.view.type === ViewType.picture) {

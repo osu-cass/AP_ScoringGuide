@@ -1,7 +1,8 @@
 import * as RequestPromise from './RequestPromise';
 import * as Cheerio from 'cheerio';
 import { ItemGroup, ViewType } from "./Models";
-import { getConfig } from './Config';
+
+const {ITEM_VIEWER_SERVICE_API} = process.env;
 
 export class ItemParser {
 
@@ -13,7 +14,7 @@ export class ItemParser {
             }),
             accommodations: [] as any[]
         }
-        return RequestPromise.post(getConfig().itemViewerServiceApi + '/Pages/API/content/load', postData);
+        return RequestPromise.post(ITEM_VIEWER_SERVICE_API + '/Pages/API/content/load', postData);
     }
 
     parseXml(xmlString: string) {
@@ -25,7 +26,7 @@ export class ItemParser {
     }
 
     parseHtml(htmlString: string, itemIds: string[]) {
-        let baseUrl = getConfig().itemViewerServiceApi;
+        let baseUrl = ITEM_VIEWER_SERVICE_API;
         let $ = Cheerio.load(htmlString);
         $('a').remove();
         $('.questionNumber').remove();
@@ -57,7 +58,7 @@ export class ItemParser {
                     type: takePicture ? ViewType.picture : ViewType.html,
                     html: takePicture ? undefined : $(selector).html(),
                     captured: takePicture ? false : true
-                } 
+                }
             });
         });
 
@@ -83,10 +84,10 @@ export class ItemParser {
 
     async loadPlainHtml(item: string) {
         const response = await this.load([item]);
-        const baseUrl = getConfig().itemViewerServiceApi;
+        const baseUrl = ITEM_VIEWER_SERVICE_API;
         const htmlString = await this.parseXml(response);
         let $ = Cheerio.load(htmlString);
-        
+
         $('a').remove();
         $('img').map((i, el) => {
             el.attribs['src'] = baseUrl + el.attribs['src'];
@@ -94,4 +95,3 @@ export class ItemParser {
         return $.html();
     }
 }
-
