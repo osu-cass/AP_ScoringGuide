@@ -87,14 +87,6 @@ export class ItemParser {
         const response = await this.load([item]);
         const baseUrl = getConfig().itemViewerServiceApi;
         const htmlString = await this.parseXml(response);
-        // let $ = Cheerio.load(htmlString);
-        
-        // $('a').remove();
-        // $('img').map((i, el) => {
-        //     el.attribs['src'] = baseUrl + el.attribs['src'];
-        // });
-        // $ = this.fixMultipleChoice($);
-        // return $.html();
         return htmlString;
     }
 
