@@ -104,9 +104,24 @@ export class ItemSearchContainer extends React.Component<Props, State> {
             height: "20%"
         }
 
+        const subjectCode = this.state.itemFilter.subjects[0] 
+        ? this.state.itemFilter.subjects[0].code
+        : "";
+        const gradeCode = this.state.itemFilter.grades[0] 
+            ? this.state.itemFilter.grades[0].toString()
+            : "";
+        const techType = this.state.itemFilter.techTypes[0] 
+            ? this.state.itemFilter.techTypes[0].code
+            : "";
+
         return (
             <div className="search-controls">
-                <button style={style}>Print Items</button>
+                <form action="/api/pdf" method="get" id="print-items-form">
+                    <input type="hidden" name="grade" value={gradeCode} />
+                    <input type="hidden" name="subject" value={subjectCode} />
+                    <input type="hidden" name="techType" value={techType} />
+                    <input type="submit" style={style} value="Print Items" />
+                </form>
                 {this.renderfilterComponent()}
                 {this.renderTableComponent()}
             </div>
