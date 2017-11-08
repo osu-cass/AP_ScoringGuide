@@ -4,14 +4,15 @@ import * as ItemModels from '../Models/ItemModels';
 import * as ItemPageTable from '../ItemTable/ItemPageTable';
 import * as ApiModels from "../Models/ApiModels";
 import { FilterHelper } from "../Models/FilterHelper";
-import {AdvancedFilterContainer ,AdvancedFilterCategory, AdvancedFilters} from "@osu-cass/react-advanced-filter";
+import {AdvancedFilterContainer, AdvancedFilterCategory, AdvancedFilters} from "@osu-cass/react-advanced-filter";
 import * as AboutItemVM from '../Models/AboutItemVM';
+import * as UrlHelper from '../Models/UrlHelper';
 
 const SearchClient = () => ApiModels.get<ItemCardViewModel.ItemCardViewModel[]>("api/search");
 
 export interface Props {
     onRowSelection: (item: { itemKey: number; bankKey: number }, reset: boolean) => void;
-    filterOptions: AdvancedFilters;
+    filterOptions: AdvancedFilterCategory[];
     searchClient: () => Promise<ItemCardViewModel.ItemCardViewModel[]>;
     item: ApiModels.Resource<AboutItemVM.AboutThisItem>;
 }
@@ -19,7 +20,7 @@ export interface Props {
 export interface State {
     itemSearchResult: ApiModels.Resource<ItemCardViewModel.ItemCardViewModel[]>;
     visibleItems?: ItemCardViewModel.ItemCardViewModel[];
-    itemFilter: ItemModels.ItemFilter;
+    itemFilter: AdvancedFilterCategory[];
 }
 
 export interface ItemsSearchViewModel {
@@ -31,7 +32,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         super(props);
         this.state = {
             itemSearchResult: { kind: "none" },
-            itemFilter: FilterHelper.readUrl(props.filterOptions)
+            itemFilter: UrlHelper.readUrl(props.filterOptions)
         };
 
         this.callSearch();
@@ -61,22 +62,11 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         if(this.state.itemSearchResult.kind == "success" || this.state.itemSearchResult.kind == "reloading") {
             const filtered = FilterHelper.filter(this.state.itemSearchResult.content || [], filter);
             this.setState({
-                visibleItems: filtered
+                visibleItems: filtered,
+                itemFilter: filter
             });
-            FilterHelper.updateUrl(filter);
+            UrlHelper.updateUrl(filter);
         }
-    }
-
-    renderfilterComponent(){
-        // TODO: refactor for more elegant solution. 
-        const propfil = this.props.filterOptions;
-        const filterOpt = [propfil.grades, propfil.subjects, propfil.techTypes]; 
-
-        return (
-            <AdvancedFilterContainer
-                filterOptions={[...filterOpt]}
-                onClick={this.onFilterApplied} />
-        );
     }
 
     renderTableComponent() {
@@ -98,31 +88,25 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
 
     render() {
-        const style = {
-            paddingRight: "5px",
-            margin: "2px",
-            height: "20%"
-        }
-
-        const subjectCode = this.state.itemFilter.subjects[0] 
-            ? this.state.itemFilter.subjects[0].code
-            : "";
-        const gradeCode = this.state.itemFilter.grades[0] 
-            ? this.state.itemFilter.grades[0].toString()
-            : "";
-        const techType = this.state.itemFilter.techTypes[0] 
-            ? this.state.itemFilter.techTypes[0].code
-            : "";
+        const codes = ["Grade", "Subject", "Tech Type"].map(s => {
+            const category = this.state.itemFilter.find(f => f.label == s);
+            const option = category
+                ? category.filterOptions.find(o => o.isSelected)
+                : undefined;
+            return option ? option.key : "";
+        });
 
         return (
             <div className="search-controls">
                 <form action="/api/pdf" method="get" id="print-items-form">
-                    <input type="hidden" name="grade" value={gradeCode} />
-                    <input type="hidden" name="subject" value={subjectCode} />
-                    <input type="hidden" name="techType" value={techType} />
+                    <input type="hidden" name="grade" value={codes[0]} />
+                    <input type="hidden" name="subject" value={codes[1]} />
+                    <input type="hidden" name="techType" value={codes[2]} />
                     <input type="submit" value="Print Items" />
                 </form>
-                {this.renderfilterComponent()}
+                <AdvancedFilterContainer
+                    filterOptions={this.state.itemFilter}
+                    onClick={this.onFilterApplied} />
                 {this.renderTableComponent()}
             </div>
         );
