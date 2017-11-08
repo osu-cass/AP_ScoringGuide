@@ -7,7 +7,7 @@ import { OptionType, AdvancedFilters, AdvancedFilterOption, AdvancedFilterCatego
 export class FilterHelper {
 
     //TODO: Get this from the server
-    static getFilterOptions(): AdvancedFilters  {
+    static getFilterOptions() {
         const subjectsFilterOptions: AdvancedFilterOption[] = [{
             label: "Mathematics",
             key: "MATH",
@@ -62,7 +62,7 @@ export class FilterHelper {
         const subjects: AdvancedFilterCategory = {
             disabled: false,
             isMultiSelect: false,
-            label: "Subjects",
+            label: "Subject",
             helpText: "Subjects HelpText here.",
             filterOptions: [...subjectsFilterOptions],
             displayAllButton: true
@@ -80,18 +80,16 @@ export class FilterHelper {
         const techTypes: AdvancedFilterCategory = {
             disabled: false,
             isMultiSelect: false,
-            label: "TechType",
+            label: "Tech Type",
             helpText: "TechType HelpText here.",
             filterOptions: [...techTypesFilterOptions],
             displayAllButton: false
         }
-
-        const value: AdvancedFilters = {subjects, grades, techTypes};
         
-        return value;
+        return [subjects, grades, techTypes];
     }
 
-    static filter(itemCards: ItemCardViewModel[], filter: AdvancedFilterCategory[]): ItemCardViewModel[] {
+    static filter(itemCards: ItemCardViewModel[], filter: AdvancedFilterCategory[]) {
         const grades = filter.find(afc => afc.label === "Grade");
         const subjects = filter.find(afc => afc.label === "Subjects");
         const techTypes = filter.find(afc => afc.label === "TechType");
@@ -134,100 +132,5 @@ export class FilterHelper {
         }
 
         return itemCards;
-    }
-
-    static updateUrl(filter: AdvancedFilterCategory[]) {
-        let pairs: string[] = [];
-
-        const grades = filter.find(afc => afc.label === "Grade");
-        const subjects = filter.find(afc => afc.label === "Subjects");
-        const techTypes = filter.find(afc => afc.label === "TechType");
-
-        if (grades && !grades.disabled) {
-            const gradeString: string[] = [];
-
-            grades.filterOptions.forEach(g => {
-                if (g.isSelected) {
-                    gradeString.push(g.key.toString());
-                }
-            });
-
-            if (gradeString.length !== 0) {
-                gradeString.join(',');
-                pairs.push("gradeLevels=" + gradeString);
-            }
-        }
-        if (subjects && !subjects.disabled) {
-            const subjString: string[] = [];
-
-            subjects.filterOptions.forEach(s => {
-                if (s.isSelected) {
-                    subjString.push(s.key);
-                }
-            });
-
-            if (subjString.length !== 0) {
-                subjString.join(',');
-                pairs.push("subjects=" + subjString);
-            }
-        }
-        if (techTypes && !techTypes.disabled) {
-            const techTypesString: string[] = [];
-
-            techTypes.filterOptions.forEach(t => {
-                if (t.isSelected) {
-                    techTypesString.push(t.key);
-                }
-            });
-            if (techTypesString.length !== 0) {
-                techTypesString.join(',');
-                pairs.push("techTypes=" + techTypesString);
-            }
-        }
-
-        let query: string;
-        if (pairs.length === 0) {
-            query = "/";
-        } else {
-            query = "?" + pairs.join("&");
-        }
-        history.replaceState(null, "", query);
-    }
-
-    static readUrl(filterOptions: AdvancedFilters) {
-        const queryObject = parseQueryString(window.location.href);
-        const subjects = queryObject["subjects"]
-            ? queryObject["subjects"]!.map(
-                subjCode => {
-                    let subject = filterOptions.subjects.filterOptions.find(s => s.key === subjCode);
-                    if (subject) {
-                        return {
-                            code: subject.key,
-                            label: subject.label
-                        }
-                    }
-                }) : [];
-
-        const grades = queryObject["grades"]
-            ? queryObject["grades"]!
-                .map(gradeCode => Number(gradeCode) as GradeLevels.GradeLevels)
-            : [];
-
-        const techTypes = queryObject["techTypes"]
-            ? queryObject["techTypes"]!.map(typeCode => {
-                let techType = filterOptions.techTypes.filterOptions.find(t => t.key === typeCode);
-                if (techType) {
-                    return {
-                        code: techType.key,
-                        label: techType.label
-                    }
-                }
-            }) : [];
-
-        return {
-            subjects: subjects,
-            grades: grades,
-            techTypes: techTypes
-        } as ItemFilter;
     }
 }
