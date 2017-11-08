@@ -1,5 +1,5 @@
 node_modules/
 screenshots/
 typings/
-client/dist/
 server/dist/
+server/public/client/

@@ -8,10 +8,11 @@
           Smarter Balanced <span class="doctitle"></span> Practice Test Scoring Guide
         </div>
         <div class="footer-page-number">
-          Page <span id="page" class="page">{page}</span>
+          Page <span class="page"></span> of <span class="topage"></span>
         </div>
       </div>
       <script>
+        // From wkhtmltopdf docs
         var vars = {};
         var query_strings_from_url = document.location.search.substring(1).split('&');
         for (var query_string in query_strings_from_url) {
