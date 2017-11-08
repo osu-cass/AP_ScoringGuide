@@ -20,10 +20,6 @@ export class FilterHelper {
         }];
 
         const gradesFilterOptions: AdvancedFilterOption[] = [{
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.Elementary),
-            key: String(GradeLevels.GradeLevels.Elementary),
-            isSelected: false
-        }, {
             label: GradeLevels.caseToString(GradeLevels.GradeLevels.Grade3),
             key: String(GradeLevels.GradeLevels.Grade3),
             isSelected: false
