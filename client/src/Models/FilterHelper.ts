@@ -80,7 +80,7 @@ export class FilterHelper {
         const techTypes: AdvancedFilterCategory = {
             disabled: false,
             isMultiSelect: false,
-            label: "Tech Type",
+            label: "TechType",
             helpText: "TechType HelpText here.",
             filterOptions: [...techTypesFilterOptions],
             displayAllButton: false
