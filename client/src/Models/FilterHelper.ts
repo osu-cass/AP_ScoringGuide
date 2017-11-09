@@ -80,7 +80,7 @@ export class FilterHelper {
         const techTypes: AdvancedFilterCategory = {
             disabled: false,
             isMultiSelect: false,
-            label: "TechType",
+            label: "Tech Type",
             helpText: "TechType HelpText here.",
             filterOptions: [...techTypesFilterOptions],
             displayAllButton: false
@@ -92,7 +92,7 @@ export class FilterHelper {
     static filter(itemCards: ItemCardViewModel[], filter: AdvancedFilterCategory[]) {
         const grades = filter.find(afc => afc.label === "Grade");
         const subjects = filter.find(afc => afc.label === "Subjects");
-        const techTypes = filter.find(afc => afc.label === "TechType");
+        const techTypes = filter.find(afc => afc.label === "Tech Type");
 
         if (grades && grades.filterOptions) {
             let selectedGrades = GradeLevels.GradeLevels.NA;
