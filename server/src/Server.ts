@@ -22,11 +22,6 @@ app.get('/item', (req, res) => {
 })
 
 app.use(Express.static(path.join(__dirname, '../public')));
-app.use(Express.static(path.join(__dirname, '../../client/dist')));
-
-app.get('/ScoringGuide', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, '../../client/dist/index.html'));
-});
 
 app.get('*', (req, res) => {
     res.status(404).sendFile(path.join(__dirname, '../public/404.html'));
