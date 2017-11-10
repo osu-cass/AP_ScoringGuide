@@ -47,7 +47,8 @@ module.exports = {
         test: /\.(css|less)$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
-          use: "css-loader!less-loader?sourceMap"
+          use: "css-loader!less-loader?sourceMap",
+          disable: process.env.NODE_ENV !== "production"
         })
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
