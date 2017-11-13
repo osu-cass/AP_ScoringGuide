@@ -37,7 +37,7 @@ ShallowWrapper {
   },
   Symbol(enzyme.__node__): Object {
     "instance": null,
-    "key": null,
+    "key": undefined,
     "nodeType": "host",
     "props": Object {
       "aria-hidden": "true",
@@ -123,7 +123,7 @@ ShallowWrapper {
     "rendered": Array [
       Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "host",
         "props": Object {
           "children": <div
@@ -196,7 +196,7 @@ ShallowWrapper {
         "ref": null,
         "rendered": Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
             "children": Array [
@@ -267,7 +267,7 @@ ShallowWrapper {
           "rendered": Array [
             Object {
               "instance": null,
-              "key": null,
+              "key": undefined,
               "nodeType": "host",
               "props": Object {
                 "children": Array [
@@ -295,7 +295,7 @@ ShallowWrapper {
               "rendered": Array [
                 Object {
                   "instance": null,
-                  "key": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
                     "aria-label": "Close",
@@ -311,7 +311,7 @@ ShallowWrapper {
                   "ref": null,
                   "rendered": Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {
                       "aria-hidden": "true",
@@ -325,7 +325,7 @@ ShallowWrapper {
                 },
                 Object {
                   "instance": null,
-                  "key": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
                     "children": "About This Item",
@@ -340,7 +340,7 @@ ShallowWrapper {
             },
             Object {
               "instance": null,
-              "key": null,
+              "key": undefined,
               "nodeType": "host",
               "props": Object {
                 "children": <ItemInformationDetail
@@ -372,7 +372,7 @@ ShallowWrapper {
               "ref": null,
               "rendered": Object {
                 "instance": null,
-                "key": null,
+                "key": undefined,
                 "nodeType": "class",
                 "props": Object {
                   "commonCoreStandardsDescription": "",
@@ -404,7 +404,7 @@ ShallowWrapper {
             },
             Object {
               "instance": null,
-              "key": null,
+              "key": undefined,
               "nodeType": "host",
               "props": Object {
                 "children": <button
@@ -419,7 +419,7 @@ ShallowWrapper {
               "ref": null,
               "rendered": Object {
                 "instance": null,
-                "key": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
                   "children": "Close",
@@ -445,7 +445,7 @@ ShallowWrapper {
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
-      "key": null,
+      "key": undefined,
       "nodeType": "host",
       "props": Object {
         "aria-hidden": "true",
@@ -531,7 +531,7 @@ ShallowWrapper {
       "rendered": Array [
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
             "children": <div
@@ -604,7 +604,7 @@ ShallowWrapper {
           "ref": null,
           "rendered": Object {
             "instance": null,
-            "key": null,
+            "key": undefined,
             "nodeType": "host",
             "props": Object {
               "children": Array [
@@ -675,7 +675,7 @@ ShallowWrapper {
             "rendered": Array [
               Object {
                 "instance": null,
-                "key": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
                   "children": Array [
@@ -703,7 +703,7 @@ ShallowWrapper {
                 "rendered": Array [
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {
                       "aria-label": "Close",
@@ -719,7 +719,7 @@ ShallowWrapper {
                     "ref": null,
                     "rendered": Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {
                         "aria-hidden": "true",
@@ -733,7 +733,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {
                       "children": "About This Item",
@@ -748,7 +748,7 @@ ShallowWrapper {
               },
               Object {
                 "instance": null,
-                "key": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
                   "children": <ItemInformationDetail
@@ -780,7 +780,7 @@ ShallowWrapper {
                 "ref": null,
                 "rendered": Object {
                   "instance": null,
-                  "key": null,
+                  "key": undefined,
                   "nodeType": "class",
                   "props": Object {
                     "commonCoreStandardsDescription": "",
@@ -812,7 +812,7 @@ ShallowWrapper {
               },
               Object {
                 "instance": null,
-                "key": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
@@ -827,7 +827,7 @@ ShallowWrapper {
                 "ref": null,
                 "rendered": Object {
                   "instance": null,
-                  "key": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
                     "children": "Close",
