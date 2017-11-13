@@ -65,7 +65,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
                 visibleItems: filtered,
                 itemFilter: filter
             });
-            UrlHelper.updateUrl(filter, window.location.pathname);
+            UrlHelper.updateUrl(filter);
         }
     }
 
