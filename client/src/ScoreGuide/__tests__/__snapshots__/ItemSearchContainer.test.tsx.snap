@@ -95,16 +95,6 @@ ShallowWrapper {
             value=""
           />
           <input
-<<<<<<< HEAD
-=======
-            style={
-              Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              }
-            }
->>>>>>> dev
             type="submit"
             value="Print Items"
           />
@@ -191,16 +181,6 @@ ShallowWrapper {
               value=""
             />,
             <input
-<<<<<<< HEAD
-=======
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
->>>>>>> dev
               type="submit"
               value="Print Items"
             />,
@@ -254,14 +234,6 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-<<<<<<< HEAD
-=======
-              "style": Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              },
->>>>>>> dev
               "type": "submit",
               "value": "Print Items",
             },
@@ -322,107 +294,6 @@ ShallowWrapper {
               "isMultiSelect": false,
               "label": "filter category",
             },
-<<<<<<< HEAD
-=======
-            Object {
-              "disabled": false,
-              "displayAllButton": true,
-              "filterOptions": Array [
-                Object {
-                  "isSelected": false,
-                  "key": "7",
-                  "label": "Elementary",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "1",
-                  "label": "Grade 3",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "2",
-                  "label": "Grade 4",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "4",
-                  "label": "Grade 5",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "8",
-                  "label": "Grade 6",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "16",
-                  "label": "Grade 7",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "32",
-                  "label": "Grade 8",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "960",
-                  "label": "High",
-                },
-              ],
-              "helpText": "you need help?",
-              "isMultiSelect": false,
-              "label": "filter category",
-            },
-            Object {
-              "disabled": false,
-              "displayAllButton": true,
-              "filterOptions": Array [
-                Object {
-                  "isSelected": false,
-                  "key": "7",
-                  "label": "Elementary",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "1",
-                  "label": "Grade 3",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "2",
-                  "label": "Grade 4",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "4",
-                  "label": "Grade 5",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "8",
-                  "label": "Grade 6",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "16",
-                  "label": "Grade 7",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "32",
-                  "label": "Grade 8",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "960",
-                  "label": "High",
-                },
-              ],
-              "helpText": "you need help?",
-              "isMultiSelect": false,
-              "label": "filter category",
-            },
->>>>>>> dev
           ],
           "onClick": [Function],
         },
@@ -472,16 +343,6 @@ ShallowWrapper {
               value=""
             />
             <input
-<<<<<<< HEAD
-=======
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
->>>>>>> dev
               type="submit"
               value="Print Items"
             />
@@ -489,107 +350,6 @@ ShallowWrapper {
           <AdvancedFilterContainer
             filterOptions={
               Array [
-<<<<<<< HEAD
-=======
-                Object {
-                  "disabled": false,
-                  "displayAllButton": true,
-                  "filterOptions": Array [
-                    Object {
-                      "isSelected": false,
-                      "key": "7",
-                      "label": "Elementary",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "1",
-                      "label": "Grade 3",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "2",
-                      "label": "Grade 4",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "4",
-                      "label": "Grade 5",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "8",
-                      "label": "Grade 6",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "16",
-                      "label": "Grade 7",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "32",
-                      "label": "Grade 8",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "960",
-                      "label": "High",
-                    },
-                  ],
-                  "helpText": "you need help?",
-                  "isMultiSelect": false,
-                  "label": "filter category",
-                },
-                Object {
-                  "disabled": false,
-                  "displayAllButton": true,
-                  "filterOptions": Array [
-                    Object {
-                      "isSelected": false,
-                      "key": "7",
-                      "label": "Elementary",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "1",
-                      "label": "Grade 3",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "2",
-                      "label": "Grade 4",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "4",
-                      "label": "Grade 5",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "8",
-                      "label": "Grade 6",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "16",
-                      "label": "Grade 7",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "32",
-                      "label": "Grade 8",
-                    },
-                    Object {
-                      "isSelected": false,
-                      "key": "960",
-                      "label": "High",
-                    },
-                  ],
-                  "helpText": "you need help?",
-                  "isMultiSelect": false,
-                  "label": "filter category",
-                },
->>>>>>> dev
                 Object {
                   "disabled": false,
                   "displayAllButton": true,
@@ -669,16 +429,6 @@ ShallowWrapper {
                 value=""
               />,
               <input
-<<<<<<< HEAD
-=======
-                style={
-                  Object {
-                    "height": "20%",
-                    "margin": "2px",
-                    "paddingRight": "5px",
-                  }
-                }
->>>>>>> dev
                 type="submit"
                 value="Print Items"
               />,
@@ -732,14 +482,6 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-<<<<<<< HEAD
-=======
-                "style": Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                },
->>>>>>> dev
                 "type": "submit",
                 "value": "Print Items",
               },
@@ -927,16 +669,6 @@ ShallowWrapper {
             value=""
           />
           <input
-<<<<<<< HEAD
-=======
-            style={
-              Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              }
-            }
->>>>>>> dev
             type="submit"
             value="Print Items"
           />
@@ -1023,16 +755,6 @@ ShallowWrapper {
               value=""
             />,
             <input
-<<<<<<< HEAD
-=======
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
->>>>>>> dev
               type="submit"
               value="Print Items"
             />,
@@ -1076,137 +798,6 @@ ShallowWrapper {
               "name": "techType",
               "type": "hidden",
               "value": "",
-<<<<<<< HEAD
-=======
-            },
-            "ref": null,
-            "rendered": null,
-            "type": "input",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "style": Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              },
-              "type": "submit",
-              "value": "Print Items",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": "input",
-          },
-        ],
-        "type": "form",
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "filterOptions": Array [
-            Object {
-              "disabled": false,
-              "displayAllButton": true,
-              "filterOptions": Array [
-                Object {
-                  "isSelected": false,
-                  "key": "7",
-                  "label": "Elementary",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "1",
-                  "label": "Grade 3",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "2",
-                  "label": "Grade 4",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "4",
-                  "label": "Grade 5",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "8",
-                  "label": "Grade 6",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "16",
-                  "label": "Grade 7",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "32",
-                  "label": "Grade 8",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "960",
-                  "label": "High",
-                },
-              ],
-              "helpText": "you need help?",
-              "isMultiSelect": false,
-              "label": "filter category",
-            },
-            Object {
-              "disabled": false,
-              "displayAllButton": true,
-              "filterOptions": Array [
-                Object {
-                  "isSelected": false,
-                  "key": "7",
-                  "label": "Elementary",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "1",
-                  "label": "Grade 3",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "2",
-                  "label": "Grade 4",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "4",
-                  "label": "Grade 5",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "8",
-                  "label": "Grade 6",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "16",
-                  "label": "Grade 7",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "32",
-                  "label": "Grade 8",
-                },
-                Object {
-                  "isSelected": false,
-                  "key": "960",
-                  "label": "High",
-                },
-              ],
-              "helpText": "you need help?",
-              "isMultiSelect": false,
-              "label": "filter category",
->>>>>>> dev
             },
             "ref": null,
             "rendered": null,
@@ -1326,16 +917,6 @@ ShallowWrapper {
               value=""
             />
             <input
-<<<<<<< HEAD
-=======
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
->>>>>>> dev
               type="submit"
               value="Print Items"
             />
@@ -1422,16 +1003,6 @@ ShallowWrapper {
                 value=""
               />,
               <input
-<<<<<<< HEAD
-=======
-                style={
-                  Object {
-                    "height": "20%",
-                    "margin": "2px",
-                    "paddingRight": "5px",
-                  }
-                }
->>>>>>> dev
                 type="submit"
                 value="Print Items"
               />,
@@ -1485,14 +1056,6 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-<<<<<<< HEAD
-=======
-                "style": Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                },
->>>>>>> dev
                 "type": "submit",
                 "value": "Print Items",
               },
