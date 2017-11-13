@@ -4,7 +4,7 @@ import * as ItemModels from '../Models/ItemModels';
 import * as ItemPageTable from '../ItemTable/ItemPageTable';
 import * as ApiModels from "../Models/ApiModels";
 import { FilterHelper } from "../Models/FilterHelper";
-import {AdvancedFilterContainer, AdvancedFilterCategory, AdvancedFilters} from "@osu-cass/react-advanced-filter";
+import { AdvancedFilterContainer, AdvancedFilterCategory, AdvancedFilters } from "@osu-cass/react-advanced-filter";
 import * as AboutItemVM from '../Models/AboutItemVM';
 import * as UrlHelper from '../Models/UrlHelper';
 
@@ -65,7 +65,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
                 visibleItems: filtered,
                 itemFilter: filter
             });
-            UrlHelper.updateUrl(filter);
+            UrlHelper.updateUrl(filter, window.location.pathname);
         }
     }
 

@@ -1,7 +1,7 @@
 import { AdvancedFilterOption, AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
 import { parseQueryString } from "../Models/ApiModels";
 
-export function updateUrl(filters: AdvancedFilterCategory[]) {
+export function updateUrl(filters: AdvancedFilterCategory[], urlPath: string) {
     let pairs: string[] = [];
 
     filters.forEach(f => {
@@ -20,7 +20,7 @@ export function updateUrl(filters: AdvancedFilterCategory[]) {
     } else {
         query = "?" + pairs.join("&");
     }
-    history.replaceState(null, "", window.location.pathname + query);
+    history.replaceState(null, "", urlPath + query);
 }
 
 export function readUrl(filters: AdvancedFilterCategory[]) {
