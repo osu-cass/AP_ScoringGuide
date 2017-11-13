@@ -173,21 +173,42 @@ ShallowWrapper {
   },
   Symbol(enzyme.__node__): Object {
     "instance": null,
-    "key": null,
+    "key": undefined,
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <button
-          style={
-            Object {
-              "height": "20%",
-              "margin": "2px",
-              "paddingRight": "5px",
-            }
-          }
+        <form
+          action="/api/pdf"
+          id="print-items-form"
+          method="get"
         >
-          Print Items
-        </button>,
+          <input
+            name="grade"
+            type="hidden"
+            value=""
+          />
+          <input
+            name="subject"
+            type="hidden"
+            value=""
+          />
+          <input
+            name="techType"
+            type="hidden"
+            value=""
+          />
+          <input
+            style={
+              Object {
+                "height": "20%",
+                "margin": "2px",
+                "paddingRight": "5px",
+              }
+            }
+            type="submit"
+            value="Print Items"
+          />
+        </form>,
         <AdvancedFilterContainer
           filterOptions={
             Array [
@@ -352,23 +373,105 @@ ShallowWrapper {
     "rendered": Array [
       Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": "Print Items",
-          "style": Object {
-            "height": "20%",
-            "margin": "2px",
-            "paddingRight": "5px",
-          },
+          "action": "/api/pdf",
+          "children": Array [
+            <input
+              name="grade"
+              type="hidden"
+              value=""
+            />,
+            <input
+              name="subject"
+              type="hidden"
+              value=""
+            />,
+            <input
+              name="techType"
+              type="hidden"
+              value=""
+            />,
+            <input
+              style={
+                Object {
+                  "height": "20%",
+                  "margin": "2px",
+                  "paddingRight": "5px",
+                }
+              }
+              type="submit"
+              value="Print Items"
+            />,
+          ],
+          "id": "print-items-form",
+          "method": "get",
         },
         "ref": null,
-        "rendered": "Print Items",
-        "type": "button",
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "name": "grade",
+              "type": "hidden",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "name": "subject",
+              "type": "hidden",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "name": "techType",
+              "type": "hidden",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "style": Object {
+                "height": "20%",
+                "margin": "2px",
+                "paddingRight": "5px",
+              },
+              "type": "submit",
+              "value": "Print Items",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+        ],
+        "type": "form",
       },
       Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "class",
         "props": Object {
           "filterOptions": Array [
@@ -528,7 +631,7 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "host",
         "props": Object {
           "children": "Loading...",
@@ -543,21 +646,42 @@ ShallowWrapper {
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
-      "key": null,
+      "key": undefined,
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <button
-            style={
-              Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              }
-            }
+          <form
+            action="/api/pdf"
+            id="print-items-form"
+            method="get"
           >
-            Print Items
-          </button>,
+            <input
+              name="grade"
+              type="hidden"
+              value=""
+            />
+            <input
+              name="subject"
+              type="hidden"
+              value=""
+            />
+            <input
+              name="techType"
+              type="hidden"
+              value=""
+            />
+            <input
+              style={
+                Object {
+                  "height": "20%",
+                  "margin": "2px",
+                  "paddingRight": "5px",
+                }
+              }
+              type="submit"
+              value="Print Items"
+            />
+          </form>,
           <AdvancedFilterContainer
             filterOptions={
               Array [
@@ -722,23 +846,105 @@ ShallowWrapper {
       "rendered": Array [
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": "Print Items",
-            "style": Object {
-              "height": "20%",
-              "margin": "2px",
-              "paddingRight": "5px",
-            },
+            "action": "/api/pdf",
+            "children": Array [
+              <input
+                name="grade"
+                type="hidden"
+                value=""
+              />,
+              <input
+                name="subject"
+                type="hidden"
+                value=""
+              />,
+              <input
+                name="techType"
+                type="hidden"
+                value=""
+              />,
+              <input
+                style={
+                  Object {
+                    "height": "20%",
+                    "margin": "2px",
+                    "paddingRight": "5px",
+                  }
+                }
+                type="submit"
+                value="Print Items"
+              />,
+            ],
+            "id": "print-items-form",
+            "method": "get",
           },
           "ref": null,
-          "rendered": "Print Items",
-          "type": "button",
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "name": "grade",
+                "type": "hidden",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "name": "subject",
+                "type": "hidden",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "name": "techType",
+                "type": "hidden",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "style": Object {
+                  "height": "20%",
+                  "margin": "2px",
+                  "paddingRight": "5px",
+                },
+                "type": "submit",
+                "value": "Print Items",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+          ],
+          "type": "form",
         },
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "class",
           "props": Object {
             "filterOptions": Array [
@@ -898,7 +1104,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
             "children": "Loading...",
@@ -1094,21 +1300,42 @@ ShallowWrapper {
   },
   Symbol(enzyme.__node__): Object {
     "instance": null,
-    "key": null,
+    "key": undefined,
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <button
-          style={
-            Object {
-              "height": "20%",
-              "margin": "2px",
-              "paddingRight": "5px",
-            }
-          }
+        <form
+          action="/api/pdf"
+          id="print-items-form"
+          method="get"
         >
-          Print Items
-        </button>,
+          <input
+            name="grade"
+            type="hidden"
+            value=""
+          />
+          <input
+            name="subject"
+            type="hidden"
+            value=""
+          />
+          <input
+            name="techType"
+            type="hidden"
+            value=""
+          />
+          <input
+            style={
+              Object {
+                "height": "20%",
+                "margin": "2px",
+                "paddingRight": "5px",
+              }
+            }
+            type="submit"
+            value="Print Items"
+          />
+        </form>,
         <AdvancedFilterContainer
           filterOptions={
             Array [
@@ -1273,23 +1500,105 @@ ShallowWrapper {
     "rendered": Array [
       Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": "Print Items",
-          "style": Object {
-            "height": "20%",
-            "margin": "2px",
-            "paddingRight": "5px",
-          },
+          "action": "/api/pdf",
+          "children": Array [
+            <input
+              name="grade"
+              type="hidden"
+              value=""
+            />,
+            <input
+              name="subject"
+              type="hidden"
+              value=""
+            />,
+            <input
+              name="techType"
+              type="hidden"
+              value=""
+            />,
+            <input
+              style={
+                Object {
+                  "height": "20%",
+                  "margin": "2px",
+                  "paddingRight": "5px",
+                }
+              }
+              type="submit"
+              value="Print Items"
+            />,
+          ],
+          "id": "print-items-form",
+          "method": "get",
         },
         "ref": null,
-        "rendered": "Print Items",
-        "type": "button",
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "name": "grade",
+              "type": "hidden",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "name": "subject",
+              "type": "hidden",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "name": "techType",
+              "type": "hidden",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "style": Object {
+                "height": "20%",
+                "margin": "2px",
+                "paddingRight": "5px",
+              },
+              "type": "submit",
+              "value": "Print Items",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+        ],
+        "type": "form",
       },
       Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "class",
         "props": Object {
           "filterOptions": Array [
@@ -1449,7 +1758,7 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "host",
         "props": Object {
           "children": "Loading...",
@@ -1464,21 +1773,42 @@ ShallowWrapper {
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
-      "key": null,
+      "key": undefined,
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <button
-            style={
-              Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              }
-            }
+          <form
+            action="/api/pdf"
+            id="print-items-form"
+            method="get"
           >
-            Print Items
-          </button>,
+            <input
+              name="grade"
+              type="hidden"
+              value=""
+            />
+            <input
+              name="subject"
+              type="hidden"
+              value=""
+            />
+            <input
+              name="techType"
+              type="hidden"
+              value=""
+            />
+            <input
+              style={
+                Object {
+                  "height": "20%",
+                  "margin": "2px",
+                  "paddingRight": "5px",
+                }
+              }
+              type="submit"
+              value="Print Items"
+            />
+          </form>,
           <AdvancedFilterContainer
             filterOptions={
               Array [
@@ -1643,23 +1973,105 @@ ShallowWrapper {
       "rendered": Array [
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": "Print Items",
-            "style": Object {
-              "height": "20%",
-              "margin": "2px",
-              "paddingRight": "5px",
-            },
+            "action": "/api/pdf",
+            "children": Array [
+              <input
+                name="grade"
+                type="hidden"
+                value=""
+              />,
+              <input
+                name="subject"
+                type="hidden"
+                value=""
+              />,
+              <input
+                name="techType"
+                type="hidden"
+                value=""
+              />,
+              <input
+                style={
+                  Object {
+                    "height": "20%",
+                    "margin": "2px",
+                    "paddingRight": "5px",
+                  }
+                }
+                type="submit"
+                value="Print Items"
+              />,
+            ],
+            "id": "print-items-form",
+            "method": "get",
           },
           "ref": null,
-          "rendered": "Print Items",
-          "type": "button",
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "name": "grade",
+                "type": "hidden",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "name": "subject",
+                "type": "hidden",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "name": "techType",
+                "type": "hidden",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "style": Object {
+                  "height": "20%",
+                  "margin": "2px",
+                  "paddingRight": "5px",
+                },
+                "type": "submit",
+                "value": "Print Items",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+          ],
+          "type": "form",
         },
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "class",
           "props": Object {
             "filterOptions": Array [
@@ -1819,7 +2231,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
             "children": "Loading...",

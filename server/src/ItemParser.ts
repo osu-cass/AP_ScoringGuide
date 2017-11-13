@@ -33,6 +33,8 @@ export class ItemParser {
             el.attribs['src'] = baseUrl + el.attribs['src'];
         });
 
+        $ = this.fixMultipleChoice($);
+
         let itemData: ItemGroup = {
             questions: []
         };
@@ -85,13 +87,18 @@ export class ItemParser {
         const response = await this.load([item]);
         const baseUrl = getConfig().itemViewerServiceApi;
         const htmlString = await this.parseXml(response);
-        let $ = Cheerio.load(htmlString);
-        
-        $('a').remove();
-        $('img').map((i, el) => {
-            el.attribs['src'] = baseUrl + el.attribs['src'];
+        return htmlString;
+    }
+
+    fixMultipleChoice($: CheerioStatic) {
+        $('.optionContainer').each((i, el) => {
+            const optionElements = $(el).children('.optionContent').children();
+            const optionVal = optionElements.length === 1 && optionElements.first().is('p')
+                ? $(el).children('.optionContent').children('p').html()
+                : $(el).children('.optionContent').html();
+            $(el).html('<b>' + $(el).children('input').attr('value') + ':</b> ' + optionVal);
         });
-        return $.html();
+        return $;
     }
 }
 
