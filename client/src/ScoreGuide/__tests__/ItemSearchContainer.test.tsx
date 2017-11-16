@@ -57,19 +57,13 @@ const item: ApiModels.Resource<AboutItemVM.AboutThisItem> = {
     kind: "none"
 }
 
-const advancedFilterCategory: AdvancedFilterCategory ={
+const advancedFilterCategory: AdvancedFilterCategory = {
     disabled: false,
     isMultiSelect: false,
     label: "filter category",
     helpText: "you need help?",
-    filterOptions: FilterHelper.getFilterOptions().grades.filterOptions,
+    filterOptions: FilterHelper.getFilterOptions().find(f => f.label == "Grade")!.filterOptions,
     displayAllButton: true
-}
-
-const advancedFilters: AdvancedFilters = {
-    subjects: advancedFilterCategory,
-    grades: advancedFilterCategory,
-    techTypes: advancedFilterCategory,
 }
 
 describe("ItemSearchContainer", () => {
@@ -77,7 +71,7 @@ describe("ItemSearchContainer", () => {
     const props = {
         onRowSelection,
         searchClient,
-        filterOptions: advancedFilters,
+        filterOptions: [advancedFilterCategory],
         item
     }
 

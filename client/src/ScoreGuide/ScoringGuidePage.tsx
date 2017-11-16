@@ -9,7 +9,8 @@ import * as ItemSearchContainer from './ItemSearchContainer';
 import * as ItemCardViewModel from '../Models/ItemCardViewModel'
 import { get } from "../Models/ApiModels";
 import { FilterHelper } from "../Models/FilterHelper";
-import { AdvancedFilters } from "@osu-cass/react-advanced-filter";
+import { AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
+import * as UrlHelper from '../Models/UrlHelper';
 
 const SearchClient = () => get<ItemCardViewModel.ItemCardViewModel[]>("api/search");
 
@@ -20,7 +21,7 @@ export interface Props {
 export interface State {
     item: ApiModels.Resource<AboutItemVM.AboutThisItem>;
     scoringGuideViewModel: ApiModels.Resource<ItemsSearchViewModel>;
-    filterOptions: AdvancedFilters;
+    filterOptions: AdvancedFilterCategory[];
 }
 
 export interface ItemsSearchViewModel {
@@ -32,7 +33,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         super(props);
         this.state = {
             scoringGuideViewModel: { kind: "loading" },
-            filterOptions: FilterHelper.getFilterOptions(),
+            filterOptions: UrlHelper.readUrl(FilterHelper.getFilterOptions()),
             item: { kind: "none" }
         }
         this.loadScoringGuideViewModel();
