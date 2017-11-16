@@ -47,7 +47,7 @@ export interface ItemViewModel {
 
 export interface AboutItemViewModel {
     itemCardViewModel: ItemViewModel;
-    rubrics: Rubric[];
+    sampleItemScoring: SampleItemScoring;
     targetDescription: string;
     depthOfKnowledge: string;
     commonCoreStandardsDescription: string;
@@ -58,8 +58,8 @@ export interface AboutItemViewModel {
 
 export interface Rubric {
     language: string;
-    rubricEntries: RubricEntry[]
-    samples: Sample[]
+    rubricEntries: RubricEntry[];
+    samples: Sample[];
 }
 
 export interface RubricEntry {
@@ -85,4 +85,19 @@ export interface Subject {
     code: string;
     label: string;
     shortLabel: string;
+}
+
+export interface SampleItemScoring {
+    answerKey: string;
+    hasMachineRubric: boolean;
+    scoringOptions: SmarterAppOption[];
+    rubrics: Rubric[];
+}
+
+export interface SmarterAppOption {
+    name: string;
+    value: string;
+    feedback: string;
+    language: string;
+    answer: string;
 }

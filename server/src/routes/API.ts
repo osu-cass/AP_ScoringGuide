@@ -25,15 +25,17 @@ export class APIRoute {
     getPdf = (req: Express.Request, res: Express.Response) => {
         const subject = req.query.subject as string || '';
         const grade = Number(req.query.grade) || -1;
+        const techType = req.query.techType as string;
         const titlePage = (req.query.titlePage as string || 'true') == "true";
 
-        if (subject === '' || grade === -1) {
-            res.status(400).send('Invalid subject or grade.');
+        if (subject === '' || grade === -1 || !techType) {
+            res.status(400).send('Invalid subject, grade, or tech type.');
+            return;
         }
 
         const gradeString = GradeLevels.caseToString(grade)
         const subjectPromise = this.repo.getSubjectByCode(subject);
-        const pdfDataPromise = this.repo.getPdfDataByGradeSubject(grade, subject);
+        const pdfDataPromise = this.repo.getPdfDataByGradeSubject(grade, subject, techType);
 
         Promise.all([subjectPromise, pdfDataPromise])
             .then(value => {
@@ -54,6 +56,7 @@ export class APIRoute {
 
         if (requestedIds.length === 0) {
             res.sendStatus(400);
+            return;
         }
 
         this.repo.getPdfDataByIds(requestedIds)
