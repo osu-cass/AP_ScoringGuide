@@ -9,7 +9,8 @@
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "watch": "webpack --watch"
   },
   "keywords": [],
   "author": "",
