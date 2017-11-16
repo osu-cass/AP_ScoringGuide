@@ -198,13 +198,6 @@ ShallowWrapper {
             value=""
           />
           <input
-            style={
-              Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              }
-            }
             type="submit"
             value="Print Items"
           />
@@ -394,13 +387,6 @@ ShallowWrapper {
               value=""
             />,
             <input
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
               type="submit"
               value="Print Items"
             />,
@@ -454,11 +440,6 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "style": Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              },
               "type": "submit",
               "value": "Print Items",
             },
@@ -671,13 +652,6 @@ ShallowWrapper {
               value=""
             />
             <input
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
               type="submit"
               value="Print Items"
             />
@@ -867,13 +841,6 @@ ShallowWrapper {
                 value=""
               />,
               <input
-                style={
-                  Object {
-                    "height": "20%",
-                    "margin": "2px",
-                    "paddingRight": "5px",
-                  }
-                }
                 type="submit"
                 value="Print Items"
               />,
@@ -927,11 +894,6 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "style": Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                },
                 "type": "submit",
                 "value": "Print Items",
               },
@@ -1325,13 +1287,6 @@ ShallowWrapper {
             value=""
           />
           <input
-            style={
-              Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              }
-            }
             type="submit"
             value="Print Items"
           />
@@ -1521,13 +1476,6 @@ ShallowWrapper {
               value=""
             />,
             <input
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
               type="submit"
               value="Print Items"
             />,
@@ -1581,11 +1529,6 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "style": Object {
-                "height": "20%",
-                "margin": "2px",
-                "paddingRight": "5px",
-              },
               "type": "submit",
               "value": "Print Items",
             },
@@ -1798,13 +1741,6 @@ ShallowWrapper {
               value=""
             />
             <input
-              style={
-                Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                }
-              }
               type="submit"
               value="Print Items"
             />
@@ -1994,13 +1930,6 @@ ShallowWrapper {
                 value=""
               />,
               <input
-                style={
-                  Object {
-                    "height": "20%",
-                    "margin": "2px",
-                    "paddingRight": "5px",
-                  }
-                }
                 type="submit"
                 value="Print Items"
               />,
@@ -2054,11 +1983,6 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "style": Object {
-                  "height": "20%",
-                  "margin": "2px",
-                  "paddingRight": "5px",
-                },
                 "type": "submit",
                 "value": "Print Items",
               },
