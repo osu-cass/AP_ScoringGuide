@@ -98,12 +98,6 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
 
     render() {
-        const style = {
-            paddingRight: "5px",
-            margin: "2px",
-            height: "20%"
-        }
-
         const subjectCode = this.state.itemFilter.subjects[0] 
         ? this.state.itemFilter.subjects[0].code
         : "";
@@ -120,7 +114,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
                     <input type="hidden" name="grade" value={gradeCode} />
                     <input type="hidden" name="subject" value={subjectCode} />
                     <input type="hidden" name="techType" value={techType} />
-                    <input type="submit" style={style} value="Print Items" />
+                    <input type="submit" value="Print Items" />
                 </form>
                 {this.renderfilterComponent()}
                 {this.renderTableComponent()}
