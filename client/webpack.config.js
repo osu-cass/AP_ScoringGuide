@@ -2,7 +2,7 @@ const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-  entry: path.join(__dirname, './src/index.tsx'),
+  entry: path.join(__dirname, 'src', 'Index.tsx'),
 
   output: {
     // redirect compiled files into server project

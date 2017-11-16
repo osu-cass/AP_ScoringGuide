@@ -5,7 +5,7 @@
   "main": "index.tsx",
   "scripts": {
     "less": "lessc-each styles/ dist/css/",
-    "less:dev": "lessc-each SmarterBalancedStyles/styles dist/css",
+    "less:dev": "lessc-each dist/css",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "test": "jest",
