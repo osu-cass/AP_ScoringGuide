@@ -1,4 +1,4 @@
-import * as GradeLevels from '../../client/src/Models/GradeLevels';
+import * as GradeLevels from './GradeLevels';
 
 export interface ItemGroup {
     passage?: ItemView;

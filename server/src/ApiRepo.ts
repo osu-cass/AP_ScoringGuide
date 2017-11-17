@@ -1,8 +1,9 @@
 import { AboutItemViewModel, ItemGroup, ItemViewModel, Subject, ViewType } from "./Models";
 import { ItemDataManager } from "./ItemDataManager";
-import { getConfig } from "./Config";
 import * as Path from 'path';
 import * as RequestPromise from './RequestPromise';
+
+const {SCREENSHOT_WIDTH, SAMPLE_ITEMS_API, CAT_CODE, PERFORMANCE_CODE} = process.env;
 
 export class ApiRepo {
     manager: ItemDataManager;
@@ -11,16 +12,16 @@ export class ApiRepo {
     subjects: Subject[];
 
     constructor() {
-        const path = Path.join(__dirname, '../../../../client/dist/images/screenshots');
+        const path = Path.join(__dirname, '../public/images/screenshots');
         this.manager = new ItemDataManager({
-            pageWidth: getConfig().screenshotPageWidth,
+            pageWidth: parseInt(SCREENSHOT_WIDTH, 10),
             screenshotPath: path
         });
     }
 
     private async loadSubjectsFromSiw() {
-        const subjects = await RequestPromise.get(getConfig().sampleItemsApi + '/ScoringGuide/ScoringGuideViewModel');
-        console.log("Subjects received from SampleItemsWebsite API:", getConfig().sampleItemsApi);
+        const subjects = await RequestPromise.get(SAMPLE_ITEMS_API + '/ScoringGuide/ScoringGuideViewModel');
+        console.log("Subjects received from SampleItemsWebsite API:", SAMPLE_ITEMS_API);
         this.subjects = JSON.parse(subjects).subjects.map((s: any) => {
             return {
                 code: s.code,
@@ -31,8 +32,8 @@ export class ApiRepo {
     }
 
     private async loadDataFromSiw() {
-        const items = await RequestPromise.get(getConfig().sampleItemsApi + '/ScoringGuide/AboutAllItems');
-        console.log("Data received from SampleItemsWebsite API:", getConfig().sampleItemsApi);
+        const items = await RequestPromise.get(SAMPLE_ITEMS_API + '/ScoringGuide/AboutAllItems');
+        console.log("Data received from SampleItemsWebsite API:", SAMPLE_ITEMS_API);
         this.aboutItems = JSON.parse(items);
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }
@@ -46,7 +47,7 @@ export class ApiRepo {
                 idsArray.push(item.associatedItems);
             }
         });
-        
+
         const splitIdsArray = idsArray.map(idGroup => idGroup.split(','));
         return splitIdsArray;
     }
@@ -54,10 +55,10 @@ export class ApiRepo {
     async addDataToViews(itemViews: ItemGroup[]) {
         let questionNum = 1;
         const aboutItems = await this.getAboutAllItems();
-        itemViews.forEach(iv => 
+        itemViews.forEach(iv =>
             iv.questions.forEach(q => {
-                q.data = aboutItems.find(item => 
-                    item.itemCardViewModel 
+                q.data = aboutItems.find(item =>
+                    item.itemCardViewModel
                     && item.itemCardViewModel.bankKey + '-' + item.itemCardViewModel.itemKey === q.id
                 );
                 q.questionNumber = questionNum++;
@@ -65,12 +66,12 @@ export class ApiRepo {
         );
     }
 
-    /** Loads HTML and, if needed, screenshots of items. 
-     * Takes an array of string arrays, each of which should 
+    /** Loads HTML and, if needed, screenshots of items.
+     * Takes an array of string arrays, each of which should
      * be an item Id or group of performance Ids. */
     async loadViewData(itemIds: string[][]) {
         let itemGroups = await Promise.all(
-            itemIds.map(idGroup => 
+            itemIds.map(idGroup =>
                 this.manager.getItemData(idGroup)
             )
         );
@@ -80,7 +81,7 @@ export class ApiRepo {
     async getItemData() {
         if (!this.itemCards) {
             await this.loadDataFromSiw();
-        } 
+        }
         return this.itemCards;
     }
 
@@ -95,8 +96,8 @@ export class ApiRepo {
         if (!this.aboutItems) {
             await this.loadDataFromSiw();
         }
-        const about = this.aboutItems.find(i => 
-            i.itemCardViewModel  
+        const about = this.aboutItems.find(i =>
+            i.itemCardViewModel
             && i.itemCardViewModel.itemKey === itemKey
             && i.itemCardViewModel.bankKey === bankKey);
         return about;
@@ -123,17 +124,16 @@ export class ApiRepo {
 
     async getPdfDataByGradeSubject(gradeCode: number, subjectCode: string, type: string) {
         const subjects = await this.getSubjects();
-        const config = getConfig();
 
-        let associatedItems: string[] = []; 
+        let associatedItems: string[] = [];
         (await this.getAboutAllItems())
             .filter(ai => {
                 if (!ai.itemCardViewModel) { return false; }
                 let match = ai.itemCardViewModel.grade === gradeCode
                     && ai.itemCardViewModel.subjectCode.toLowerCase() === subjectCode.toLowerCase();
-                if (type === config.catCode && ai.itemCardViewModel.isPerformanceItem) {
+                if (type === CAT_CODE && ai.itemCardViewModel.isPerformanceItem) {
                     match = false;
-                } else if (type.toLowerCase() === config.performanceItemsCode.toLowerCase()
+                } else if (type.toLowerCase() === PERFORMANCE_CODE.toLowerCase()
                            && !ai.itemCardViewModel.isPerformanceItem) {
                     match = false;
                 }

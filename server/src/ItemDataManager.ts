@@ -37,7 +37,7 @@ export class ItemDataManager {
         let takePictures = false;
 
         if (!FileSystem.existsSync(this.screenshotPath)) {
-            FileSystem.mkdirSync(this.screenshotPath); 
+            FileSystem.mkdirSync(this.screenshotPath);
         }
 
         takePictures = this.getPassagePaths(itemData, ids, takePictures);

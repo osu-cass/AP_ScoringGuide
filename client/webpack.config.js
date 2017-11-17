@@ -1,58 +1,70 @@
-﻿const path = require('path');
+const path = require('path');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: path.join(__dirname, 'src', 'Index.tsx'),
 
   output: {
-    path: path.join(__dirname, "dist"),
-    filename: "js/bundle.js",
-    libraryTarget: "var",
-    library: "EntryPoint"
+    // redirect compiled files into server project
+    path: path.join(__dirname, "../server/public/client/"),
+    publicPath: "/client/",
+    filename: "bundle.js"
   },
 
-  // Enable sourcemaps for debugging webpack's output.
-  resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
+  devServer: {
+    port: 8080,
+    quiet: true,
+    noInfo: true,
+    proxy: {
+      "/": "http://localhost:3000/"
+    }
+  },
 
+  devtool: '#source-map',
+
+  externals: {
+    "react": "React",
+    "react-dom": "ReactDOM",
+    "jquery": "jQuery"
+  },
+
+  resolve: {
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
     modules: [
       path.join(__dirname, 'node_modules'),
       path.join(__dirname, './src')
     ]
   },
 
-
   module: {
     rules: [
-      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.js$/, loader: 'babel-loader' },
       {
         test: /\.tsx?$/,
-        loader: "awesome-typescript-loader",
-        options: {
-          configFileName: path.join(__dirname, 'tsconfig.json')
-        }
+        loader: "awesome-typescript-loader"
+        //options: {configFileName: 'tsconfig.json'}
       },
       {
         test: /\.(css|less)$/,
-        loader: 'style-loader!css-loader!less-loader?sourceMap'
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader!less-loader?sourceMap",
+          disable: process.env.NODE_ENV !== "production"
+        })
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
+      { test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=images/[name].[ext]"}
 
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+      //{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
     ]
   },
 
-  externals: {
-    "react": "React",
-    "react-dom": "ReactDOM",
-    "jquery": "jQuery"
-  }
+  plugins: [
+    new ExtractTextPlugin("bundle.css")
+  ]
 };
 
-if(process.env.NODE_ENV === "development"){
-  //load styles from from git submodule
+if (process.env.NODE_ENV === "production") {
   module.exports.devtool = "source-map";
 }

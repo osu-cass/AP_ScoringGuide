@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as React from 'react';
 import { ItemGroup } from '../Models';
 import { ItemPage } from './ItemPage';
@@ -8,8 +9,8 @@ interface Props {
     items: ItemGroup[];
     grade: string;
     subject: string;
-    pageBaseUrl: string;
     ivsBaseUrl: string;
+    cssUrl: string;
     displayTitlePage: boolean;
 }
 
@@ -22,15 +23,14 @@ export class PdfComponent extends React.Component<Props, {}> {
         return (
             <html>
                 <head>
-                    <base href={this.props.pageBaseUrl} />
                     <meta charSet="UTF-8" />
-                    <link rel='stylesheet' href='css/pdf.css' />
+                    <link rel='stylesheet' href={this.props.cssUrl} />
                     <link rel='stylesheet' href={this.props.ivsBaseUrl + "/Shared/CSS/Universal/items.css"} />
                     <link rel='stylesheet' href={this.props.ivsBaseUrl + "/Projects/SBAC/css/modernItems.css"} />
                 </head>
                 <body>
-                    {this.props.displayTitlePage 
-                        ? <FirstPage grade={this.props.grade} subject={this.props.subject} /> 
+                    {this.props.displayTitlePage
+                        ? <FirstPage grade={this.props.grade} subject={this.props.subject} />
                         : null}
                     {itemPages}
                 </body>
@@ -38,4 +38,3 @@ export class PdfComponent extends React.Component<Props, {}> {
         );
     }
 }
-

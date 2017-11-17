@@ -27,28 +27,26 @@ $ npm install
 $ cd server/
 $ npm install
 ```
-3. Install global dependencies
-```
-$ npm install -g jest
-$ npm install -g lessc-each
-$ npm install -g typescript
-```
 </details>
 
 ### Building the project
 Scoring Guide uses typescript and less files for both the server and the client, so these need to be compiled before running the app. 
 
-In Visual Studio Code, you can run the launch configuration `Launch Program` (or press F5). This will build all of the necessary components before running the server. 
+In Visual Studio Code, you can run the launch configuration **Launch Program** (or press F5). This will build all of the necessary server components, and then run the server. You can run the **webpack-watch** task to start a service to watch for changes to the client side code and recompile with Webpack. 
 
-In any other editor or IDE, you can run the build-all bash script.
+In any other editor or IDE, you can use the following commands to get the same result. Note you only need to start watching for changes to webpack once, and that you must keep the process alive to continue watching. It is recommended to run the webpack command in a separate terminal window. 
 ```
-$ ./build-all
+$ cd server/
+$ npm run build
+
+$ cd ../client/
+$ npm run watch
 ```
 
 ### Running the project
 If you're not using Visual Studio Code or don't want to rebuild, you can run the project by starting the Node server in the server directory.
 ```
-$ node server/dist/server/src/server.js
+$ node server/dist/Server.js
 ```
 
 You could also run 

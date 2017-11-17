@@ -8,8 +8,9 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "preLaunchTask": "build-all",
-            "program": "${workspaceRoot}\\server\\dist\\server\\src\\Server.js",
+            "preLaunchTask": "build-server",
+            "program": "${workspaceRoot}\\server\\dist\\Server.js",
+            "cwd": "${workspaceFolder}\\server",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceRoot}\\server\\dist\\**\\*.js"
