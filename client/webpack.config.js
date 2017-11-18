@@ -1,12 +1,14 @@
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
+const webpack = require('webpack');
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const bundleOutputDir = "../server/public/client/";
 module.exports = {
-  entry: path.join(__dirname, 'src', 'Index.tsx'),
+  entry: path.join(__dirname, 'src', 'index.tsx'),
 
   output: {
     // redirect compiled files into server project
-    path: path.join(__dirname, "../server/public/client/"),
+    path: path.join(__dirname,bundleOutputDir ),
     publicPath: "/client/",
     filename: "bundle.js"
   },
@@ -17,17 +19,12 @@ module.exports = {
     noInfo: true,
     proxy: {
       "/": "http://localhost:3000/"
-    }
+    },
+    hot: true
   },
 
   devtool: '#source-map',
-
-  externals: {
-    "react": "React",
-    "react-dom": "ReactDOM",
-    "jquery": "jQuery"
-  },
-
+  
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
     modules: [
@@ -40,7 +37,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "awesome-typescript-loader"
+        loaders: ["react-hot-loader/webpack", "awesome-typescript-loader"]
         //options: {configFileName: 'tsconfig.json'}
       },
       {
@@ -61,7 +58,14 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin("bundle.css")
+    new ExtractTextPlugin("bundle.css"),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new CheckerPlugin(),
+    new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: require(path.join(__dirname, bundleOutputDir , 'vendor-manifest.json'))
+    })
   ]
 };
 

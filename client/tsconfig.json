@@ -9,14 +9,28 @@
     "target": "es5",
     "jsx": "react",
     "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "lib": [
       "es5",
       "es6",
       "dom"
     ],
     "types": [
-      "jest"
+      "jest",
+      "webpack-env"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*",
+    "**/setupTest.ts"
+  ],
+  "jest": {
+    "moduleDirectories": [
+      "node_modules"
     ]
   }
 }

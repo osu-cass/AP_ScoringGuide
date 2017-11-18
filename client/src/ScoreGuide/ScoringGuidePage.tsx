@@ -11,10 +11,12 @@ import { get } from "../Models/ApiModels";
 import { FilterHelper } from "../Models/FilterHelper";
 import { AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
 import * as UrlHelper from '../Models/UrlHelper';
+import { RouteComponentProps } from 'react-router';
+
 
 const SearchClient = () => get<ItemCardViewModel.ItemCardViewModel[]>("api/search");
 
-export interface Props {
+export interface Props extends RouteComponentProps<{}>{
     scoreGuideViewModelClient: () => Promise<ItemsSearchViewModel>;
 }
 
