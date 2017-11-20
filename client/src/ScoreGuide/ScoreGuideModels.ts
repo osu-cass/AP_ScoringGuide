@@ -1,4 +1,4 @@
-import { get, ItemsSearchModel, ItemCardModel, AboutItemModel } from "@osu-cass/sb-components";
+import { get, ItemsSearchModel, ItemCardModel, ItemModel, AboutItemModel } from "@osu-cass/sb-components";
 
 export const itemSearchModelClient = () =>
     get<ItemsSearchModel>("http://is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel");
@@ -6,6 +6,6 @@ export const itemSearchModelClient = () =>
 export const itemCardClient = () =>
     get<ItemCardModel[]>("api/search");
 
-export const aboutitemClient = () =>
-    get<AboutItemModel>("api/search");
+export const aboutItemClient = (params: ItemModel) =>
+    get<AboutItemModel>("/api/aboutItem", params)
 
