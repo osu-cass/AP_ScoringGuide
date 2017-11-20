@@ -51,12 +51,11 @@ export class APIRoute {
 
     getPdfById = (req: Express.Request, res: Express.Response) => {
         const ids = req.query.ids;
-        const requestedIds = ids.split(',');
-
-        if (requestedIds.length === 0) {
+        if (!ids) {
             res.sendStatus(400);
             return;
         }
+        const requestedIds = ids.split(',');
 
         this.repo.getPdfDataByIds(requestedIds)
             .then(itemViews => {
