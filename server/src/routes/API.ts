@@ -4,9 +4,8 @@ import { HtmlRenderer, PdfGenerator } from "../PdfGenerator";
 import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
-import { ItemViewModel, AboutItemViewModel } from "../Models";
 import { ApiRepo } from '../ApiRepo';
-import * as GradeLevels from '../GradeLevels';
+import { GradeLevel } from '@osu-cass/sb-components';
 
 export class APIRoute {
     router: Express.Router;
@@ -33,7 +32,7 @@ export class APIRoute {
             return;
         }
 
-        const gradeString = GradeLevels.caseToString(grade)
+        const gradeString = GradeLevel.gradeCaseToString(grade)
         const subjectPromise = this.repo.getSubjectByCode(subject);
         const pdfDataPromise = this.repo.getPdfDataByGradeSubject(grade, subject, techType);
 

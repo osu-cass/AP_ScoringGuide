@@ -1,31 +1,33 @@
 import * as React from 'react';
-import * as ItemCardViewModel from '../Models/ItemCardViewModel';
-import * as ItemModels from '../Models/ItemModels';
-import * as ItemPageTable from '../ItemTable/ItemPageTable';
-import * as ApiModels from "../Models/ApiModels";
 import { FilterHelper } from "../Models/FilterHelper";
-import { AdvancedFilterContainer, AdvancedFilterCategory, AdvancedFilters } from "@osu-cass/react-advanced-filter";
-import * as AboutItemVM from '../Models/AboutItemVM';
 import * as UrlHelper from '../Models/UrlHelper';
+import {
+    AdvancedFilterContainer,
+    ItemCardModel,
+    AdvancedFilterCategoryModel,
+    AboutItemModel,
+    SubjectModel,
+    get,
+    Resource,
+    ItemTableContainer,
+    ItemSearch,
+    getResourceContent
+} from '@osu-cass/sb-components';
 
-const SearchClient = () => ApiModels.get<ItemCardViewModel.ItemCardViewModel[]>("api/search");
 
 export interface Props {
     onRowSelection: (item: { itemKey: number; bankKey: number }, reset: boolean) => void;
-    filterOptions: AdvancedFilterCategory[];
-    searchClient: () => Promise<ItemCardViewModel.ItemCardViewModel[]>;
-    item: ApiModels.Resource<AboutItemVM.AboutThisItem>;
+    filterOptions: AdvancedFilterCategoryModel[];
+    searchClient: () => Promise<ItemCardModel[]>;
+    item: Resource<AboutItemModel>;
 }
 
 export interface State {
-    itemSearchResult: ApiModels.Resource<ItemCardViewModel.ItemCardViewModel[]>;
-    visibleItems?: ItemCardViewModel.ItemCardViewModel[];
-    itemFilter: AdvancedFilterCategory[];
+    itemSearchResult: Resource<ItemCardModel[]>;
+    visibleItems?: ItemCardModel[];
+    itemFilter: AdvancedFilterCategoryModel[];
 }
 
-export interface ItemsSearchViewModel {
-    subjects: ItemModels.Subject[];
-}
 
 export class ItemSearchContainer extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -44,10 +46,12 @@ export class ItemSearchContainer extends React.Component<Props, State> {
             .catch((err) => this.onSearchFailure(err));
     }
 
-    onSearchSuccess(data: ItemCardViewModel.ItemCardViewModel[]): void {
+    onSearchSuccess(data: ItemCardModel[]): void {
+        const searchApi = ItemSearch.advancedFilterToSearch(this.state.itemFilter);
+        const filteredItems = ItemSearch.filterItemCards(data, searchApi);
         this.setState({
             itemSearchResult: { kind: "success", content: data },
-            visibleItems: FilterHelper.filter(data, this.state.itemFilter)
+            visibleItems: filteredItems
         });
     }
 
@@ -58,21 +62,26 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         });
     }
 
-    onFilterApplied = (filter: AdvancedFilterCategory[]) => {
-        if(this.state.itemSearchResult.kind == "success" || this.state.itemSearchResult.kind == "reloading") {
-            const filtered = FilterHelper.filter(this.state.itemSearchResult.content || [], filter);
-            this.setState({
-                visibleItems: filtered,
-                itemFilter: filter
-            });
-            UrlHelper.updateUrl(filter);
+    onFilterApplied = (filter: AdvancedFilterCategoryModel[]) => {
+        const itemSearch = getResourceContent(this.state.itemSearchResult);
+        let filteredItems: ItemCardModel[] | undefined = undefined;
+
+        if (itemSearch) {
+            const searchAPI = ItemSearch.advancedFilterToSearch(filter);
+            filteredItems = ItemSearch.filterItemCards(itemSearch, searchAPI);
         }
+        
+        UrlHelper.updateUrl(filter);
+        this.setState({
+            visibleItems: filteredItems,
+            itemFilter: filter
+        });
     }
 
     renderTableComponent() {
         if (this.state.visibleItems) {
             return (
-                <ItemPageTable.ItemPageTable
+                <ItemTableContainer
                     onRowSelection={this.props.onRowSelection}
                     itemCards={this.state.visibleItems}
                     item={this.props.item} />

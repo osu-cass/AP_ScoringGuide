@@ -3,15 +3,14 @@ import { Stream } from "stream";
 import * as React from 'react';
 import * as ReactDOMServer from 'react-dom/server';
 const wkhtmltopdf = require('wkhtmltopdf');
-import { ItemGroup } from './Models';
-import { PdfComponent } from './components/PdfComponent';
+import {PdfContainer, ItemGroupModel} from '@osu-cass/sb-components';
 
 const {ITEM_VIEWER_SERVICE_API} = process.env;
 
 export class HtmlRenderer {
-    static renderBody(items: ItemGroup[], subject: string, grade: string, titlePage: boolean) {
+    static renderBody(items: ItemGroupModel[], subject: string, grade: string, titlePage: boolean) {
         return ReactDOMServer.renderToString(
-            <PdfComponent
+            <PdfContainer
                 items={items}
                 subject={subject}
                 grade={grade}

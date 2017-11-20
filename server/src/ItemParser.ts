@@ -1,8 +1,8 @@
 import * as RequestPromise from './RequestPromise';
 import * as Cheerio from 'cheerio';
-import { ItemGroup, ViewType } from "./Models";
+import { ItemGroupModel, PdfViewType } from '@osu-cass/sb-components';
 
-const {ITEM_VIEWER_SERVICE_API} = process.env;
+const { ITEM_VIEWER_SERVICE_API } = process.env;
 
 export class ItemParser {
 
@@ -36,7 +36,7 @@ export class ItemParser {
 
         $ = this.fixMultipleChoice($);
 
-        let itemData: ItemGroup = {
+        let itemData: ItemGroupModel = {
             questions: []
         };
 
@@ -44,7 +44,7 @@ export class ItemParser {
             const takePicture = this.shouldTakePicture($('.thePassage'))
             itemData.passage = {
                 id: itemIds[0],
-                type: takePicture ? ViewType.picture : ViewType.html,
+                type: takePicture ? PdfViewType.picture : PdfViewType.html,
                 html: takePicture ? undefined : $('.thePassage').html(),
                 captured: takePicture ? false : true
             }
@@ -57,7 +57,7 @@ export class ItemParser {
                 id: id,
                 view: {
                     id: id,
-                    type: takePicture ? ViewType.picture : ViewType.html,
+                    type: takePicture ? PdfViewType.picture : PdfViewType.html,
                     html: takePicture ? undefined : $(selector).html(),
                     captured: takePicture ? false : true
                 }

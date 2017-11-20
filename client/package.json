@@ -6,6 +6,10 @@
   "scripts": {
     "less": "lessc-each styles/ dist/css/",
     "less:dev": "lessc-each dist/css",
+    "webpack-dev": "./node_modules/.bin/webpack --config webpack.config.js --env.dev",
+    "webpack-prod": "./node_modules/.bin/webpack --config webpack.config.js --env.prod",
+    "webpack-vendor-dev": "./node_modules/.bin/webpack --config webpack.config.vendor.js --env.dev",
+    "webpack-vendor-prod": "./node_modules/.bin/webpack --config webpack.config.vendor.js --env.prod",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "test": "jest",
@@ -17,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "@osu-cass/react-advanced-filter": "^1.0.5",
-    "@osu-cass/sb-components": "0.0.22",
+    "@osu-cass/sb-components": "0.0.31",
     "@osu-cass/smarter-balanced-styles": "^1.0.8",
     "bootstrap": "^3.3.7",
     "event-source-polyfill": "0.0.11",

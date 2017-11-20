@@ -1,33 +1,33 @@
 ﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as ItemModels from '../Models/ItemModels';
-import * as ApiModels from '../Models/ApiModels';
-import * as GradeLevels from '../Models/GradeLevels';
-import * as ItemCardViewer from '../AboutItem/ItemCardViewer';
-import * as AboutItemVM from '../Models/AboutItemVM';
-import * as ItemSearchContainer from './ItemSearchContainer';
-import * as ItemCardViewModel from '../Models/ItemCardViewModel'
-import { get } from "../Models/ApiModels";
 import { FilterHelper } from "../Models/FilterHelper";
-import { AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
 import * as UrlHelper from '../Models/UrlHelper';
 import { RouteComponentProps } from 'react-router';
+import { ItemSearchContainer } from './ItemSearchContainer';
+import {
+    ItemCardModel,
+    ItemsSearchModel,
+    Resource,
+    getResourceContent,
+    AdvancedFilterCategoryModel,
+    SubjectModel,
+    AboutItemModel,
+    get,
+    ItemModel
+
+} from '@osu-cass/sb-components';
 
 
-const SearchClient = () => get<ItemCardViewModel.ItemCardViewModel[]>("api/search");
-
-export interface Props extends RouteComponentProps<{}>{
-    scoreGuideViewModelClient: () => Promise<ItemsSearchViewModel>;
+export interface Props extends RouteComponentProps<{}> {
+    scoreGuideViewModelClient: () => Promise<ItemsSearchModel>;
+    aboutItemClient: (params: ItemModel) => Promise<AboutItemModel>;
+    itemCardClient: () => Promise<ItemCardModel[]>;
 }
 
 export interface State {
-    item: ApiModels.Resource<AboutItemVM.AboutThisItem>;
-    scoringGuideViewModel: ApiModels.Resource<ItemsSearchViewModel>;
-    filterOptions: AdvancedFilterCategory[];
-}
-
-export interface ItemsSearchViewModel {
-    subjects: ItemModels.Subject[];
+    item: Resource<AboutItemModel>;
+    scoringGuideViewModel: Resource<ItemsSearchModel>;
+    filterOptions: AdvancedFilterCategoryModel[];
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
@@ -41,9 +41,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.loadScoringGuideViewModel();
     }
 
-
-    getAboutItem = (item: { itemKey: number, bankKey: number }) => {
-        AboutItemVM.ScoreSearchClient(item)
+    getAboutItem = (item: ItemModel) => {
+        this.props.aboutItemClient(item)
             .then((data) => {
                 this.onAboutItemSuccess(data)
             })
@@ -52,9 +51,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             });
     }
 
-    onAboutItemSuccess = (data: AboutItemVM.AboutThisItem) => {
-        const item: ApiModels.Resource<AboutItemVM.AboutThisItem> = { kind: "success", content: data };
-        this.setState({item});
+    onAboutItemSuccess = (data: AboutItemModel) => {
+        const item: Resource<AboutItemModel> = { kind: "success", content: data };
+        this.setState({ item });
     }
 
     onAboutItemError = (err: any) => {
@@ -71,7 +70,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     }
 
-    onSuccessLoadScoringGuideViewModel = (result: ItemsSearchViewModel) => {
+    onSuccessLoadScoringGuideViewModel = (result: ItemsSearchModel) => {
         this.setState({
             scoringGuideViewModel: { kind: "success", content: result }
         });
@@ -84,26 +83,26 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         });
     }
 
-    onRowSelection = (item: { bankKey: number, itemKey: number }, reset: boolean) => {
+    onRowSelection = (item: ItemModel, reset: boolean) => {
         if (reset === false) {
             this.getAboutItem(item);
         } else {
-            let item: ApiModels.Resource<AboutItemVM.AboutThisItem> = { kind: "none" };
+            let item: Resource<AboutItemModel> = { kind: "none" };
             this.setState({ item });
         }
     }
 
     render() {
-        const scoringVMState = this.state.scoringGuideViewModel;
+        const scoringModel = getResourceContent(this.state.scoringGuideViewModel);
 
-        if ((scoringVMState.kind == "success" || scoringVMState.kind == "reloading") && scoringVMState.content != undefined) {
+        if (scoringModel) {
             return (
                 <div className="search-page">
                     <div className="search-container">
-                        <ItemSearchContainer.ItemSearchContainer
+                        <ItemSearchContainer
                             onRowSelection={this.onRowSelection}
                             filterOptions={this.state.filterOptions}
-                            searchClient={SearchClient}
+                            searchClient={this.props.itemCardClient}
                             item={this.state.item}
                         />
                     </div>

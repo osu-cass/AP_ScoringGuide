@@ -1,7 +1,7 @@
 import { ItemCapture } from "./ItemCapture";
 import * as FileSystem from 'fs';
 import * as Path from 'path';
-import { ItemGroup, Question, ItemView, ViewType } from "./Models";
+import { ItemGroupModel, ItemPdfModel, PdfViewType } from '@osu-cass/sb-components';
 import { ItemParser } from "./ItemParser";
 
 export interface ScreenshotOptions {
@@ -30,7 +30,7 @@ export class ItemDataManager {
         if (ids.length === 0) {
             return {
                 questions: []
-            } as ItemGroup;
+            } as ItemGroupModel;
         }
 
         let itemData = await new ItemParser().loadItemData(ids);
@@ -49,16 +49,16 @@ export class ItemDataManager {
         return itemData
     }
 
-    private getPassagePaths(itemData: ItemGroup, ids: string[], takePictures: boolean) {
-        if (itemData.passage && itemData.passage.type === ViewType.picture) {
+    private getPassagePaths(itemData: ItemGroupModel, ids: string[], takePictures: boolean) {
+        if (itemData.passage && itemData.passage.type === PdfViewType.picture) {
             const possiblePassagePaths = ids.map(id => {
                 const pth = Path.join(this.screenshotPath, id + '-passage.png');
                 return {
                     picturePath: pth,
                     id: id,
-                    type: ViewType.picture,
+                    type: PdfViewType.picture,
                     captured: FileSystem.existsSync(pth)
-                } as ItemView;
+                } as ItemPdfModel;
             });
 
             const capturedPassages = possiblePassagePaths.filter(pp => pp.captured);
@@ -72,9 +72,9 @@ export class ItemDataManager {
         return takePictures;
     }
 
-    private getQuestionPaths(itemData: ItemGroup, takePictures: boolean) {
+    private getQuestionPaths(itemData: ItemGroupModel, takePictures: boolean) {
         itemData.questions.forEach(q => {
-            if (q.view.type === ViewType.picture) {
+            if (q.view.type === PdfViewType.picture) {
                 const pth = Path.join(this.screenshotPath, q.id + '-question.png');
                 const captured = FileSystem.existsSync(pth);
                 if (!captured) {

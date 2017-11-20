@@ -1,15 +1,15 @@
-import { AboutItemViewModel, ItemGroup, ItemViewModel, Subject, ViewType } from "./Models";
 import { ItemDataManager } from "./ItemDataManager";
 import * as Path from 'path';
 import * as RequestPromise from './RequestPromise';
+import { AboutItemModel, ItemCardModel, SubjectModel, ItemGroupModel, PdfViewType } from '@osu-cass/sb-components';
 
-const {SCREENSHOT_WIDTH, SAMPLE_ITEMS_API, CAT_CODE, PERFORMANCE_CODE} = process.env;
+const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API, CAT_CODE, PERFORMANCE_CODE } = process.env;
 
 export class ApiRepo {
     manager: ItemDataManager;
-    itemCards: ItemViewModel[];
-    aboutItems: AboutItemViewModel[];
-    subjects: Subject[];
+    itemCards: ItemCardModel[];
+    aboutItems: AboutItemModel[];
+    subjects: SubjectModel[];
 
     constructor() {
         const path = Path.join(__dirname, '../public/images/screenshots');
@@ -42,7 +42,7 @@ export class ApiRepo {
         let idsArray: string[] = [];
         const aboutItems = await this.getAboutAllItems();
         requestedIds.forEach(reqId => {
-            const item = aboutItems.find(ai => ai.associatedItems.split(',').includes(reqId));
+            const item = aboutItems.find(ai => (ai.associatedItems).includes(reqId));
             if (item && !idsArray.includes(item.associatedItems)) {
                 idsArray.push(item.associatedItems);
             }
@@ -52,7 +52,7 @@ export class ApiRepo {
         return splitIdsArray;
     }
 
-    async addDataToViews(itemViews: ItemGroup[]) {
+    async addDataToViews(itemViews: ItemGroupModel[]) {
         let questionNum = 1;
         const aboutItems = await this.getAboutAllItems();
         itemViews.forEach(iv =>
@@ -134,7 +134,7 @@ export class ApiRepo {
                 if (type === CAT_CODE && ai.itemCardViewModel.isPerformanceItem) {
                     match = false;
                 } else if (type.toLowerCase() === PERFORMANCE_CODE.toLowerCase()
-                           && !ai.itemCardViewModel.isPerformanceItem) {
+                    && !ai.itemCardViewModel.isPerformanceItem) {
                     match = false;
                 }
                 return match;
@@ -155,24 +155,24 @@ export class ApiRepo {
     /**
      * Finds all items with the same passage and combines the items into one passage with multiple questions
      */
-    combinelikePassages(itemGroups: ItemGroup[]) {
-        let combinedItems: ItemGroup[] = [];
+    combinelikePassages(itemGroups: ItemGroupModel[]) {
+        let combinedItems: ItemGroupModel[] = [];
         let addedIds: string[] = [];
 
         for (let i = 0; i < itemGroups.length; i++) {
             if (itemGroups[i].passage) {
-                
-                const samePassageItems = itemGroups.filter((ig, filterIdx) => 
-                    ig.passage && ig.passage.type === ViewType.html 
+
+                const samePassageItems = itemGroups.filter((ig, filterIdx) =>
+                    ig.passage && ig.passage.type === PdfViewType.html
                     && ig.passage.html === itemGroups[i].passage.html);
                 const samePassageQuestions = samePassageItems
                     .map(ig => ig.questions)
                     .reduce((prev, curr) => prev.concat(curr), []);
                 if (samePassageQuestions.map(q => addedIds.includes(q.id)).every(bool => bool === false)) {
-                    combinedItems.push({passage: itemGroups[i].passage, questions: samePassageQuestions});
+                    combinedItems.push({ passage: itemGroups[i].passage, questions: samePassageQuestions });
                     addedIds = addedIds.concat(samePassageQuestions.map(q => q.id));
                 }
-                
+
                 //itemGroups = itemGroups.filter(ig => !samePassageItems.includes(ig));
             } else {
                 combinedItems.push(itemGroups[i]);

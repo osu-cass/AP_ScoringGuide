@@ -5,12 +5,26 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
-    "jsx": "react"
+    "jsx": "react",
+    "types": [
+      "jest"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
   "include": [
-    "./src/**/*"
+    "src/**/*"
   ],
   "exclude": [
-    "./**/*.test.*"
-  ]
+    "node_modules",
+    "public",
+    "**/__tests__/*",
+    "**/setupTest.ts"
+  ],
+  "jest": {
+    "moduleDirectories": [
+      "node_modules"
+    ]
+  }
 }

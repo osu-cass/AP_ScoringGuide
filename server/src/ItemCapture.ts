@@ -1,6 +1,6 @@
 import * as Path from 'path';
 import * as FileStructure from 'fs';
-import { ItemGroup, Question, ItemView, ViewType } from './Models';
+import { ItemGroupModel, ItemPdfModel, PdfViewType } from '@osu-cass/sb-components';
 const puppeteer = require('puppeteer');
 
 export class ItemCapture {
@@ -16,10 +16,10 @@ export class ItemCapture {
         console.log('chrome url: ', this.browser.wsEndpoint());
     }
 
-    getIdString(paths: ItemGroup) {
+    getIdString(paths: ItemGroupModel) {
         let ids: string[] = [];
         paths.questions.forEach(p => {
-            if (p.view.type === ViewType.picture) {
+            if (p.view.type === PdfViewType.picture) {
                 ids.push(p.id);
             }
         });
@@ -30,7 +30,7 @@ export class ItemCapture {
         return ids.join(',');
     }
 
-    async takeScreenshots(itemData: ItemGroup) {
+    async takeScreenshots(itemData: ItemGroupModel) {
         const page = await this.browser.newPage();
         const idsString = this.getIdString(itemData);
         await page.goto('http://ivs.smarterbalanced.org/items?ids=' + idsString + '&isaap=TDS_SLM1');
@@ -59,7 +59,7 @@ export class ItemCapture {
 
         // passage
         if (itemData.passage
-            && itemData.passage.type === ViewType.picture
+            && itemData.passage.type === PdfViewType.picture
             && !itemData.passage.captured) {
 
             const passageRect = await iframe.evaluate(() => {
@@ -101,7 +101,7 @@ export class ItemCapture {
 
         for (let i = 0; i < itemRects.length; i++) {
             const question = itemData.questions.find(q => q.id.includes(itemRects[i].itemId));
-            if (!question.view.captured && question.view.type === ViewType.picture) {
+            if (!question.view.captured && question.view.type === PdfViewType.picture) {
                 await page.screenshot({
                     path: question.view.picturePath,
                     clip: itemRects[i]

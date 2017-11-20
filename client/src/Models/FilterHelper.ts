@@ -1,14 +1,17 @@
-import { ItemCardViewModel } from "../Models/ItemCardViewModel";
-import { ItemFilter, FilterOptions } from "../Models/ItemModels";
-import * as GradeLevels from '../Models/GradeLevels';
-import { parseQueryString } from "../Models/ApiModels";
-import { OptionType, AdvancedFilters, AdvancedFilterOption, AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
+import {
+    FilterOptionModel,
+    GradeLevels,
+    GradeLevel,
+    AdvancedFilterCategoryModel,
+    ItemCardModel
+} from '@osu-cass/sb-components';
+
 
 export class FilterHelper {
 
     //TODO: Get this from the server
     static getFilterOptions() {
-        const subjectsFilterOptions: AdvancedFilterOption[] = [{
+        const subjectsFilterOptions: FilterOptionModel[] = [{
             label: "Mathematics",
             key: "MATH",
             isSelected: false
@@ -19,37 +22,37 @@ export class FilterHelper {
             isSelected: false
         }];
 
-        const gradesFilterOptions: AdvancedFilterOption[] = [{
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.Grade3),
-            key: String(GradeLevels.GradeLevels.Grade3),
+        const gradesFilterOptions: FilterOptionModel[] = [{
+            label: GradeLevel.gradeCaseToString(GradeLevels.Grade3),
+            key: String(GradeLevels.Grade3),
             isSelected: false
         }, {
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.Grade4),
-            key: String(GradeLevels.GradeLevels.Grade4),
+            label: GradeLevel.gradeCaseToString(GradeLevels.Grade4),
+            key: String(GradeLevels.Grade4),
             isSelected: false
         }, {
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.Grade5),
-            key: String(GradeLevels.GradeLevels.Grade5),
+            label: GradeLevel.gradeCaseToString(GradeLevels.Grade5),
+            key: String(GradeLevels.Grade5),
             isSelected: false
         }, {
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.Grade6),
-            key: String(GradeLevels.GradeLevels.Grade6),
+            label: GradeLevel.gradeCaseToString(GradeLevels.Grade6),
+            key: String(GradeLevels.Grade6),
             isSelected: false
         }, {
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.Grade7),
-            key: String(GradeLevels.GradeLevels.Grade7),
+            label: GradeLevel.gradeCaseToString(GradeLevels.Grade7),
+            key: String(GradeLevels.Grade7),
             isSelected: false
         }, {
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.Grade8),
-            key: String(GradeLevels.GradeLevels.Grade8),
+            label: GradeLevel.gradeCaseToString(GradeLevels.Grade8),
+            key: String(GradeLevels.Grade8),
             isSelected: false
         }, {
-            label: GradeLevels.caseToString(GradeLevels.GradeLevels.High),
-            key: String(GradeLevels.GradeLevels.High),
+            label: GradeLevel.gradeCaseToString(GradeLevels.High),
+            key: String(GradeLevels.High),
             isSelected: false
         }];
 
-        const techTypesFilterOptions: AdvancedFilterOption[] = [{
+        const techTypesFilterOptions: FilterOptionModel[] = [{
             label: "CAT",
             key: "CAT",
             isSelected: false
@@ -59,78 +62,38 @@ export class FilterHelper {
             isSelected: false
         }];
 
-        const subjects: AdvancedFilterCategory = {
+        const subjects: AdvancedFilterCategoryModel = {
             disabled: false,
             isMultiSelect: false,
             label: "Subject",
             helpText: "Subjects HelpText here.",
             filterOptions: [...subjectsFilterOptions],
-            displayAllButton: true
+            displayAllButton: true,
+            code: "Subject"
         }
 
-        const grades: AdvancedFilterCategory = {
+        const grades: AdvancedFilterCategoryModel = {
             disabled: false,
             isMultiSelect: false,
             label: "Grade",
             helpText: "Grade HelpText here.",
             filterOptions: [...gradesFilterOptions],
-            displayAllButton: true
+            displayAllButton: true,
+            code: "Grade"
         }
 
-        const techTypes: AdvancedFilterCategory = {
+        const techTypes: AdvancedFilterCategoryModel = {
             disabled: false,
             isMultiSelect: false,
             label: "Tech Type",
             helpText: "TechType HelpText here.",
             filterOptions: [...techTypesFilterOptions],
-            displayAllButton: false
+            displayAllButton: false,
+            code: "TechType"
         }
-        
+
         return [subjects, grades, techTypes];
     }
 
-    static filter(itemCards: ItemCardViewModel[], filter: AdvancedFilterCategory[]) {
-        const grades = filter.find(afc => afc.label === "Grade");
-        const subjects = filter.find(afc => afc.label === "Subjects");
-        const techTypes = filter.find(afc => afc.label === "Tech Type");
 
-        if (grades && grades.filterOptions) {
-            let selectedGrades = GradeLevels.GradeLevels.NA;
-
-            grades.filterOptions.forEach(gradeFilter => {
-                if (gradeFilter.isSelected) {
-                    selectedGrades = selectedGrades | Number(gradeFilter.key);
-                }
-            });
-
-            if (selectedGrades === GradeLevels.GradeLevels.NA) {
-                selectedGrades = GradeLevels.GradeLevels.All;
-            }
-
-            itemCards = itemCards.filter(g => GradeLevels.contains(selectedGrades, g.grade));
-        }
-
-        if (subjects && subjects.filterOptions) {
-            let subjectCode:string|undefined;
-
-            subjects.filterOptions.forEach(s => {
-                if(s.isSelected){
-                    subjectCode = s.key;
-                }
-            });
-            if(subjectCode !== undefined){
-                itemCards = itemCards.filter(i => subjectCode === i.subjectCode);
-            }
-        }
-        //TODO: What is CAT technology? Filter? Ignore?
-        if (techTypes && techTypes.filterOptions) {
-            if (techTypes.filterOptions.find(t => t.key === "PT" && t.isSelected)) {
-                itemCards = itemCards.filter(i => i.isPerformanceItem);
-            } else if (techTypes.filterOptions.find(t => t.key === "CAT" && t.isSelected)) {
-                itemCards = itemCards.filter(i => !i.isPerformanceItem);
-            }
-        }
-
-        return itemCards;
-    }
 }
