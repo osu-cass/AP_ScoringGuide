@@ -14,7 +14,7 @@
     "build:dev": "cross-env NODE_ENV=development webpack",
     "test": "jest",
     "coverage": "jest --coverage",
-    "watch": "webpack --watch"
+    "watch": "webpack --config webpack.config.js --env.dev --watch"
   },
   "keywords": [],
   "author": "",
