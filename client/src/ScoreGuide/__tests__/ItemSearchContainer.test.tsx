@@ -5,15 +5,12 @@ import * as ReactDOM from 'react-dom';
 import { ItemSearchContainer } from '../ItemSearchContainer';
 import { ItemCardViewModel } from '../../Models/ItemCardViewModel';
 import { AdvancedFilters, AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
-import {FilterHelper} from "../../Models/FilterHelper"
+import { FilterHelper } from "../../Models/FilterHelper"
 import { DataTable } from '../../ItemTable/ItemTable';
 import * as AboutItemVM from '../../Models/AboutItemVM';
 import * as ApiModels from '../../Models/ApiModels';
 import * as GradeLevels from '../../Models/GradeLevels';
-import Enzyme, { shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { shallow, mount } from 'enzyme';
 
 const subject = {
     code: "subjectCode",
