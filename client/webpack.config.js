@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const bundleOutputDir = "../server/public/client/";
 module.exports = {
-  entry: path.join(__dirname, 'src', 'index.tsx'),
+  entry: path.join(__dirname, 'src', 'Index.tsx'),
 
   output: {
     // redirect compiled files into server project
