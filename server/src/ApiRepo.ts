@@ -110,8 +110,13 @@ export class ApiRepo {
         return this.aboutItems;
     }
 
-    async getPdfDataByIds(requestedIds: string[]) {
-        const idGroups = await this.getAssociatedItems(requestedIds);
+    async getPdfDataByIds(requestedIds: string[], printAssoc: boolean) {
+        let idGroups: string[][];
+        if (printAssoc) {
+            idGroups = await this.getAssociatedItems(requestedIds);
+        } else {
+            idGroups = requestedIds.map(id => [id]);
+        }
         const views = await this.loadViewData(idGroups);
         await this.addDataToViews(views);
         return views;
