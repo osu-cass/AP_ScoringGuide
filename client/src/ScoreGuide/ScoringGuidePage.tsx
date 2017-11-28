@@ -1,6 +1,5 @@
 ﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { FilterHelper } from "../Models/FilterHelper";
 import * as UrlHelper from '../Models/UrlHelper';
 import { RouteComponentProps } from 'react-router';
 import { ItemSearchContainer } from './ItemSearchContainer';
@@ -16,6 +15,7 @@ import {
     ItemModel
 
 } from '@osu-cass/sb-components';
+import { getFilterFromScoringGuideVM } from './ScoreGuideModels';
 
 
 export interface Props extends RouteComponentProps<{}> {
@@ -35,7 +35,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         super(props);
         this.state = {
             scoringGuideViewModel: { kind: "loading" },
-            filterOptions: UrlHelper.readUrl(FilterHelper.getFilterOptions()),
+            filterOptions: [],
             item: { kind: "none" }
         }
         this.loadScoringGuideViewModel();
@@ -72,7 +72,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     onSuccessLoadScoringGuideViewModel = (result: ItemsSearchModel) => {
         this.setState({
-            scoringGuideViewModel: { kind: "success", content: result }
+            scoringGuideViewModel: { kind: "success", content: result },
+            filterOptions: UrlHelper.readUrl(getFilterFromScoringGuideVM(result))
         });
     }
 

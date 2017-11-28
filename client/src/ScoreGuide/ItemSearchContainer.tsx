@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FilterHelper } from "../Models/FilterHelper";
 import * as UrlHelper from '../Models/UrlHelper';
 import {
     AdvancedFilterContainer,
@@ -47,7 +46,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
 
     onSearchSuccess(data: ItemCardModel[]): void {
-        const searchApi = ItemSearch.advancedFilterToSearch(this.state.itemFilter);
+        const searchApi = ItemSearch.filterToSearchApiModel(this.state.itemFilter);
         const filteredItems = ItemSearch.filterItemCards(data, searchApi);
         this.setState({
             itemSearchResult: { kind: "success", content: data },
@@ -67,7 +66,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         let filteredItems: ItemCardModel[] | undefined = undefined;
 
         if (itemSearch) {
-            const searchAPI = ItemSearch.advancedFilterToSearch(filter);
+            const searchAPI = ItemSearch.filterToSearchApiModel(filter);
             filteredItems = ItemSearch.filterItemCards(itemSearch, searchAPI);
         }
         
