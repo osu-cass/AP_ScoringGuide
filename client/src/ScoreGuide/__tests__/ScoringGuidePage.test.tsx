@@ -4,7 +4,6 @@ import { ScoringGuidePage, ItemsSearchViewModel } from '../ScoringGuidePage';
 import * as ItemModels from '../../Models/ItemModels';
 import { shallow } from 'enzyme';
 
-
 const func = jest.fn(() => {
     const subjects: ItemModels.Subject[] = [{code: "12648456",  label: "_label_"}];
     return new Promise<ItemsSearchViewModel>((resolve ,reject) => {
