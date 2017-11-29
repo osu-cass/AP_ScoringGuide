@@ -16,8 +16,9 @@
       "dom"
     ],
     "types": [
-      "jest",
-      "webpack-env"
+      "webpack-env",
+      "node",
+      "jest"
     ],
     "typeRoots": [
       "./node_modules/@types"

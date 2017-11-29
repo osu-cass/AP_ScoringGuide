@@ -3,48 +3,43 @@ import * as React from 'react';
 import * as $ from 'jquery'
 import * as ReactDOM from 'react-dom';
 import { ItemSearchContainer } from '../ItemSearchContainer';
-import { ItemCardViewModel } from '../../Models/ItemCardViewModel';
+import { ItemCardModel, Resource, GradeLevels, AboutItemModel } from '@osu-cass/sb-components'
 import { AdvancedFilters, AdvancedFilterCategory } from "@osu-cass/react-advanced-filter";
-import {FilterHelper} from "../../Models/FilterHelper"
-import { DataTable } from '../../ItemTable/ItemTable';
-import * as AboutItemVM from '../../Models/AboutItemVM';
-import * as ApiModels from '../../Models/ApiModels';
-import * as GradeLevels from '../../Models/GradeLevels';
-import Enzyme, { shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { FilterHelper } from "../../Models/FilterHelper";
+import { shallow, mount } from 'enzyme';
 
 const subject = {
     code: "subjectCode",
-    label:  "subjectLabel"
+    label: "subjectLabel"
 }
 
-const itemVM: ItemCardViewModel = {
+const itemVM: ItemCardModel = {
     bankKey: 1,
     itemKey: 2,
     title: "title",
-    grade: GradeLevels.GradeLevels.Grade3,
+    grade: GradeLevels.Grade3,
     gradeLabel: "gradeLabel",
     subjectCode: "subjectCode",
     subjectLabel: "subjectLabel",
     claimCode: "claimCode",
     claimLabel: "claimLabel",
-    target: "target",
+    targetHash: 1234,
+    targetShortName: "shortName",
+    targetId: "abc",
     interactionTypeCode: "interactionTypeCode",
     interactionTypeLabel: "interactionTypeLabel",
     isPerformanceItem: true
 }
 
 const searchClient = jest.fn(() => {
-    return new Promise<ItemCardViewModel[]>((resolve, reject) => {
-        let item: ItemCardViewModel[] = [itemVM]
+    return new Promise<ItemCardModel[]>((resolve, reject) => {
+        let item: ItemCardModel[] = [itemVM]
         resolve(item);
     })
 })
 
 const searchClientErr = jest.fn(() => {
-    return new Promise<ItemCardViewModel[]>((resolve, reject) => {
+    return new Promise<ItemCardModel[]>((resolve, reject) => {
         reject(new Error("Search failed"))
     })
 })
@@ -53,7 +48,7 @@ const onRowSelection = jest.fn((item: { itemKey: number, bankKey: number }, rese
     return null;
 })
 
-const item: ApiModels.Resource<AboutItemVM.AboutThisItem> = {
+const item: Resource<AboutItemModel> = {
     kind: "none"
 }
 
