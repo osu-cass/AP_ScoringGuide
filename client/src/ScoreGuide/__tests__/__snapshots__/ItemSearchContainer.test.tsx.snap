@@ -99,7 +99,7 @@ ShallowWrapper {
             value="Print Items"
           />
         </form>,
-        <AdvancedFilterContainer
+        <t
           filterOptions={
             Array [
               Object {
@@ -347,7 +347,7 @@ ShallowWrapper {
               value="Print Items"
             />
           </form>,
-          <AdvancedFilterContainer
+          <t
             filterOptions={
               Array [
                 Object {
@@ -673,7 +673,7 @@ ShallowWrapper {
             value="Print Items"
           />
         </form>,
-        <AdvancedFilterContainer
+        <t
           filterOptions={
             Array [
               Object {
@@ -921,7 +921,7 @@ ShallowWrapper {
               value="Print Items"
             />
           </form>,
-          <AdvancedFilterContainer
+          <t
             filterOptions={
               Array [
                 Object {

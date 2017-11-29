@@ -16,8 +16,22 @@
             ]
         },
         {
+            "taskName": "webpack-vendor",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}\\client"
+            },
+            "command": "npm",
+            "args": [
+                "run",
+                "webpack-vendor-dev"
+            ],
+            "problemMatcher": []
+        },
+        {
             "taskName": "webpack-watch",
             "type": "shell",
+            "dependsOn": "webpack-vendor",
             "options": {
                 "cwd": "${workspaceRoot}\\client"
             },

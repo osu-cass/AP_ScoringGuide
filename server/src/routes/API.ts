@@ -51,14 +51,15 @@ export class APIRoute {
 
     getPdfById = (req: Express.Request, res: Express.Response) => {
         const ids = req.query.ids;
-        const requestedIds = ids.split(',');
-
-        if (requestedIds.length === 0) {
+        const assoc = req.query.assoc as string || "false";
+        const printAssoc = (assoc.toLowerCase() === "true");
+        if (!ids) {
             res.sendStatus(400);
             return;
         }
+        const requestedIds = ids.split(',');
 
-        this.repo.getPdfDataByIds(requestedIds)
+        this.repo.getPdfDataByIds(requestedIds, printAssoc)
             .then(itemViews => {
                 const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false);
                 res.type('application/pdf');
