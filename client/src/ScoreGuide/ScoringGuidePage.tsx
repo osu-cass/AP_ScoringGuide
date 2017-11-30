@@ -5,36 +5,36 @@ import { RouteComponentProps } from 'react-router';
 import { ItemSearchContainer } from './ItemSearchContainer';
 import {
     ItemCardModel,
-    ItemsSearchModel,
     Resource,
     getResourceContent,
-    AdvancedFilterCategoryModel,
     SubjectModel,
     AboutItemModel,
     get,
-    ItemModel
+    ItemModel,
+    ItemsSearchFilterModel,
+    BasicFilterCategoryModel,
+    ItemSearch
 
 } from '@osu-cass/sb-components';
-import { getFilterFromScoringGuideVM } from './ScoreGuideModels';
-
+import { getFilterCategories } from './ScoreGuideModels';
 
 export interface Props extends RouteComponentProps<{}> {
-    scoreGuideViewModelClient: () => Promise<ItemsSearchModel>;
+    itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
     aboutItemClient: (params: ItemModel) => Promise<AboutItemModel>;
     itemCardClient: () => Promise<ItemCardModel[]>;
 }
 
 export interface State {
     item: Resource<AboutItemModel>;
-    scoringGuideViewModel: Resource<ItemsSearchModel>;
-    filterOptions: AdvancedFilterCategoryModel[];
+    itemsSearchFilter: Resource<ItemsSearchFilterModel>;
+    filterOptions: BasicFilterCategoryModel[];
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            scoringGuideViewModel: { kind: "loading" },
+            itemsSearchFilter: { kind: "loading" },
             filterOptions: [],
             item: { kind: "none" }
         }
@@ -64,16 +64,18 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     loadScoringGuideViewModel = () => {
-        this.props.scoreGuideViewModelClient()
+        this.props.itemsSearchFilterClient()
             .then(result => this.onSuccessLoadScoringGuideViewModel(result))
             .catch(err => this.onErrorLoadScoringGuideViewModel(err));
 
     }
 
-    onSuccessLoadScoringGuideViewModel = (result: ItemsSearchModel) => {
+    onSuccessLoadScoringGuideViewModel = (result: ItemsSearchFilterModel) => {
+        const filterCategories = getFilterCategories(result);
+        const t = ItemSearch.
         this.setState({
-            scoringGuideViewModel: { kind: "success", content: result },
-            filterOptions: UrlHelper.readUrl(getFilterFromScoringGuideVM(result))
+            itemsSearchFilter: { kind: "success", content: result },
+            filterOptions: 
         });
     }
 
@@ -94,7 +96,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     render() {
-        const scoringModel = getResourceContent(this.state.scoringGuideViewModel);
+        const scoringModel = getResourceContent(this.state.itemsSearchFilter);
 
         if (scoringModel) {
             return (
