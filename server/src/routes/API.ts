@@ -19,6 +19,7 @@ export class APIRoute {
         this.router.get('/search', this.search);
         this.router.get('/aboutItem', this.getAboutItem);
         this.router.get('/scoringGuideViewModel', this.getSubjects);
+        this.router.get('/filterSearchModel', this.getFilterSearchModel);
     }
 
     getPdf = (req: Express.Request, res: Express.Response) => {
@@ -110,6 +111,18 @@ export class APIRoute {
             })
             .catch(err => {
                 console.error(`/api/aboutItem for ${bankKey}-${itemKey}:`, err);
+                res.sendStatus(500);
+            });
+    }
+
+    getFilterSearchModel = (req: Express.Request, res: Express.Response) => {
+        this.repo.getFilterSearchModel()
+            .then(model => {
+                res.type('application/json');
+                res.send(JSON.stringify(model));
+            })
+            .catch(err => {
+                console.error('/api/filterSearchModel:', err);
                 res.sendStatus(500);
             });
     }

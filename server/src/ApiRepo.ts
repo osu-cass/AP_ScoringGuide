@@ -1,7 +1,7 @@
 import { ItemDataManager } from "./ItemDataManager";
 import * as Path from 'path';
 import * as RequestPromise from './RequestPromise';
-import { AboutItemModel, ItemCardModel, SubjectModel, ItemGroupModel, PdfViewType } from '@osu-cass/sb-components';
+import { AboutItemModel, ItemCardModel, SubjectModel, ItemGroupModel, PdfViewType, ItemsSearchFilterModel } from '@osu-cass/sb-components';
 
 const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API, CAT_CODE, PERFORMANCE_CODE } = process.env;
 
@@ -10,6 +10,7 @@ export class ApiRepo {
     itemCards: ItemCardModel[];
     aboutItems: AboutItemModel[];
     subjects: SubjectModel[];
+    filterSearchModel: ItemsSearchFilterModel;
 
     constructor() {
         const path = Path.join(__dirname, '../public/images/screenshots');
@@ -29,6 +30,15 @@ export class ApiRepo {
                 shortLabel: s.shortLabel
             }
         });
+    }
+
+    public async getFilterSearchModel() {
+        if (!this.filterSearchModel) {
+            const modelString = await RequestPromise.get(SAMPLE_ITEMS_API + '/BrowseItems/FilterSearchModel');
+            console.log("Filter Search Model received from SampleItemsWebsite API:", SAMPLE_ITEMS_API);
+            this.filterSearchModel = JSON.parse(modelString);
+        }
+        return this.filterSearchModel;
     }
 
     private async loadDataFromSiw() {
