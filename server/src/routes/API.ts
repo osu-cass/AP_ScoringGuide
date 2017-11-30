@@ -25,7 +25,8 @@ export class APIRoute {
         const subject = req.query.subject as string || '';
         const grade = Number(req.query.grade) || -1;
         const techType = req.query.techType as string;
-        const titlePage = (req.query.titlePage as string || 'true') == "true";
+        const titlePage = (req.query.titlePage as string || 'true') == 'true';
+        const showScoreInfo = (req.query.scoreInfo as string || 'true') == 'true';
 
         if (subject === '' || grade === -1 || !techType) {
             res.status(400).send('Invalid subject, grade, or tech type.');
@@ -39,7 +40,7 @@ export class APIRoute {
         Promise.all([subjectPromise, pdfDataPromise])
             .then(value => {
                 const subjectString = value[0].label;
-                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage);
+                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage, showScoreInfo);
                 const title = gradeString + ' ' + subjectString;
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
@@ -52,7 +53,10 @@ export class APIRoute {
     getPdfById = (req: Express.Request, res: Express.Response) => {
         const ids = req.query.ids;
         const assoc = req.query.assoc as string || "false";
+        const scoreInfo = req.query.scoreInfo as string || "true";
+        const scoreInfoBool = (scoreInfo.toLowerCase() === "true");
         const printAssoc = (assoc.toLowerCase() === "true");
+        
         if (!ids) {
             res.sendStatus(400);
             return;
@@ -61,7 +65,7 @@ export class APIRoute {
 
         this.repo.getPdfDataByIds(requestedIds, printAssoc)
             .then(itemViews => {
-                const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false);
+                const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false, scoreInfoBool);
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, "Custom Item Sequence").pipe(res);
             })
