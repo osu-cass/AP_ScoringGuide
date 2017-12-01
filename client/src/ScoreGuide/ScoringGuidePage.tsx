@@ -17,6 +17,7 @@ import {
 
 } from '@osu-cass/sb-components';
 import { getFilterCategories } from './ScoreGuideModels';
+import { SearchUrl } from '@osu-cass/sb-components/lib/ItemSearch/SearchUrl';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
@@ -72,17 +73,18 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     onSuccessLoadScoringGuideViewModel = (result: ItemsSearchFilterModel) => {
         const filterCategories = getFilterCategories(result);
-        const t = ItemSearch.
+        const urlParams = SearchUrl.decodeSearch(this.props.location.search);
+        
         this.setState({
             itemsSearchFilter: { kind: "success", content: result },
-            filterOptions: 
+            filterOptions: filterCategories
         });
     }
 
     onErrorLoadScoringGuideViewModel = (err: any) => {
         console.error(err);
         this.setState({
-            scoringGuideViewModel: { kind: "failure" }
+            itemsSearchFilter: { kind: "failure" }
         });
     }
 

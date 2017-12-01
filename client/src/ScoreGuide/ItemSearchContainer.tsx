@@ -3,20 +3,22 @@ import * as UrlHelper from '../Models/UrlHelper';
 import {
     AdvancedFilterContainer,
     ItemCardModel,
-    AdvancedFilterCategoryModel,
     AboutItemModel,
     SubjectModel,
     get,
     Resource,
     ItemTableContainer,
     ItemSearch,
-    getResourceContent
+    getResourceContent,
+    BasicFilterCategoryModel,
+    BasicFilterContainer
 } from '@osu-cass/sb-components';
+import { SearchUrl } from '@osu-cass/sb-components/lib/ItemSearch/SearchUrl';
 
 
 export interface Props {
     onRowSelection: (item: { itemKey: number; bankKey: number }, reset: boolean) => void;
-    filterOptions: AdvancedFilterCategoryModel[];
+    filterOptions: BasicFilterCategoryModel[];
     searchClient: () => Promise<ItemCardModel[]>;
     item: Resource<AboutItemModel>;
 }
@@ -24,7 +26,7 @@ export interface Props {
 export interface State {
     itemSearchResult: Resource<ItemCardModel[]>;
     visibleItems?: ItemCardModel[];
-    itemFilter: AdvancedFilterCategoryModel[];
+    itemFilter: BasicFilterCategoryModel[];
 }
 
 
@@ -33,7 +35,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         super(props);
         this.state = {
             itemSearchResult: { kind: "none" },
-            itemFilter: UrlHelper.readUrl(props.filterOptions)
+            itemFilter: props.filterOptions
         };
 
         this.callSearch();
@@ -61,16 +63,16 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         });
     }
 
-    onFilterApplied = (filter: AdvancedFilterCategoryModel[]) => {
+    onFilterApplied = (filter: BasicFilterCategoryModel[]) => {
         const itemSearch = getResourceContent(this.state.itemSearchResult);
         let filteredItems: ItemCardModel[] | undefined = undefined;
 
         if (itemSearch) {
             const searchAPI = ItemSearch.filterToSearchApiModel(filter);
             filteredItems = ItemSearch.filterItemCards(itemSearch, searchAPI);
+            SearchUrl.encodeQuery(searchAPI);
         }
-        
-        UrlHelper.updateUrl(filter);
+
         this.setState({
             visibleItems: filteredItems,
             itemFilter: filter
@@ -112,9 +114,11 @@ export class ItemSearchContainer extends React.Component<Props, State> {
                     <input type="hidden" name="techType" value={codes[2]} />
                     <input type="submit" value="Print Items" />
                 </form>
-                <AdvancedFilterContainer
+                <BasicFilterContainer
                     filterOptions={this.state.itemFilter}
-                    onClick={this.onFilterApplied} />
+                    onClick={this.onFilterApplied}
+                    containsAdvancedFilter={false}
+                    handleAdvancedFilterExpand={() => {}}/>
                 {this.renderTableComponent()}
             </div>
         );
