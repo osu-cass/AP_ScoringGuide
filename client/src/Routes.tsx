@@ -8,7 +8,7 @@ import {
     ItemsSearchModel,
     get
 } from '@osu-cass/sb-components';
-import { itemCardClient, itemSearchModelClient, aboutItemClient } from './ScoreGuide/ScoreGuideModels';
+import { itemCardClient, searchFilterModel, aboutItemClient } from './ScoreGuide/ScoreGuideModels';
 
 const siteLinks: SbNavlinkProps[] = [
 ];
@@ -18,7 +18,7 @@ export const routes = <Layout siteName="Score Guide" links={siteLinks}>
     <Route exact path='/' render={(props) => (
         <ScoringGuidePage
             {...props}
-            scoreGuideViewModelClient={itemSearchModelClient}
+            itemsSearchFilterClient={searchFilterModel}
             aboutItemClient={aboutItemClient}
             itemCardClient={itemCardClient}
         />

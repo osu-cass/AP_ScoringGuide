@@ -11,10 +11,9 @@ import {
     ItemSearch,
     getResourceContent,
     BasicFilterCategoryModel,
-    BasicFilterContainer
+    BasicFilterContainer,
+    SearchUrl
 } from '@osu-cass/sb-components';
-import { SearchUrl } from '@osu-cass/sb-components/lib/ItemSearch/SearchUrl';
-
 
 export interface Props {
     onRowSelection: (item: { itemKey: number; bankKey: number }, reset: boolean) => void;

@@ -14,7 +14,6 @@ import {
     ItemsSearchFilterModel,
     BasicFilterCategoryModel,
     ItemSearch
-
 } from '@osu-cass/sb-components';
 import { getFilterCategories } from './ScoreGuideModels';
 import { SearchUrl } from '@osu-cass/sb-components/lib/ItemSearch/SearchUrl';
