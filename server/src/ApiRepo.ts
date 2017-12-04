@@ -1,7 +1,8 @@
 import { ItemDataManager } from "./ItemDataManager";
 import * as Path from 'path';
 import * as RequestPromise from './RequestPromise';
-import { AboutItemModel, ItemCardModel, SubjectModel, ItemGroupModel, PdfViewType, ItemsSearchFilterModel } from '@osu-cass/sb-components';
+import { AboutItemModel, ItemCardModel, SubjectModel, ItemGroupModel, PdfViewType, SearchAPIParamsModel, ItemSearch } from '@osu-cass/sb-components';
+import { ItemsSearchFilterModel } from "@osu-cass/sb-components/lib/ItemSearch/ItemSearchModels";
 
 const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API, CAT_CODE, PERFORMANCE_CODE } = process.env;
 
@@ -137,27 +138,27 @@ export class ApiRepo {
         return subjects.find(s => s.code === code);
     }
 
-    async getPdfDataByGradeSubject(gradeCode: number, subjectCode: string, type: string) {
-        const subjects = await this.getSubjects();
+    async getAboutItemsByFilter(filter: SearchAPIParamsModel) {
+        const allItems = await this.getItemData();
+        const filteredItems = ItemSearch.filterItemCards(allItems, filter);
+        const aboutAllItems = await this.getAboutAllItems();
+        const aboutFilteredItems = filteredItems.map(i => 
+            aboutAllItems.find(ai => 
+                ai.itemCardViewModel && ai.itemCardViewModel.itemKey === i.itemKey && ai.itemCardViewModel.bankKey === i.bankKey
+            )
+        );
+        return aboutFilteredItems;
+    }
 
+    async getPdfDataByFilter(filter: SearchAPIParamsModel) {
+        //const subjects = await this.getSubjects();
+        const aboutItems = await this.getAboutItemsByFilter(filter);
         let associatedItems: string[] = [];
-        (await this.getAboutAllItems())
-            .filter(ai => {
-                if (!ai.itemCardViewModel) { return false; }
-                let match = ai.itemCardViewModel.grade === gradeCode
-                    && ai.itemCardViewModel.subjectCode.toLowerCase() === subjectCode.toLowerCase();
-                if (type === CAT_CODE && ai.itemCardViewModel.isPerformanceItem) {
-                    match = false;
-                } else if (type.toLowerCase() === PERFORMANCE_CODE.toLowerCase()
-                    && !ai.itemCardViewModel.isPerformanceItem) {
-                    match = false;
-                }
-                return match;
-            }).forEach(ai => {
-                if (!associatedItems.includes(ai.associatedItems)) {
-                    associatedItems.push(ai.associatedItems);
-                }
-            });
+        aboutItems.forEach(ai => {
+            if (!associatedItems.includes(ai.associatedItems)) {
+                associatedItems.push(ai.associatedItems);
+            }
+        });
 
         const idGroups = associatedItems.map(ai => ai.split(','));
         let views = await this.loadViewData(idGroups);
