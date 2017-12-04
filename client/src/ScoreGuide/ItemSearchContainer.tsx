@@ -97,20 +97,25 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
 
     render() {
-        const codes = ["Grade", "Subject", "Tech Type"].map(s => {
-            const category = this.state.itemFilter.find(f => f.label == s);
-            const option = category
-                ? category.filterOptions.find(o => o.isSelected)
-                : undefined;
-            return option ? option.key : "";
-        });
+        const searchModel = ItemSearch.filterToSearchApiModel(this.state.itemFilter);
+        const subject = searchModel.subjects && searchModel.subjects[0] 
+            ? searchModel.subjects[0]
+            : "";
+        let techType: string;
+        if (searchModel.catOnly) {
+            techType = "CAT";
+        } else if (searchModel.performanceOnly) {
+            techType = "PT";
+        } else {
+            techType = "";
+        }
 
         return (
             <div className="search-controls">
                 <form action="/api/pdf" method="get" id="print-items-form">
-                    <input type="hidden" name="grade" value={codes[0]} />
-                    <input type="hidden" name="subject" value={codes[1]} />
-                    <input type="hidden" name="techType" value={codes[2]} />
+                    <input type="hidden" name="grade" value={searchModel.gradeLevels} />
+                    <input type="hidden" name="subject" value={subject} />
+                    <input type="hidden" name="techType" value={techType} />
                     <input type="submit" value="Print Items" />
                 </form>
                 <BasicFilterContainer
