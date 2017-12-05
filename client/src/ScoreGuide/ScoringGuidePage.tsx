@@ -13,10 +13,10 @@ import {
     ItemModel,
     ItemsSearchFilterModel,
     BasicFilterCategoryModel,
-    ItemSearch
+    ItemSearch,
+    SearchUrl
 } from '@osu-cass/sb-components';
 import { getFilterCategories } from './ScoreGuideModels';
-import { SearchUrl } from '@osu-cass/sb-components/lib/ItemSearch/SearchUrl';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
