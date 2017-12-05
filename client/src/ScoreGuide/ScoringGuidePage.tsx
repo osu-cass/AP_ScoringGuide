@@ -17,6 +17,7 @@ import {
     SearchUrl
 } from '@osu-cass/sb-components';
 import { getFilterCategories } from './ScoreGuideModels';
+import { SearchAPIParamsModel } from '@osu-cass/sb-components/lib/ItemSearch/ItemSearchModels';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
@@ -96,6 +97,10 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         }
     }
 
+    updateUrl = (filter: SearchAPIParamsModel) => {
+        this.props.history.push(SearchUrl.encodeQuery(filter));
+    }
+
     render() {
         const scoringModel = getResourceContent(this.state.itemsSearchFilter);
 
@@ -108,6 +113,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                             filterOptions={this.state.filterOptions}
                             searchClient={this.props.itemCardClient}
                             item={this.state.item}
+                            onFilterSelection={this.updateUrl}
                         />
                     </div>
                 </div>

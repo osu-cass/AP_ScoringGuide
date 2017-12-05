@@ -14,9 +14,11 @@ import {
     BasicFilterContainer,
     SearchUrl
 } from '@osu-cass/sb-components';
+import { SearchAPIParamsModel } from '@osu-cass/sb-components/lib/ItemSearch/ItemSearchModels';
 
 export interface Props {
     onRowSelection: (item: { itemKey: number; bankKey: number }, reset: boolean) => void;
+    onFilterSelection: (filter: SearchAPIParamsModel) => void;
     filterOptions: BasicFilterCategoryModel[];
     searchClient: () => Promise<ItemCardModel[]>;
     item: Resource<AboutItemModel>;
@@ -69,7 +71,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         if (itemSearch) {
             const searchAPI = ItemSearch.filterToSearchApiModel(filter);
             filteredItems = ItemSearch.filterItemCards(itemSearch, searchAPI);
-            SearchUrl.encodeQuery(searchAPI);
+            this.props.onFilterSelection(searchAPI);
         }
 
         this.setState({
@@ -98,26 +100,14 @@ export class ItemSearchContainer extends React.Component<Props, State> {
 
     render() {
         const searchModel = ItemSearch.filterToSearchApiModel(this.state.itemFilter);
-        const subject = searchModel.subjects && searchModel.subjects[0] 
-            ? searchModel.subjects[0]
-            : "";
-        let techType: string;
-        if (searchModel.catOnly) {
-            techType = "CAT";
-        } else if (searchModel.performanceOnly) {
-            techType = "PT";
-        } else {
-            techType = "";
-        }
+        const urlParamString = SearchUrl.encodeQuery(searchModel);
 
         return (
             <div className="search-controls">
-                <form action="/api/pdf" method="get" id="print-items-form">
-                    <input type="hidden" name="grade" value={searchModel.gradeLevels} />
-                    <input type="hidden" name="subject" value={subject} />
-                    <input type="hidden" name="techType" value={techType} />
-                    <input type="submit" value="Print Items" />
-                </form>
+                <a href={`api/pdf${urlParamString}`}>
+                    <button>Print Items</button>
+                </a>
+                
                 <BasicFilterContainer
                     filterOptions={this.state.itemFilter}
                     onClick={this.onFilterApplied}
