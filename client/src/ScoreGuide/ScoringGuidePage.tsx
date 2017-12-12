@@ -82,7 +82,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         
         this.setState({
             itemsSearchFilter: { kind: "success", content: result },
-            basicFilterOptions: basicFilterCategories
+            basicFilterOptions: basicFilterCategories,
+            advancedFilterOptions: advancedFilterCategories
         });
     }
 
