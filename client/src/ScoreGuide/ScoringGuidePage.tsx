@@ -14,10 +14,12 @@ import {
     ItemsSearchFilterModel,
     BasicFilterCategoryModel,
     ItemSearch,
-    SearchUrl
+    SearchUrl,
+    Filter,
+    AdvancedFilterCategoryModel,
+    SearchAPIParamsModel
 } from '@osu-cass/sb-components';
-import { getFilterCategories } from './ScoreGuideModels';
-import { SearchAPIParamsModel } from '@osu-cass/sb-components/lib/ItemSearch/ItemSearchModels';
+import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
@@ -28,7 +30,8 @@ export interface Props extends RouteComponentProps<{}> {
 export interface State {
     item: Resource<AboutItemModel>;
     itemsSearchFilter: Resource<ItemsSearchFilterModel>;
-    filterOptions: BasicFilterCategoryModel[];
+    basicFilterOptions: BasicFilterCategoryModel[];
+    advancedFilterOptions: AdvancedFilterCategoryModel[];
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
@@ -36,7 +39,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         super(props);
         this.state = {
             itemsSearchFilter: { kind: "loading" },
-            filterOptions: [],
+            basicFilterOptions: [],
+            advancedFilterOptions: [],
             item: { kind: "none" }
         }
         this.loadScoringGuideViewModel();
@@ -72,12 +76,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     onSuccessLoadScoringGuideViewModel = (result: ItemsSearchFilterModel) => {
-        const filterCategories = getFilterCategories(result);
+        const basicFilterCategories = getBasicFilterCategories(result);
+        const advancedFilterCategories = getAdvancedFilterCategories(result);
         const urlParams = SearchUrl.decodeSearch(this.props.location.search);
         
         this.setState({
             itemsSearchFilter: { kind: "success", content: result },
-            filterOptions: filterCategories
+            basicFilterOptions: basicFilterCategories
         });
     }
 
@@ -97,8 +102,16 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         }
     }
 
-    updateUrl = (filter: SearchAPIParamsModel) => {
+    onFilterSelection = (filter: SearchAPIParamsModel) => {
         this.props.history.push(SearchUrl.encodeQuery(filter));
+        const searchFilterModel = getResourceContent(this.state.itemsSearchFilter);
+        if (searchFilterModel) {
+            const searchModel = getItemSearchModel(searchFilterModel);
+            const newAdvancedFilter = Filter.getUpdatedSearchFilters(searchModel, this.state.advancedFilterOptions, filter);
+            this.setState({
+                advancedFilterOptions: newAdvancedFilter
+            });
+        }
     }
 
     render() {
@@ -110,10 +123,11 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     <div className="search-container">
                         <ItemSearchContainer
                             onRowSelection={this.onRowSelection}
-                            filterOptions={this.state.filterOptions}
+                            basicFilterOptions={this.state.basicFilterOptions}
+                            advancedFilterOptions={this.state.advancedFilterOptions}
                             searchClient={this.props.itemCardClient}
                             item={this.state.item}
-                            onFilterSelection={this.updateUrl}
+                            onFilterSelection={this.onFilterSelection}
                         />
                     </div>
                 </div>

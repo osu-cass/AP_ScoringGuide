@@ -12,14 +12,18 @@ import {
     getResourceContent,
     BasicFilterCategoryModel,
     BasicFilterContainer,
-    SearchUrl
+    SearchUrl,
+    FilterContainer,
+    AdvancedFilterCategoryModel, 
+    FilterCategoryModel,
+    SearchAPIParamsModel
 } from '@osu-cass/sb-components';
-import { SearchAPIParamsModel } from '@osu-cass/sb-components/lib/ItemSearch/ItemSearchModels';
 
 export interface Props {
     onRowSelection: (item: { itemKey: number; bankKey: number }, reset: boolean) => void;
     onFilterSelection: (filter: SearchAPIParamsModel) => void;
-    filterOptions: BasicFilterCategoryModel[];
+    basicFilterOptions: BasicFilterCategoryModel[];
+    advancedFilterOptions: AdvancedFilterCategoryModel[];
     searchClient: () => Promise<ItemCardModel[]>;
     item: Resource<AboutItemModel>;
 }
@@ -27,7 +31,8 @@ export interface Props {
 export interface State {
     itemSearchResult: Resource<ItemCardModel[]>;
     visibleItems?: ItemCardModel[];
-    itemFilter: BasicFilterCategoryModel[];
+    basicFilter: BasicFilterCategoryModel[];
+    advancedFilter: AdvancedFilterCategoryModel[];
 }
 
 
@@ -36,7 +41,8 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         super(props);
         this.state = {
             itemSearchResult: { kind: "none" },
-            itemFilter: props.filterOptions
+            basicFilter: props.basicFilterOptions,
+            advancedFilter: props.advancedFilterOptions
         };
 
         this.callSearch();
@@ -49,7 +55,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
 
     onSearchSuccess(data: ItemCardModel[]): void {
-        const searchApi = ItemSearch.filterToSearchApiModel(this.state.itemFilter);
+        const searchApi = ItemSearch.filterToSearchApiModel(this.state.basicFilter);
         const filteredItems = ItemSearch.filterItemCards(data, searchApi);
         this.setState({
             itemSearchResult: { kind: "success", content: data },
@@ -64,19 +70,39 @@ export class ItemSearchContainer extends React.Component<Props, State> {
         });
     }
 
-    onFilterApplied = (filter: BasicFilterCategoryModel[]) => {
-        const itemSearch = getResourceContent(this.state.itemSearchResult);
+    onBasicFilterApplied = (filter: BasicFilterCategoryModel[]) => {
+        const allItems = getResourceContent(this.state.itemSearchResult);
         let filteredItems: ItemCardModel[] | undefined = undefined;
 
-        if (itemSearch) {
-            const searchAPI = ItemSearch.filterToSearchApiModel(filter);
-            filteredItems = ItemSearch.filterItemCards(itemSearch, searchAPI);
-            this.props.onFilterSelection(searchAPI);
+        if (allItems) {
+            let bothFilters: FilterCategoryModel[] = filter;
+            bothFilters = bothFilters.concat(this.state.advancedFilter);
+            const searchParams = ItemSearch.filterToSearchApiModel(bothFilters);
+            filteredItems = ItemSearch.filterItemCards(allItems, searchParams);
+            this.props.onFilterSelection(searchParams);
         }
 
         this.setState({
             visibleItems: filteredItems,
-            itemFilter: filter
+            basicFilter: filter
+        });
+    }
+
+    onAdvancedFilterApplied = (filter: AdvancedFilterCategoryModel[]) => {
+        const allItems = getResourceContent(this.state.itemSearchResult);
+        let filteredItems: ItemCardModel[] | undefined = undefined;
+
+        if (allItems) {
+            let bothFilters: FilterCategoryModel[] = filter;
+            bothFilters = bothFilters.concat(this.state.basicFilter);
+            const searchParams = ItemSearch.filterToSearchApiModel(bothFilters);
+            filteredItems = ItemSearch.filterItemCards(allItems, searchParams);
+            this.props.onFilterSelection(searchParams);
+        }
+
+        this.setState({
+            visibleItems: filteredItems,
+            advancedFilter: filter
         });
     }
 
@@ -99,7 +125,7 @@ export class ItemSearchContainer extends React.Component<Props, State> {
     }
 
     render() {
-        const searchModel = ItemSearch.filterToSearchApiModel(this.state.itemFilter);
+        const searchModel = ItemSearch.filterToSearchApiModel(this.state.basicFilter);
         const urlParamString = SearchUrl.encodeQuery(searchModel);
 
         return (
@@ -108,11 +134,12 @@ export class ItemSearchContainer extends React.Component<Props, State> {
                     <button>Print Items</button>
                 </a>
                 
-                <BasicFilterContainer
-                    filterOptions={this.state.itemFilter}
-                    onClick={this.onFilterApplied}
-                    containsAdvancedFilter={false}
-                    handleAdvancedFilterExpand={() => {}}/>
+                <FilterContainer
+                    basicFilterOptions={this.state.basicFilter}
+                    onBasicFilterClick={this.onBasicFilterApplied}
+                    advancedFilterOptions={this.state.advancedFilter}
+                    onAdvancedFilterClick={this.onAdvancedFilterApplied} />
+
                 {this.renderTableComponent()}
             </div>
         );
