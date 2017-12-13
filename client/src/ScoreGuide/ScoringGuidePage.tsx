@@ -19,10 +19,10 @@ import {
     SearchAPIParamsModel,
     ItemTableContainer,
     FilterContainer,
-    FilterLink
+    FilterLink,
+    FilterCategoryModel
 } from '@osu-cass/sb-components';
 import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
-import { FilterCategoryModel } from '@osu-cass/sb-components/src/Filter/FilterModels';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;

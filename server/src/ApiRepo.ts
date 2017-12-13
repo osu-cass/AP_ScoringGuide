@@ -1,8 +1,16 @@
 import { ItemDataManager } from "./ItemDataManager";
 import * as Path from 'path';
 import * as RequestPromise from './RequestPromise';
-import { AboutItemModel, ItemCardModel, SubjectModel, ItemGroupModel, PdfViewType, SearchAPIParamsModel, ItemSearch } from '@osu-cass/sb-components';
-import { ItemsSearchFilterModel } from "@osu-cass/sb-components/lib/ItemSearch/ItemSearchModels";
+import { 
+    AboutItemModel, 
+    ItemCardModel, 
+    SubjectModel, 
+    ItemGroupModel, 
+    PdfViewType, 
+    SearchAPIParamsModel, 
+    ItemSearch,
+    ItemsSearchFilterModel
+} from '@osu-cass/sb-components';
 
 const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API, CAT_CODE, PERFORMANCE_CODE } = process.env;
 

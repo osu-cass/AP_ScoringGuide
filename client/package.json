@@ -21,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "@osu-cass/react-advanced-filter": "^1.0.5",
-    "@osu-cass/sb-components": "0.0.64",
+    "@osu-cass/sb-components": "0.0.66",
     "@osu-cass/smarter-balanced-styles": "^1.0.8",
     "bootstrap": "^3.3.7",
     "event-source-polyfill": "0.0.11",
