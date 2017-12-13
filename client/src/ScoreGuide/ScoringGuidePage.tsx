@@ -67,7 +67,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         let advancedFilter = getAdvancedFilterCategories(filterModel, searchParams);
 
         const searchModel = getItemSearchModel(filterModel);
-        //const bothCategories: FilterCategoryModel = [...basicFilter, ...advancedFilter];
         advancedFilter = Filter.getUpdatedSearchFilters(searchModel, advancedFilter, searchParams);
 
         this.setState({
@@ -106,7 +105,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         console.error(err);
         this.setState({
             item: { kind: "failure" }
-        })
+        });
     }
 
     onRowSelection = (item: ItemModel, reset: boolean) => {
@@ -121,14 +120,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     onFilterApplied(basicFilter: BasicFilterCategoryModel[], advancedFilter: AdvancedFilterCategoryModel[]) {
         let bothFilters: FilterCategoryModel[] = basicFilter;
         bothFilters = bothFilters.concat(advancedFilter);
-
-        const allItems = getResourceContent(this.state.allItems);
-        let filteredItems: ItemCardModel[] = [];
         
         const searchParams = ItemSearch.filterToSearchApiModel(bothFilters);
         this.props.history.push(SearchUrl.encodeQuery(searchParams));
         const searchFilterModel = getResourceContent(this.state.itemsSearchFilter);
 
+        const allItems = getResourceContent(this.state.allItems);
+        let filteredItems: ItemCardModel[] = [];
         if (allItems) {
             filteredItems = ItemSearch.filterItemCards(allItems, searchParams);
         }
