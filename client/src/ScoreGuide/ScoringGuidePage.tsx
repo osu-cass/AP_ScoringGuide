@@ -18,14 +18,15 @@ import {
     AdvancedFilterCategoryModel,
     SearchAPIParamsModel,
     ItemTableContainer,
-    FilterContainer
+    FilterContainer,
+    FilterLink
 } from '@osu-cass/sb-components';
 import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
-import { FilterCategoryModel } from '@osu-cass/sb-components/lib/Filter/FilterModels';
+import { FilterCategoryModel } from '@osu-cass/sb-components/src/Filter/FilterModels';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
-    aboutItemClient: (params: ItemModel) => Promise<AboutItemModel>;
+    aboutItemClient: ( params: ItemModel ) => Promise<AboutItemModel>;
     itemCardClient: () => Promise<ItemCardModel[]>;
 }
 
@@ -33,173 +34,174 @@ export interface State {
     item: Resource<AboutItemModel>;
     allItems: Resource<ItemCardModel[]>;
     itemsSearchFilter: Resource<ItemsSearchFilterModel>;
-    basicFilterOptions: BasicFilterCategoryModel[];
-    advancedFilterOptions: AdvancedFilterCategoryModel[];
+    basicFilterCategories: BasicFilterCategoryModel[];
+    advancedFilterCategories: AdvancedFilterCategoryModel[];
     visibleItems: ItemCardModel[];
+    filterId: string;
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
+    constructor ( props: Props ) {
+        super( props );
         this.state = {
             itemsSearchFilter: { kind: "loading" },
             allItems: { kind: "loading" },
-            basicFilterOptions: [],
-            advancedFilterOptions: [],
+            basicFilterCategories: [],
+            advancedFilterCategories: [],
             item: { kind: "none" },
-            visibleItems: []
+            visibleItems: [],
+            filterId: "sb-filter-id"
         };
 
         this.loadSearchData();
     }
 
-    loadSearchData() {
-        Promise.all([this.props.itemCardClient(), this.props.itemsSearchFilterClient()])
-            .then(([cards, filterModel]) => this.onLoadSuccess(cards, filterModel))
-            .catch((err) => this.onLoadFailure(err));
+    loadSearchData () {
+        Promise.all( [ this.props.itemCardClient(), this.props.itemsSearchFilterClient() ] )
+            .then( ( [ cards, filterModel ] ) => this.onLoadSuccess( cards, filterModel ) )
+            .catch( ( err ) => this.onLoadFailure( err ) );
     }
 
-    onLoadSuccess = (cards: ItemCardModel[], filterModel: ItemsSearchFilterModel) => {
-        const searchParams = SearchUrl.decodeSearch(this.props.location.search);
-        const filteredItems = ItemSearch.filterItemCards(cards, searchParams);
+    onLoadSuccess = ( cards: ItemCardModel[], filterModel: ItemsSearchFilterModel ) => {
+        const searchParams = SearchUrl.decodeSearch( this.props.location.search );
+        const filteredItems = ItemSearch.filterItemCards( cards, searchParams );
 
-        const basicFilter = getBasicFilterCategories(filterModel, searchParams);
-        let advancedFilter = getAdvancedFilterCategories(filterModel, searchParams);
+        const basicFilter = getBasicFilterCategories( filterModel, searchParams );
+        let advancedFilter = getAdvancedFilterCategories( filterModel, searchParams );
 
-        const searchModel = getItemSearchModel(filterModel);
-        advancedFilter = Filter.getUpdatedSearchFilters(searchModel, advancedFilter, searchParams);
+        const searchModel = getItemSearchModel( filterModel );
+        advancedFilter = Filter.getUpdatedSearchFilters( searchModel, advancedFilter, searchParams );
 
-        this.setState({
+        this.setState( {
             allItems: { kind: "success", content: cards },
             itemsSearchFilter: { kind: "success", content: filterModel },
-            basicFilterOptions: basicFilter,
-            advancedFilterOptions: advancedFilter,
+            basicFilterCategories: basicFilter,
+            advancedFilterCategories: advancedFilter,
             visibleItems: filteredItems
-        });
+        } );
     }
 
-    onLoadFailure(err: any) {
-        console.error(err);
-        this.setState({
+    onLoadFailure ( err: any ) {
+        console.error( err );
+        this.setState( {
             allItems: { kind: "failure" },
             itemsSearchFilter: { kind: "failure" }
-        });
+        } );
     }
 
-    getAboutItem = (item: ItemModel) => {
-        this.props.aboutItemClient(item)
-            .then((data) => {
-                this.onAboutItemSuccess(data)
-            })
-            .catch((err) => {
-                this.onAboutItemError(err)
-            });
+    getAboutItem = ( item: ItemModel ) => {
+        this.props.aboutItemClient( item )
+            .then( ( data ) => {
+                this.onAboutItemSuccess( data )
+            } )
+            .catch( ( err ) => {
+                this.onAboutItemError( err )
+            } );
     }
 
-    onAboutItemSuccess = (data: AboutItemModel) => {
+    onAboutItemSuccess = ( data: AboutItemModel ) => {
         const item: Resource<AboutItemModel> = { kind: "success", content: data };
-        this.setState({ item });
+        this.setState( { item } );
     }
 
-    onAboutItemError = (err: any) => {
-        console.error(err);
-        this.setState({
+    onAboutItemError = ( err: any ) => {
+        console.error( err );
+        this.setState( {
             item: { kind: "failure" }
-        });
+        } );
     }
 
-    onRowSelection = (item: ItemModel, reset: boolean) => {
-        if (reset === false) {
-            this.getAboutItem(item);
+    onRowSelection = ( item: ItemModel, reset: boolean ) => {
+        if ( reset === false ) {
+            this.getAboutItem( item );
         } else {
             let item: Resource<AboutItemModel> = { kind: "none" };
-            this.setState({ item });
+            this.setState( { item } );
         }
     }
 
-    onFilterApplied(basicFilter: BasicFilterCategoryModel[], advancedFilter: AdvancedFilterCategoryModel[]) {
+    onFilterApplied ( basicFilter: BasicFilterCategoryModel[], advancedFilter: AdvancedFilterCategoryModel[] ) {
         let bothFilters: FilterCategoryModel[] = basicFilter;
-        bothFilters = bothFilters.concat(advancedFilter);
-        
-        const searchParams = ItemSearch.filterToSearchApiModel(bothFilters);
-        this.props.history.push(SearchUrl.encodeQuery(searchParams));
-        const searchFilterModel = getResourceContent(this.state.itemsSearchFilter);
+        bothFilters = bothFilters.concat( advancedFilter );
 
-        const allItems = getResourceContent(this.state.allItems);
+        const searchParams = ItemSearch.filterToSearchApiModel( bothFilters );
+        this.props.history.push( SearchUrl.encodeQuery( searchParams ) );
+        const searchFilterModel = getResourceContent( this.state.itemsSearchFilter );
+
+        const allItems = getResourceContent( this.state.allItems );
         let filteredItems: ItemCardModel[] = [];
-        if (allItems) {
-            filteredItems = ItemSearch.filterItemCards(allItems, searchParams);
+        if ( allItems ) {
+            filteredItems = ItemSearch.filterItemCards( allItems, searchParams );
         }
 
-        if (searchFilterModel) {
-            const searchModel = getItemSearchModel(searchFilterModel);
-            const newAdvancedFilter = Filter.getUpdatedSearchFilters(searchModel, advancedFilter, searchParams);
-            this.setState({
-                advancedFilterOptions: newAdvancedFilter,
-                basicFilterOptions: basicFilter,
+        if ( searchFilterModel ) {
+            const searchModel = getItemSearchModel( searchFilterModel );
+            const newAdvancedFilter = Filter.getUpdatedSearchFilters( searchModel, advancedFilter, searchParams );
+            this.setState( {
+                advancedFilterCategories: newAdvancedFilter,
+                basicFilterCategories: basicFilter,
                 visibleItems: filteredItems
-            });
+            } );
         }
     }
 
-    onBasicFilterApplied = (filter: BasicFilterCategoryModel[]) => {
-        this.onFilterApplied(filter, this.state.advancedFilterOptions);
+    onBasicFilterApplied = ( filter: BasicFilterCategoryModel[] ) => {
+        this.onFilterApplied( filter, this.state.advancedFilterCategories );
     }
 
-    onAdvancedFilterApplied = (filter: AdvancedFilterCategoryModel[]) => {
-        this.onFilterApplied(this.state.basicFilterOptions, filter);
+    onAdvancedFilterApplied = ( filter: AdvancedFilterCategoryModel[] ) => {
+        this.onFilterApplied( this.state.basicFilterCategories, filter );
     }
 
-    renderFilterComponent() {
-        let bothFilters: FilterCategoryModel[] = this.state.basicFilterOptions;
-        bothFilters = bothFilters.concat(this.state.advancedFilterOptions);
-        const searchModel = ItemSearch.filterToSearchApiModel(bothFilters);
-        const urlParamString = SearchUrl.encodeQuery(searchModel);
+    renderFilterComponent () {
+        const { basicFilterCategories, advancedFilterCategories, filterId } = this.state
+        let bothFilters: FilterCategoryModel[] = this.state.basicFilterCategories;
+        bothFilters = bothFilters.concat( this.state.advancedFilterCategories );
+        const searchModel = ItemSearch.filterToSearchApiModel( bothFilters );
+        const urlParamString = SearchUrl.encodeQuery( searchModel );
 
         return (
             <div className="search-controls">
-                <a href={`api/pdf${urlParamString}`}>
-                    <button>Print Items</button>
+                <a className="btn btn-blue btn-lg" role="button" href={`api/pdf${ urlParamString }`}>
+                    Print Items
                 </a>
-                
+
                 <FilterContainer
-                    basicFilterOptions={this.state.basicFilterOptions}
-                    onBasicFilterClick={this.onBasicFilterApplied}
-                    advancedFilterOptions={this.state.advancedFilterOptions}
-                    onAdvancedFilterClick={this.onAdvancedFilterApplied} />
+                    filterId={this.state.filterId}
+                    basicFilterCategories={basicFilterCategories}
+                    onUpdateBasicFilter={this.onBasicFilterApplied}
+                    advancedFilterCategories={advancedFilterCategories}
+                    onUpdateAdvancedFilter={this.onAdvancedFilterApplied} />
 
                 {this.renderTableComponent()}
             </div>
         );
     }
 
-    renderTableComponent() {
-        if (this.state.visibleItems.length > 0) {
-            return (
+    renderTableComponent () {
+        let content = ( <div>Loading...</div> );
+        if ( this.state.visibleItems.length > 0 ) {
+            content = (
                 <ItemTableContainer
                     onRowSelection={this.onRowSelection}
                     itemCards={this.state.visibleItems}
                     item={this.state.item} />
             );
-
         }
-        else if (this.state.allItems.kind == "failure") {
-            return <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div>
+        else if ( this.state.allItems.kind == "failure" ) {
+            content = ( <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div> );
         }
-        else {
-            return <div>Loading...</div>
-        }
+        return content;
     }
 
-    render() {
-        const scoringModel = getResourceContent(this.state.itemsSearchFilter);
+    render () {
+        const scoringModel = getResourceContent( this.state.itemsSearchFilter );
 
-        if (scoringModel) {
+        if ( scoringModel ) {
             return (
-                <div className="search-page">
-                    <div className="search-container">
-                        {this.renderFilterComponent()}
-                    </div>
+                <div className="container search-page">
+                    {this.renderFilterComponent()}
+                    <FilterLink filterId={`#${ this.state.filterId }`} />
                 </div>
             );
         }
