@@ -7,15 +7,15 @@
   "author": "",
   "license": "MPL-2.0",
   "scripts": {
-    "webpack": "cross-env NODE_ENV=development webpack --config webpack.config.js",
-    "webpack:prod": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "webpack": "cross-env NODE_ENV=development webpack --config webpack.config.js --env.dev",
+    "webpack:prod": "cross-env NODE_ENV=production webpack --config webpack.config.js --env.prod ",
     "webpack-vendor": "cross-env NODE_ENV=development webpack --config webpack.config.vendor.js --env.dev",
     "webpack-vendor:prod": "cross-env NODE_ENV=production webpack --config webpack.config.vendor.js --env.prod",
     "build": "npm run webpack-vendor && npm run webpack",
     "build:prod": "npm run webpack-vendor:prod && npm run webpack:prod",
     "test": "jest",
     "coverage": "jest --coverage",
-    "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch",
+    "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --env.dev --watch",
     "prettier": "prettier --write client/src/**/*.ts*"
   },
   "dependencies": {
