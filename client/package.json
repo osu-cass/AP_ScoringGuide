@@ -19,9 +19,6 @@
     "prettier": "prettier --write client/src/**/*.ts*"
   },
   "dependencies": {
-    "@osu-cass/react-advanced-filter": "^1.0.5",
-    "@osu-cass/sb-components": "0.0.66",
-    "@osu-cass/smarter-balanced-styles": "^1.0.8",
     "bootstrap": "^3.3.7",
     "event-source-polyfill": "0.0.11",
     "react": "16.2.0",

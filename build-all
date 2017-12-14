@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 if [[ $1 == -p ]]; then
     cd client
     npm run build
