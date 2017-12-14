@@ -5,7 +5,7 @@ import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
 import { ApiRepo } from '../ApiRepo';
-import { GradeLevel, SearchAPIParamsModel } from '@osu-cass/sb-components';
+import { GradeLevel, SearchAPIParamsModel, SearchUrl } from '@osu-cass/sb-components';
 
 export class APIRoute {
     router: Express.Router;
@@ -23,17 +23,21 @@ export class APIRoute {
     }
 
     getPdf = (req: Express.Request, res: Express.Response) => {
-        const filter: SearchAPIParamsModel = req.query;
-        const titlePage = (req.query.titlePage as string || 'true') == "true";
+        const searchParams = SearchUrl.decodeExpressQuery(req.query);
+        const titlePage = (req.query.titlePage as string || 'true') == 'true';
 
-        if (!filter.subjects || !filter.subjects[0] || !filter.gradeLevels) {
+        if (!searchParams.subjects || !searchParams.subjects[0] || !searchParams.gradeLevels) {
             res.status(400).send('Invalid subject or grade.');
             return;
         }
 
-        const gradeString = GradeLevel.gradeCaseToString(filter.gradeLevels);
-        const subjectPromise = this.repo.getSubjectByCode(filter.subjects[0]);
-        const pdfDataPromise = this.repo.getPdfDataByFilter(filter);
+        if (!searchParams.catOnly && !searchParams.performanceOnly) {
+            res.status(400).send('Invalid tech type.');
+        }
+
+        const gradeString = GradeLevel.gradeLevelToString(searchParams.gradeLevels);
+        const subjectPromise = this.repo.getSubjectByCode(searchParams.subjects[0]);
+        const pdfDataPromise = this.repo.getPdfDataByFilter(searchParams);
 
         Promise.all([subjectPromise, pdfDataPromise])
             .then(value => {
