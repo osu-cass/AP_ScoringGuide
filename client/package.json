@@ -20,7 +20,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@osu-cass/smarter-balanced-styles": "^1.0.8",
     "bootstrap": "^3.3.7",
     "event-source-polyfill": "0.0.11",
     "react": "16.2.0",
