@@ -3,8 +3,11 @@ node_js:
   - "8"
 
 install: 
-  - npm install --project client
-  - npm install --project server
+  - cd $TRAVIS_BUILD_DIR/client
+  - npm install
+  - cd $TRAVIS_BUILD_DIR/server
+  - npm install
+
 script: 
   # Client
   - cd $TRAVIS_BUILD_DIR/client
