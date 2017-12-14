@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const bundleOutputDir = "../server/public/client/";
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env) => {
     const extractCSS = new ExtractTextPlugin('vendor.css');
@@ -22,7 +23,7 @@ module.exports = (env) => {
             vendor: [
                 "bootstrap",
                 "bootstrap/dist/css/bootstrap.css",
-                "@osu-cass/sb-components,
+                "@osu-cass/sb-components",
                 "@osu-cass/sb-components/lib/sb-components.css",
                 "font-awesome/css/font-awesome.css",
                 "event-source-polyfill",
@@ -47,7 +48,13 @@ module.exports = (env) => {
             }),
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"'
-            })
+            }),
+            new CopyWebpackPlugin([
+                {
+                    from: path.join(__dirname, 'node_modules', '@osu-cass/sb-components/lib/Assets/Images'),
+                    to: path.join(__dirname, '../server/public', 'Assets/Images')
+                }
+            ])
         ].concat(isDevBuild ? [] : [
             new webpack.optimize.UglifyJsPlugin()
         ])
