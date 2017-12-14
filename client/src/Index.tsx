@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import "./styles/site.less";
+import "@osu-cass/sb-components/lib/Assets/styles/custom.less"
 import { routes } from './Routes';
 import { BrowserRouter } from 'react-router-dom';
 

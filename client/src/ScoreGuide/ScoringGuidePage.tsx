@@ -20,7 +20,7 @@ import {
     ItemTableContainer,
     FilterContainer,
     FilterLink
-} from '@osu-cass/sb-components';
+} from '@osu-cass/sb-components/lib/index';
 import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
 import { FilterCategoryModel } from '@osu-cass/sb-components/src/Filter/FilterModels';
 

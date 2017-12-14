@@ -1,6 +1,25 @@
-@import "~@osu-cass/smarter-balanced-styles/styles/site.less";
+@import "~@osu-cass/sb-components/lib/assets/styles/site.less";
 
 body {
   margin: 0;
   padding: 0;
+}
+
+.search-controls {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  flex-basis: 600px;
+  justify-content: center;
+  align-items: center;
+  padding: @spacing-unit;
+  padding-top: 2em;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #cccccc;
+  border-radius: 0px 0px 10px 10px;
+  margin-top: -@spacing-unit;
+  background-color: @sb-white;
+  box-shadow: @box-shadow;
 }
