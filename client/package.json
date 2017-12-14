@@ -1,11 +1,12 @@
 {
-  "name": "sample-items-scoring-guide-client",
+  "name": "ap-scoring-guide-client",
   "version": "1.0.0",
   "description": "",
   "main": "index.tsx",
+  "keywords": [],
+  "author": "",
+  "license": "MPL-2.0",
   "scripts": {
-    "less": "lessc-each styles/ dist/css/",
-    "less:dev": "lessc-each dist/css",
     "webpack-dev": "./node_modules/.bin/webpack --config webpack.config.js --env.dev",
     "webpack-prod": "./node_modules/.bin/webpack --config webpack.config.js --env.prod",
     "webpack-vendor-dev": "./node_modules/.bin/webpack --config webpack.config.vendor.js --env.dev",
@@ -14,11 +15,9 @@
     "build:dev": "cross-env NODE_ENV=development webpack",
     "test": "jest",
     "coverage": "jest --coverage",
-    "watch": "webpack --config webpack.config.js --env.dev --watch"
+    "watch": "webpack --config webpack.config.js --env.dev --watch",
+    "prettier": "prettier --write client/src/**/*.ts*"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@osu-cass/react-advanced-filter": "^1.0.5",
     "@osu-cass/sb-components": "0.0.66",
@@ -28,9 +27,15 @@
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
+    "typeface-pt-sans-caption": "0.0.44",
+    "typeface-pt-serif": "0.0.44",
+    "typeface-pt-serif-caption": "0.0.44",
+    "font-awesome": "~4.7.0",
+    "jquery": "3.2.1"
   },
   "devDependencies": {
+    "@osu-cass/tslint-config": "^1.0.4",
     "@types/enzyme": "^3.1.3",
     "@types/enzyme-adapter-react-16": "^1.0.1",
     "@types/history": "^4.6.2",
@@ -49,11 +54,9 @@
     "enzyme-adapter-react-16": "^1.0.4",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.4",
-    "font-awesome": "^4.7.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "~21.2.1",
     "jest-cli": "^21.2.1",
-    "jquery": "3.2.1",
     "jsdom": "^11.3.0",
     "jsdom-global": "^3.0.2",
     "less-loader": "^4.0.5",
@@ -63,10 +66,21 @@
     "source-map-loader": "0.2.1",
     "style-loader": "^0.19.0",
     "ts-jest": "20.0.7",
-    "typescript": "^2.5.3",
+    "typescript": "^2.6.2",
     "url-loader": "^0.5.9",
     "webpack": "3.5.5",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^2.9.4",
+    "tslint": "^5.8.0",
+    "tslint-language-service": "^0.9.7",
+    "prettier": "~1.8.2",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0"
+  },
+  "lint-staged": {
+    "{src}/**/*{.tsx,.ts}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./src/setupTests.ts",
@@ -81,7 +95,8 @@
     ],
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "./tsconfig.json"
+        "tsConfigFile": "./tsconfig.json",
+        "skipBabel": true
       }
     },
     "moduleFileExtensions": [

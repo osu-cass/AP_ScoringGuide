@@ -5,6 +5,7 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
+    "allowSyntheticDefaultImports": false,
     "jsx": "react",
     "types": [
       "jest",
@@ -12,6 +13,11 @@
     ],
     "typeRoots": [
       "./node_modules/@types"
+    ],
+    "plugins": [
+      {
+        "name": "tslint-language-service"
+      }
     ]
   },
   "include": [
