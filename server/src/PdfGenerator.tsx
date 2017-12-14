@@ -8,7 +8,7 @@ import {PdfContainer, ItemGroupModel} from '@osu-cass/sb-components';
 const {ITEM_VIEWER_SERVICE_API} = process.env;
 
 export class HtmlRenderer {
-    static renderBody(items: ItemGroupModel[], subject: string, grade: string, titlePage: boolean) {
+    static renderBody(items: ItemGroupModel[], subject: string, grade: string, titlePage: boolean, scoringInfo: boolean) {
         return ReactDOMServer.renderToString(
             <PdfContainer
                 items={items}
@@ -16,7 +16,8 @@ export class HtmlRenderer {
                 grade={grade}
                 ivsBaseUrl={ITEM_VIEWER_SERVICE_API}
                 cssUrl={path.join(__dirname, '../public/pdf/pdf.css')}
-                displayTitlePage={titlePage} />
+                displayTitlePage={titlePage} 
+                displayScoreInfo={scoringInfo} />
         );
     }
 }

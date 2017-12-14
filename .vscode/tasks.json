@@ -7,7 +7,7 @@
             "taskName": "build-server",
             "type": "shell",
             "options": {
-                "cwd": "${workspaceRoot}\\server"
+                "cwd": "${workspaceRoot}/server"
             },
             "command": "npm",
             "args": [
@@ -19,7 +19,7 @@
             "taskName": "webpack-vendor",
             "type": "shell",
             "options": {
-                "cwd": "${workspaceRoot}\\client"
+                "cwd": "${workspaceRoot}/client"
             },
             "command": "npm",
             "args": [
@@ -33,7 +33,7 @@
             "type": "shell",
             "dependsOn": "webpack-vendor",
             "options": {
-                "cwd": "${workspaceRoot}\\client"
+                "cwd": "${workspaceRoot}/client"
             },
             "isBackground": true,
             "command": "npm",

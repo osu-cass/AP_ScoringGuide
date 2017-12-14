@@ -9,11 +9,11 @@
             "request": "launch",
             "name": "Launch Program",
             "preLaunchTask": "build-server",
-            "program": "${workspaceRoot}\\server\\dist\\Server.js",
-            "cwd": "${workspaceFolder}\\server",
+            "program": "${workspaceRoot}/server/dist/Server.js",
+            "cwd": "${workspaceFolder}/server",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceRoot}\\server\\dist\\**\\*.js"
+                "${workspaceRoot}/server/dist/**/*.js"
             ]
         }
     ]
