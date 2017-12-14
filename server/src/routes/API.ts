@@ -24,7 +24,8 @@ export class APIRoute {
 
     getPdf = (req: Express.Request, res: Express.Response) => {
         const searchParams = SearchUrl.decodeExpressQuery(req.query);
-        const titlePage = (req.query.titlePage as string || 'true') == 'true';
+        const titlePage = (req.query.TitlePage as string || 'true') == 'true';
+        const showRubric = (req.query.ScoringInfo as string || 'true') == 'true';
 
         if (!searchParams.subjects || !searchParams.subjects[0] || !searchParams.gradeLevels) {
             res.status(400).send('Invalid subject or grade.');
@@ -42,7 +43,7 @@ export class APIRoute {
         Promise.all([subjectPromise, pdfDataPromise])
             .then(value => {
                 const subjectString = value[0].label;
-                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage);
+                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage, showRubric);
                 const title = gradeString + ' ' + subjectString;
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
@@ -53,9 +54,10 @@ export class APIRoute {
     }
 
     getPdfById = (req: Express.Request, res: Express.Response) => {
-        const ids = req.query.ids;
-        const assoc = req.query.assoc as string || "false";
+        const ids = req.query.Ids;
+        const assoc = req.query.Assoc as string || "false";
         const printAssoc = (assoc.toLowerCase() === "true");
+        const showRubric = (req.query.ScoringInfo as string || 'true') == 'true';
         if (!ids) {
             res.sendStatus(400);
             return;
@@ -64,7 +66,7 @@ export class APIRoute {
 
         this.repo.getPdfDataByIds(requestedIds, printAssoc)
             .then(itemViews => {
-                const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false);
+                const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false, showRubric);
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, "Custom Item Sequence").pipe(res);
             })
