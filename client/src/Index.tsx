@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import "./styles/site.less";
+import "./Styles/site.less";
 import { routes } from './Routes';
 import { BrowserRouter } from 'react-router-dom';
 
