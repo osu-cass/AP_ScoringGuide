@@ -203,6 +203,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     {this.renderFilterComponent()}
                     <FilterLink filterId={`#${ this.state.filterId }`} />
                 </div>
+
             );
         }
         else {
