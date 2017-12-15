@@ -15,7 +15,7 @@ export class HtmlRenderer {
                 subject={subject}
                 grade={grade}
                 ivsBaseUrl={ITEM_VIEWER_SERVICE_API}
-                cssUrl={path.join(__dirname, '../public/pdf/pdf.css')}
+                cssUrl={path.join(__dirname, '../public/client/vendor.css')}
                 displayTitlePage={titlePage} 
                 displayScoreInfo={scoringInfo} />
         );
