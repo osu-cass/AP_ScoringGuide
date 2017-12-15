@@ -10,7 +10,7 @@ install:
 script: 
   # Client
   - cd $TRAVIS_BUILD_DIR/client
-  - npmrun webpack-dev
+  - npm run webpack-dev
   - npm run webpack-vendor-dev
   - npm run build
   - npm run less
