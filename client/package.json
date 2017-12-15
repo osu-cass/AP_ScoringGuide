@@ -69,7 +69,9 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./src/setupTests.ts",
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "transform": {
       ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
     },
