@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && lessc src/pdf.less public/pdf/pdf.css",
     "start": "node dist/Server.js",
     "test": "jest",
     "dev": "npm run build && npm start",
@@ -53,7 +53,8 @@
     "tslint-language-service": "^0.9.7",
     "prettier": "~1.8.2",
     "husky": "^0.14.3",
-    "lint-staged": "^6.0.0"
+    "lint-staged": "^6.0.0",
+    "less": "2.7.3"
   },
   "lint-staged": {
     "{src}/**/*{.tsx,.ts}": [
