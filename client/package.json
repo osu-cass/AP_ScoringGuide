@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@osu-cass/sb-components": "0.0.68",
+    "@osu-cass/sb-components": "0.0.69",
     "bootstrap": "^3.3.7",
     "enzyme-to-json": "^3.3.0",
     "event-source-polyfill": "0.0.11",
