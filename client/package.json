@@ -22,6 +22,7 @@
   "dependencies": {
     "@osu-cass/sb-components": "0.0.68",
     "bootstrap": "^3.3.7",
+    "enzyme-to-json": "^3.3.0",
     "event-source-polyfill": "0.0.11",
     "react": "16.2.0",
     "react-dom": "16.2.0",
@@ -68,6 +69,7 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./src/setupTests.ts",
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "transform": {
       ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
     },
