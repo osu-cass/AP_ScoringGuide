@@ -19,6 +19,8 @@ script:
   # - npm run test
   # Server
   - cd $TRAVIS_BUILD_DIR/server
+  #debug: 
+  - ls node_modules/@osu-cass/sb-components/lib/Assets/Styles
   - npm run build
   # - npm run test
 
