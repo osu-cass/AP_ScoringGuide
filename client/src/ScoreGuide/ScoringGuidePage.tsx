@@ -20,7 +20,7 @@ import {
     FilterCategoryModel,
     FilterContainer,
     FilterLink
-} from '@osu-cass/sb-components/lib/index';
+} from '@osu-cass/sb-components';
 import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
 
 export interface Props extends RouteComponentProps<{}> {
