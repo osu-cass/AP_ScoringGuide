@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc && lessc src/pdf.less public/pdf/pdf.css",
+    "build": "tsc && lessc node_modules/@osu-cass/sb-components/lib/assets/styles/pdf.less public/pdf/pdf.css",
     "start": "node dist/Server.js",
     "test": "jest",
     "dev": "npm run build && npm start",
@@ -14,7 +14,7 @@
   "author": "",
   "license": "MPL-2.0",
   "dependencies": {
-    "@osu-cass/sb-components": "0.0.69",
+    "@osu-cass/sb-components": "1.0.0",
     "dotenv": "^4.0.0",
     "express": "4.15.4",
     "font-awesome": "~4.7.0",
