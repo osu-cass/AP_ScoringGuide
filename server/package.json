@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc && lessc node_modules/@osu-cass/sb-components/lib/assets/styles/pdf.less public/pdf/pdf.css",
+    "build": "tsc && lessc 'node_modules/@osu-cass/sb-components/lib/assets/styles/pdf.less' 'public/pdf/pdf.css'",
     "start": "node dist/Server.js",
     "test": "jest",
     "dev": "npm run build && npm start",
