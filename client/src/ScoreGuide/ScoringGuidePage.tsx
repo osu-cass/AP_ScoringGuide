@@ -1,6 +1,5 @@
 ﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as UrlHelper from '../Models/UrlHelper';
 import { RouteComponentProps } from 'react-router';
 import {
     ItemCardModel,

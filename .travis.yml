@@ -2,23 +2,25 @@ language: node_js
 node_js: 
   - "8"
 
+cache:
+  directories:
+    - node_modules
+
 install: 
-  - cd $TRAVIS_BUILD_DIR/server
-  - npm install
   - cd $TRAVIS_BUILD_DIR/client
   - npm install
+  - cd $TRAVIS_BUILD_DIR/server
+  - npm install
+
 script: 
   # Client
   - cd $TRAVIS_BUILD_DIR/client
-  - npm run webpack-dev
-  - npm run webpack-vendor-dev
-  - npm run build
-  - npm run less
-  - npm run test
+  - npm run build:prod
+  # - npm run test
   # Server
-  - cd $TRAVIS_BUILD_DIR/server
+  - cd $TRAVIS_BUILD_DIR/server 
   - npm run build
-  - npm run test
+  # - npm run test
 
 after_success:
   - cd $TRAVIS_BUILD_DIR

@@ -12,7 +12,7 @@ import {
     ItemsSearchFilterModel
 } from '@osu-cass/sb-components';
 
-const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API, CAT_CODE, PERFORMANCE_CODE } = process.env;
+const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API } = process.env;
 
 export class ApiRepo {
     manager: ItemDataManager;
@@ -22,7 +22,7 @@ export class ApiRepo {
     filterSearchModel: ItemsSearchFilterModel;
 
     constructor() {
-        const path = Path.join(__dirname, '../public/images/screenshots');
+        const path = Path.join(__dirname, '../public/screenshots');
         this.manager = new ItemDataManager({
             pageWidth: parseInt(SCREENSHOT_WIDTH, 10),
             screenshotPath: path

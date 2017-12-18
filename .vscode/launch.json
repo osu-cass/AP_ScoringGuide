@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Run ScoreGuide",
             "preLaunchTask": "build-server",
             "program": "${workspaceRoot}/server/dist/Server.js",
             "cwd": "${workspaceFolder}/server",

@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build-server",
+            "label": "build-server",
             "type": "shell",
             "options": {
                 "cwd": "${workspaceRoot}/server"
@@ -13,10 +13,13 @@
             "args": [
                 "run",
                 "build"
-            ]
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
         },
         {
-            "taskName": "webpack-vendor",
+            "label": "webpack-vendor",
             "type": "shell",
             "options": {
                 "cwd": "${workspaceRoot}/client"
@@ -24,12 +27,13 @@
             "command": "npm",
             "args": [
                 "run",
-                "webpack-vendor-dev"
+                "webpack-vendor"
             ],
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": "build"
         },
         {
-            "taskName": "webpack-watch",
+            "label": "client-watch",
             "type": "shell",
             "dependsOn": "webpack-vendor",
             "options": {
@@ -41,7 +45,11 @@
                 "run",
                 "watch"
             ],
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
