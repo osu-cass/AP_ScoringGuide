@@ -5,7 +5,7 @@ import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from '../RequestPromise';
 import { ApiRepo } from '../ApiRepo';
-import { GradeLevel } from '@osu-cass/sb-components';
+import { GradeLevel, SearchAPIParamsModel, SearchUrl } from '@osu-cass/sb-components';
 
 export class APIRoute {
     router: Express.Router;
@@ -19,27 +19,31 @@ export class APIRoute {
         this.router.get('/search', this.search);
         this.router.get('/aboutItem', this.getAboutItem);
         this.router.get('/scoringGuideViewModel', this.getSubjects);
+        this.router.get('/filterSearchModel', this.getFilterSearchModel);
     }
 
     getPdf = (req: Express.Request, res: Express.Response) => {
-        const subject = req.query.subject as string || '';
-        const grade = Number(req.query.grade) || -1;
-        const techType = req.query.techType as string;
-        const titlePage = (req.query.titlePage as string || 'true') == "true";
+        const searchParams = SearchUrl.decodeExpressQuery(req.query);
+        const titlePage = (req.query.TitlePage as string || 'true') == 'true';
+        const showRubric = (req.query.ScoringInfo as string || 'true') == 'true';
 
-        if (subject === '' || grade === -1 || !techType) {
-            res.status(400).send('Invalid subject, grade, or tech type.');
+        if (!searchParams.subjects || !searchParams.subjects[0] || !searchParams.gradeLevels) {
+            res.status(400).send('Invalid subject or grade.');
             return;
         }
 
-        const gradeString = GradeLevel.gradeCaseToString(grade)
-        const subjectPromise = this.repo.getSubjectByCode(subject);
-        const pdfDataPromise = this.repo.getPdfDataByGradeSubject(grade, subject, techType);
+        if (!searchParams.catOnly && !searchParams.performanceOnly) {
+            res.status(400).send('Invalid tech type.');
+        }
+
+        const gradeString = GradeLevel.gradeLevelToString(searchParams.gradeLevels);
+        const subjectPromise = this.repo.getSubjectByCode(searchParams.subjects[0]);
+        const pdfDataPromise = this.repo.getPdfDataByFilter(searchParams);
 
         Promise.all([subjectPromise, pdfDataPromise])
             .then(value => {
                 const subjectString = value[0].label;
-                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage);
+                const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage, showRubric);
                 const title = gradeString + ' ' + subjectString;
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
@@ -50,9 +54,10 @@ export class APIRoute {
     }
 
     getPdfById = (req: Express.Request, res: Express.Response) => {
-        const ids = req.query.ids;
-        const assoc = req.query.assoc as string || "false";
+        const ids = req.query.Ids;
+        const assoc = req.query.Assoc as string || "false";
         const printAssoc = (assoc.toLowerCase() === "true");
+        const showRubric = (req.query.ScoringInfo as string || 'true') == 'true';
         if (!ids) {
             res.sendStatus(400);
             return;
@@ -61,7 +66,7 @@ export class APIRoute {
 
         this.repo.getPdfDataByIds(requestedIds, printAssoc)
             .then(itemViews => {
-                const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false);
+                const htmlString = HtmlRenderer.renderBody(itemViews, "", "", false, showRubric);
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, "Custom Item Sequence").pipe(res);
             })
@@ -110,6 +115,18 @@ export class APIRoute {
             })
             .catch(err => {
                 console.error(`/api/aboutItem for ${bankKey}-${itemKey}:`, err);
+                res.sendStatus(500);
+            });
+    }
+
+    getFilterSearchModel = (req: Express.Request, res: Express.Response) => {
+        this.repo.getFilterSearchModel()
+            .then(model => {
+                res.type('application/json');
+                res.send(JSON.stringify(model));
+            })
+            .catch(err => {
+                console.error('/api/filterSearchModel:', err);
                 res.sendStatus(500);
             });
     }
