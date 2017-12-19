@@ -19,7 +19,8 @@ import {
     ItemTableContainer,
     FilterCategoryModel,
     FilterContainer,
-    FilterLink
+    FilterLink,
+    GradeLevels
 } from '@osu-cass/sb-components';
 import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
 
@@ -36,6 +37,7 @@ export interface State {
     basicFilterCategories: BasicFilterCategoryModel[];
     advancedFilterCategories: AdvancedFilterCategoryModel[];
     visibleItems: ItemCardModel[];
+    nonSelectedFilters: string[];
     filterId: string;
 }
 
@@ -49,17 +51,22 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             advancedFilterCategories: [],
             item: { kind: "none" },
             visibleItems: [],
+            nonSelectedFilters: [],
             filterId: "sb-filter-id"
         };
-
-        this.loadSearchData();
     }
 
-    loadSearchData () {
-        Promise.all( [ this.props.itemCardClient(), this.props.itemsSearchFilterClient() ] )
-            .then( ( [ cards, filterModel ] ) => this.onLoadSuccess( cards, filterModel ) )
-            .catch( ( err ) => this.onLoadFailure( err ) );
+    componentDidMount () {
+        Promise.all( [
+            this.props.itemCardClient(),
+            this.props.itemsSearchFilterClient()
+        ] )
+            .then( ( [ cards, filterModel ] ) =>
+                this.onLoadSuccess( cards, filterModel ) )
+            .catch( ( err ) =>
+                this.onLoadFailure( err ) );
     }
+
 
     onLoadSuccess = ( cards: ItemCardModel[], filterModel: ItemsSearchFilterModel ) => {
         const searchParams = SearchUrl.decodeSearch( this.props.location.search );
@@ -152,8 +159,46 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.onFilterApplied( this.state.basicFilterCategories, filter );
     }
 
-    renderFilterComponent () {
-        const { basicFilterCategories, advancedFilterCategories, filterId } = this.state
+    printItems = ( searchModel: SearchAPIParamsModel, urlParamString: string ) => {
+        const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
+        let nonSelectedFilters: string[] = [];
+        if ( subjects !== undefined && subjects.length <= 0 ) {
+            nonSelectedFilters.push( "subject" );
+        }
+        if ( gradeLevels === GradeLevels.NA ) {
+            nonSelectedFilters.push( "grade level" );
+        }
+        if ( performanceOnly === false && catOnly === false ) {
+            nonSelectedFilters.push( "tech type" );
+        }
+        if ( nonSelectedFilters.length > 0 ) {
+            this.setState( { nonSelectedFilters } );
+        } else {
+            window.location.href = `api/pdf${ urlParamString }`;
+        }
+    }
+
+    renderErrorPrompt = () => {
+        const { nonSelectedFilters } = this.state;
+        let content = null;
+        if ( nonSelectedFilters.length > 0 ) {
+            let filterPrompt = "Please select a ";
+            nonSelectedFilters.forEach( ( fil, idx ) => {
+                if ( idx === 2 || ( nonSelectedFilters.length === 2 && idx === 1 ) ) {
+                    filterPrompt = `${ filterPrompt } and ${ fil }.`;
+                } else if ( nonSelectedFilters.length === 1 && idx === 0 ) {
+                    filterPrompt = `${ filterPrompt } ${ fil }.`;
+                } else {
+                    filterPrompt = `${ filterPrompt } ${ fil },`;
+                }
+            } )
+            content = <div>{filterPrompt}</div>
+        }
+        return content;
+    }
+
+    renderFilterComponent = () => {
+        const { basicFilterCategories, advancedFilterCategories, filterId, nonSelectedFilters } = this.state
         let bothFilters: FilterCategoryModel[] = this.state.basicFilterCategories;
         bothFilters = bothFilters.concat( this.state.advancedFilterCategories );
         const searchModel = ItemSearch.filterToSearchApiModel( bothFilters );
@@ -161,23 +206,22 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
         return (
             <div className="search-controls">
-                <a className="btn btn-blue btn-lg" role="button" href={`api/pdf${ urlParamString }`}>
+                <button className="btn btn-blue btn-lg" type="button" onClick={() => this.printItems( searchModel, urlParamString )}>
                     Print Items
-                </a>
-
+                </button>
+                {this.renderErrorPrompt()}
                 <FilterContainer
                     filterId={this.state.filterId}
                     basicFilterCategories={basicFilterCategories}
                     onUpdateBasicFilter={this.onBasicFilterApplied}
                     advancedFilterCategories={advancedFilterCategories}
                     onUpdateAdvancedFilter={this.onAdvancedFilterApplied} />
-
                 {this.renderTableComponent()}
             </div>
         );
     }
 
-    renderTableComponent () {
+    renderTableComponent = () => {
         let content = ( <div>Loading...</div> );
         if ( this.state.visibleItems.length > 0 ) {
             content = (
@@ -187,7 +231,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     item={this.state.item} />
             );
         }
-        else if ( this.state.allItems.kind == "failure" ) {
+        else if ( this.state.allItems.kind === "failure" ) {
             content = ( <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div> );
         }
         return content;
@@ -195,20 +239,12 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     render () {
         const scoringModel = getResourceContent( this.state.itemsSearchFilter );
-
-        if ( scoringModel ) {
-            return (
-                <div className="container search-page">
-                    {this.renderFilterComponent()}
-                    <FilterLink filterId={`#${ this.state.filterId }`} />
-                </div>
-
-            );
-        }
-        else {
-            return <div></div>;
-        }
-
+        let content = scoringModel ?
+            <div className="container search-page">
+                {this.renderFilterComponent()}
+                <FilterLink filterId={`#${ this.state.filterId }`} />
+            </div> : null;
+        return content;
     }
 }
 

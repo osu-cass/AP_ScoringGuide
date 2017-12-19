@@ -29,11 +29,10 @@ export function getAdvancedFilterCategories(itemSearchFilter: ItemsSearchFilterM
 }
 
 export function getItemSearchModel(itemSearchFilter: ItemsSearchFilterModel): ItemsSearchModel {
-    const itemSearch: ItemsSearchModel = {
+    return {
         claims: itemSearchFilter.claims.filterOptions,
         subjects: itemSearchFilter.subjects.filterOptions,
         interactionTypes: itemSearchFilter.interactionTypes.filterOptions,
         //targets: itemSearchFilter.targets.filterOptions
     };
-    return itemSearch;
 }
