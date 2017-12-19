@@ -56,7 +56,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         };
     }
 
-    ComponentDidMount = () => {
+    componentDidMount() {
         Promise.all( [ this.props.itemCardClient(), this.props.itemsSearchFilterClient() ] )
         .then( ( [ cards, filterModel ] ) => this.onLoadSuccess( cards, filterModel ) )
         .catch( ( err ) => this.onLoadFailure( err ) );
