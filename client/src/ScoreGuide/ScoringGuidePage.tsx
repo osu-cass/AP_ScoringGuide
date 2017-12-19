@@ -161,7 +161,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     printItems = ( searchModel: SearchAPIParamsModel, urlParamString: string ) => {
         const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
-        console.log( searchModel )
         let nonSelectedFilters: string[] = [];
         if ( subjects !== undefined && subjects.length <= 0 ) {
             nonSelectedFilters.push( "subject" );
