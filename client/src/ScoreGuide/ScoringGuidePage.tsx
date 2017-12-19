@@ -56,10 +56,15 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         };
     }
 
-    componentDidMount() {
-        Promise.all( [ this.props.itemCardClient(), this.props.itemsSearchFilterClient() ] )
-        .then( ( [ cards, filterModel ] ) => this.onLoadSuccess( cards, filterModel ) )
-        .catch( ( err ) => this.onLoadFailure( err ) );
+    componentDidMount () {
+        Promise.all( [
+            this.props.itemCardClient(),
+            this.props.itemsSearchFilterClient()
+        ] )
+            .then( ( [ cards, filterModel ] ) =>
+                this.onLoadSuccess( cards, filterModel ) )
+            .catch( ( err ) =>
+                this.onLoadFailure( err ) );
     }
 
 
@@ -180,7 +185,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if ( nonSelectedFilters.length > 0 ) {
             let filterPrompt = "Please select a ";
             nonSelectedFilters.forEach( ( fil, idx ) => {
-                filterPrompt = idx === 2 ? `${ filterPrompt } and ${ fil }.` : `${ filterPrompt } ${ fil },`;
+                if ( idx === 2 || ( nonSelectedFilters.length === 2 && idx === 1 ) ) {
+                    filterPrompt = `${ filterPrompt } and ${ fil }.`;
+                } else if ( nonSelectedFilters.length === 1 && idx === 0 ) {
+                    filterPrompt = `${ filterPrompt } ${ fil }.`;
+                } else {
+                    filterPrompt = `${ filterPrompt } ${ fil },`;
+                }
             } )
             content = <div>{filterPrompt}</div>
         }
