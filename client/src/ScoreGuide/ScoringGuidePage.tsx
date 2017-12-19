@@ -155,7 +155,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     printItems = ( searchModel: SearchAPIParamsModel, urlParamString: string ) => {
-        //href="api/pdf${ urlParamString }"
         const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
         console.log( searchModel )
         let nonSelectedFilters: string[] = [];
@@ -181,7 +180,6 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if ( nonSelectedFilters.length > 0 ) {
             let filterPrompt = "Please select a ";
             nonSelectedFilters.forEach( ( fil, idx ) => {
-                console.log( "appending to the error string" )
                 filterPrompt = idx === 2 ? `${ filterPrompt } and ${ fil }.` : `${ filterPrompt } ${ fil },`;
             } )
             content = <div>{filterPrompt}</div>
