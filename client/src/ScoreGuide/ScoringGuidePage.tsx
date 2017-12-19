@@ -54,15 +54,14 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             nonSelectedFilters: [],
             filterId: "sb-filter-id"
         };
-
-        this.loadSearchData();
     }
 
-    loadSearchData () {
+    ComponentDidMount = () => {
         Promise.all( [ this.props.itemCardClient(), this.props.itemsSearchFilterClient() ] )
-            .then( ( [ cards, filterModel ] ) => this.onLoadSuccess( cards, filterModel ) )
-            .catch( ( err ) => this.onLoadFailure( err ) );
+        .then( ( [ cards, filterModel ] ) => this.onLoadSuccess( cards, filterModel ) )
+        .catch( ( err ) => this.onLoadFailure( err ) );
     }
+
 
     onLoadSuccess = ( cards: ItemCardModel[], filterModel: ItemsSearchFilterModel ) => {
         const searchParams = SearchUrl.decodeSearch( this.props.location.search );
