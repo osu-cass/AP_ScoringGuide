@@ -188,18 +188,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     renderFilterComponent = () => {
-        const { basicFilterCategories, advancedFilterCategories, nonSelectedFilters } = this.state;
-        let bothFilters: FilterCategoryModel[] = basicFilterCategories;
-        bothFilters = bothFilters.concat( advancedFilterCategories );
-        const searchModel = ItemSearch.filterToSearchApiModel( bothFilters );
-        const urlParamString = SearchUrl.encodeQuery( searchModel );
-
+        const { basicFilterCategories, advancedFilterCategories, nonSelectedFilters, searchAPIParams } = this.state;
         return (
             <div className="search-controls">
                 <button
                     className="btn btn-blue btn-lg"
                     type="button"
-                    onClick={() => this.printItems( searchModel, urlParamString )}>
+                    onClick={() => this.printItems( searchAPIParams, SearchUrl.encodeQuery( searchAPIParams ) )}>
                     Print Items
                 </button>
                 {this.renderErrorPrompt()}
