@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Router, Route } from 'react-router';
+import { Router, Route, Switch } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { ScoringGuidePage } from './ScoreGuide/ScoringGuidePage';
 import {
@@ -15,16 +15,18 @@ const siteLinks: SbNavlinkProps[] = [
 
 
 export const routes = <Layout siteName="Score Guide" links={siteLinks}>
-    <Route exact path='/' render={(props) => (
-        <ScoringGuidePage
-            {...props}
-            itemsSearchFilterClient={searchFilterModel}
-            aboutItemClient={aboutItemClient}
-            itemCardClient={itemCardClient}
-        />
-    )} />
-    <Route exact path='*' render={(props) => (
-        <div>TODO: add error</div>
-    )} />
+    <Switch>
+        <Route exact path='/' render={(props) => (
+            <ScoringGuidePage
+                {...props}
+                itemsSearchFilterClient={searchFilterModel}
+                aboutItemClient={aboutItemClient}
+                itemCardClient={itemCardClient}
+            />
+        )} />
+        <Route path='*' render={(props) => (
+            <div>TODO: add error</div>
+        )} />
+    </Switch>
 </Layout>;
 
