@@ -168,9 +168,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         }
     }
 
-    renderErrorPrompt (): JSX.Element {
+    renderErrorPrompt (): JSX.Element | undefined {
         const { nonSelectedFilters } = this.state;
-        let content = null;
+        let content;
         if ( nonSelectedFilters.length > 0 ) {
             let filterPrompt = "Please select a ";
             nonSelectedFilters.forEach( ( fil, idx ) => {
