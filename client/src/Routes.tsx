@@ -26,6 +26,5 @@ export const routes = <Layout siteName="Score Guide" links={siteLinks}>
     <Route exact path='*' render={(props) => (
         <div>TODO: add error</div>
     )} />
-
 </Layout>;
 

@@ -141,34 +141,34 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         }
     }
 
-    onBasicFilterApplied = ( filter: BasicFilterCategoryModel[] ) => {
+    onBasicFilterApplied ( filter: BasicFilterCategoryModel[] ): void {
         this.onFilterApplied( filter, this.state.advancedFilterCategories );
     }
 
-    onAdvancedFilterApplied = ( filter: AdvancedFilterCategoryModel[] ) => {
+    onAdvancedFilterApplied ( filter: AdvancedFilterCategoryModel[] ): void {
         this.onFilterApplied( this.state.basicFilterCategories, filter );
     }
 
-    printItems = ( searchModel: SearchAPIParamsModel, urlParamString: string ) => {
+    printItems ( searchModel: SearchAPIParamsModel, urlParamString: string ): void {
         const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
-        let nonSelectedFilters: string[] = [];
-        if ( subjects !== undefined && subjects.length <= 0 ) {
+        const nonSelectedFilters: string[] = [];
+        if ( !subjects || subjects.length <= 0 ) {
             nonSelectedFilters.push( "subject" );
         }
-        if ( gradeLevels === GradeLevels.NA ) {
+        if ( !gradeLevels || gradeLevels.valueOf() === GradeLevels.NA ) {
             nonSelectedFilters.push( "grade level" );
         }
-        if ( performanceOnly === false && catOnly === false ) {
+        if ( !performanceOnly && !catOnly ) {
             nonSelectedFilters.push( "tech type" );
-        }
-        if ( nonSelectedFilters.length > 0 ) {
+        } if ( nonSelectedFilters.length > 0 ) {
             this.setState( { nonSelectedFilters } );
-        } else {
+        }
+        else {
             window.location.href = `api/pdf${ urlParamString }`;
         }
     }
 
-    renderErrorPrompt = () => {
+    renderErrorPrompt (): JSX.Element {
         const { nonSelectedFilters } = this.state;
         let content = null;
         if ( nonSelectedFilters.length > 0 ) {
@@ -181,20 +181,21 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 } else {
                     filterPrompt = `${ filterPrompt } ${ fil },`;
                 }
-            } )
-            content = <div>{filterPrompt}</div>
+            } );
+            content = <div>{filterPrompt}</div>;
         }
         return content;
     }
 
-    renderFilterComponent = () => {
+    renderFilterComponent (): JSX.Element {
         const { basicFilterCategories, advancedFilterCategories, nonSelectedFilters, searchAPIParams } = this.state;
+        const handleClick = () => this.printItems( searchAPIParams, SearchUrl.encodeQuery( searchAPIParams ) );
         return (
             <div className="search-controls">
                 <button
                     className="btn btn-blue btn-lg"
                     type="button"
-                    onClick={() => this.printItems( searchAPIParams, SearchUrl.encodeQuery( searchAPIParams ) )}>
+                    onClick={handleClick}>
                     Print Items
                 </button>
                 {this.renderErrorPrompt()}
@@ -209,7 +210,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         );
     }
 
-    renderTableComponent = () => {
+    renderTableComponent (): JSX.Element {
         let content = ( <div>Loading...</div> );
         if ( this.state.visibleItems.length > 0 ) {
             content = (
@@ -226,12 +227,18 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     render () {
-        const scoringModel = getResourceContent( this.state.itemsSearchFilter );
-        let content = scoringModel ?
-            <div className="container search-page">
+        const { itemsSearchFilter } = this.state;
+        const scoringModel = getResourceContent( itemsSearchFilter );
+        let content = <div>Search failed</div>;
+        if ( scoringModel ) {
+            content = <div className="container search-page">
                 {this.renderFilterComponent()}
                 <FilterLink filterId="sb-filter-id" />
-            </div> : null;
+            </div>;
+        } else if ( itemsSearchFilter && itemsSearchFilter.kind === "loading" ) {
+            content = <div>Loading spinner</div>;
+        }
+
         return content;
     }
 }
