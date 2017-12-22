@@ -133,19 +133,19 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if ( searchFilterModel ) {
             const searchModel = getItemSearchModel( searchFilterModel );
             this.setState( {
-                advancedFilterCategories: Filter.getUpdatedSearchFilters( searchModel, advancedFilterCategories, searchAPIParams ),
                 basicFilterCategories,
                 visibleItems,
-                searchAPIParams
+                searchAPIParams,
+                advancedFilterCategories: Filter.getUpdatedSearchFilters( searchModel, advancedFilterCategories, searchAPIParams )
             } );
         }
     }
 
-    onBasicFilterApplied ( filter: BasicFilterCategoryModel[] ): void {
+    onBasicFilterApplied = ( filter: BasicFilterCategoryModel[] ) => {
         this.onFilterApplied( filter, this.state.advancedFilterCategories );
     }
 
-    onAdvancedFilterApplied ( filter: AdvancedFilterCategoryModel[] ): void {
+    onAdvancedFilterApplied = ( filter: AdvancedFilterCategoryModel[] ) => {
         this.onFilterApplied( this.state.basicFilterCategories, filter );
     }
 
