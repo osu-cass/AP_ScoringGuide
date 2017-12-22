@@ -22,10 +22,10 @@ module.exports = (env) => {
         entry: {
             vendor: [
                 "bootstrap",
-                "bootstrap/dist/css/bootstrap.css",
-                "font-awesome/css/font-awesome.css",
+                "bootstrap/less/bootstrap.less",
+                "font-awesome/less/font-awesome.less",
                 "@osu-cass/sb-components",
-                "@osu-cass/sb-components/lib/Assets/Styles/bundle.less",
+                "@osu-cass/sb-components/lib/Assets/Styles/sb-components.less",
                 "event-source-polyfill",
                 "react", 
                 "react-dom", 
