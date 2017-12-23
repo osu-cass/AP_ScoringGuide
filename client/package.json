@@ -19,7 +19,7 @@
     "prettier": "prettier --write client/src/**/*.ts*"
   },
   "dependencies": {
-    "@osu-cass/sb-components": "1.0.1-alpha.3",
+    "@osu-cass/sb-components": "1.0.1-alpha.7",
     "bootstrap": "^3.3.7",
     "enzyme-to-json": "^3.3.0",
     "event-source-polyfill": "0.0.11",

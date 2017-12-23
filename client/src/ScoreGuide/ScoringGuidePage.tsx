@@ -211,7 +211,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     renderTableComponent (): JSX.Element {
-        let content = ( <div>Loading...</div> );
+        let content = ( <div className="loader"/> );
         if ( this.state.visibleItems.length > 0 ) {
             content = (
                 <ItemTableContainer
@@ -236,7 +236,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 <FilterLink filterId="sb-filter-id" />
             </div>;
         } else if ( itemsSearchFilter && itemsSearchFilter.kind === "loading" ) {
-            content = <div>Loading spinner</div>;
+            content =  <div className="loader"/> ;
         }
 
         return content;
