@@ -15,7 +15,8 @@ import {
     Filter,
     AdvancedFilterCategoryModel,
     SearchAPIParamsModel,
-    ItemTableContainer,
+    SearchResultContainer,
+    SearchResultType,
     FilterCategoryModel,
     FilterContainer,
     FilterLink,
@@ -75,7 +76,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     onLoadSuccess = ( cards: ItemCardModel[], filterModel: ItemsSearchFilterModel ) => {
         const { searchAPIParams } = this.state;
         const searchModel = getItemSearchModel( filterModel );
-        let advancedFilter = getAdvancedFilterCategories( filterModel, searchAPIParams );
+        const advancedFilter = getAdvancedFilterCategories( filterModel, searchAPIParams );
         this.setState( {
             allItems: { kind: "success", content: cards },
             itemsSearchFilter: { kind: "success", content: filterModel },
@@ -190,18 +191,19 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             } );
             content = <div>{filterPrompt}</div>;
         }
+
         return content;
     }
 
     renderFilterComponent (): JSX.Element {
         const { basicFilterCategories, advancedFilterCategories, nonSelectedFilters, searchAPIParams } = this.state;
-        const handleClick = () => this.printItems( searchAPIParams );
+
         return (
             <div className="search-controls">
                 <button
                     className="btn btn-blue btn-lg"
                     type="button"
-                    onClick={handleClick}>
+                    onClick={() => this.printItems( searchAPIParams )}>
                     Print Items
                 </button>
                 {this.renderErrorPrompt()}
@@ -220,15 +222,18 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         let content = ( <div className="loader" /> );
         if ( this.state.visibleItems.length > 0 ) {
             content = (
-                <ItemTableContainer
+                <SearchResultContainer
                     onRowSelection={this.onRowSelection}
+                    onItemSelection={() => {}}
                     itemCards={this.state.visibleItems}
-                    item={this.state.item} />
+                    item={this.state.item}
+                />
             );
         }
         else if ( this.state.allItems.kind === "failure" ) {
             content = ( <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div> );
         }
+
         return content;
     }
 
