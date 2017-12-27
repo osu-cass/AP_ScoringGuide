@@ -5,8 +5,7 @@ import { ScoringGuidePage } from './ScoreGuide/ScoringGuidePage';
 import {
     Layout,
     SbNavlinkProps,
-    ItemsSearchModel,
-    get
+    ItemsSearchModel
 } from '@osu-cass/sb-components';
 import { itemCardClient, searchFilterModel, aboutItemClient } from './ScoreGuide/ScoreGuideModels';
 

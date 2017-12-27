@@ -19,13 +19,13 @@ app.get('/item', (req, res) => {
     ip.loadPlainHtml(id)
         .then(item => res.send(item))
         .catch(err => res.status(500).send(err));
-})
+});
 
 app.use(Express.static(path.join(__dirname, '../public')));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
-})
+});
 
 app.listen(PORT || 3000, () => {
   console.log('server started', PORT || 3000)

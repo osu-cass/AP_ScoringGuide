@@ -15,7 +15,7 @@ export class APIRoute {
         this.repo = new ApiRepo();
         this.router = Express.Router();
         this.router.get('/pdf/items', this.getPdfById);
-        this.router.get('/pdf', this.getPdf);
+        this.router.post('/pdf', this.getPdf);
         this.router.get('/search', this.search);
         this.router.get('/aboutItem', this.getAboutItem);
         this.router.get('/scoringGuideViewModel', this.getSubjects);
@@ -24,8 +24,8 @@ export class APIRoute {
 
     getPdf = (req: Express.Request, res: Express.Response) => {
         const searchParams = SearchUrl.decodeExpressQuery(req.query);
-        const titlePage = (req.query.TitlePage as string || 'true') == 'true';
-        const showRubric = (req.query.ScoringInfo as string || 'true') == 'true';
+        const titlePage = (req.query.TitlePage as string || 'true') === 'true';
+        const showRubric = (req.query.ScoringInfo as string || 'true') === 'true';
 
         if (!searchParams.subjects || !searchParams.subjects[0] || !searchParams.gradeLevels) {
             res.status(400).send('Invalid subject or grade.');
@@ -44,7 +44,7 @@ export class APIRoute {
             .then(value => {
                 const subjectString = value[0].label;
                 const htmlString = HtmlRenderer.renderBody(value[1], subjectString, gradeString, titlePage, showRubric);
-                const title = gradeString + ' ' + subjectString;
+                const title = `${gradeString} ${subjectString}`;
                 res.type('application/pdf');
                 PdfGenerator.generate(htmlString, title).pipe(res);
             }).catch(error => {
@@ -57,7 +57,7 @@ export class APIRoute {
         const ids = req.query.Ids;
         const assoc = req.query.Assoc as string || "false";
         const printAssoc = (assoc.toLowerCase() === "true");
-        const showRubric = (req.query.ScoringInfo as string || 'true') == 'true';
+        const showRubric = (req.query.ScoringInfo as string || 'true') === 'true';
         if (!ids) {
             res.sendStatus(400);
             return;

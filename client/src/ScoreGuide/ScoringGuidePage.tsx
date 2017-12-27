@@ -7,7 +7,6 @@ import {
     getResourceContent,
     SubjectModel,
     AboutItemModel,
-    get,
     ItemModel,
     ItemsSearchFilterModel,
     BasicFilterCategoryModel,
@@ -22,7 +21,12 @@ import {
     FilterLink,
     GradeLevels
 } from '@osu-cass/sb-components';
-import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
+import {
+    pdfPost,
+    getBasicFilterCategories,
+    getAdvancedFilterCategories,
+    getItemSearchModel
+} from './ScoreGuideModels';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
@@ -81,7 +85,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         } );
     }
 
-    onLoadFailure ( err: any ) {
+    onLoadFailure ( err: Error ) {
         console.error( err );
         this.setState( {
             allItems: { kind: "failure" },
@@ -100,7 +104,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.setState( { item } );
     }
 
-    onAboutItemError = ( err: any ) => {
+    onAboutItemError = ( err: Error ) => {
         console.error( err );
         this.setState( {
             item: { kind: "failure" }
@@ -111,7 +115,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if ( reset === false ) {
             this.getAboutItem( item );
         } else {
-            let item: Resource<AboutItemModel> = { kind: "none" };
+            const item: Resource<AboutItemModel> = { kind: "none" };
             this.setState( { item } );
         }
     }
@@ -149,7 +153,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.onFilterApplied( this.state.basicFilterCategories, filter );
     }
 
-    printItems ( searchModel: SearchAPIParamsModel, urlParamString: string ): void {
+    printItems ( searchModel: SearchAPIParamsModel ): void {
         const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
         const nonSelectedFilters: string[] = [];
         if ( !subjects || subjects.length <= 0 ) {
@@ -160,11 +164,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         }
         if ( !performanceOnly && !catOnly ) {
             nonSelectedFilters.push( "tech type" );
-        } if ( nonSelectedFilters.length > 0 ) {
+        }
+        if ( nonSelectedFilters.length > 0 ) {
             this.setState( { nonSelectedFilters } );
         }
         else {
-            window.location.href = `api/pdf${ urlParamString }`;
+            // window.location.href = `api/pdf${ urlParamString }`;
+            pdfPost( SearchUrl.encodeQuery( searchModel ) );
         }
     }
 
@@ -189,7 +195,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     renderFilterComponent (): JSX.Element {
         const { basicFilterCategories, advancedFilterCategories, nonSelectedFilters, searchAPIParams } = this.state;
-        const handleClick = () => this.printItems( searchAPIParams, SearchUrl.encodeQuery( searchAPIParams ) );
+        const handleClick = () => this.printItems( searchAPIParams );
         return (
             <div className="search-controls">
                 <button
@@ -211,7 +217,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     renderTableComponent (): JSX.Element {
-        let content = ( <div className="loader"/> );
+        let content = ( <div className="loader" /> );
         if ( this.state.visibleItems.length > 0 ) {
             content = (
                 <ItemTableContainer
@@ -236,7 +242,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 <FilterLink filterId="sb-filter-id" />
             </div>;
         } else if ( itemsSearchFilter && itemsSearchFilter.kind === "loading" ) {
-            content =  <div className="loader"/> ;
+            content = <div className="loader" />;
         }
 
         return content;
