@@ -264,7 +264,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if ( scoringModel ) {
             content = <div className="container search-page">
                 {this.renderFilterComponent()}
-                <FilterLink filterId="sb-filter-id" />
+                <FilterLink filterId="#sb-filter-id" />
             </div>;
         } else if ( itemsSearchFilter && itemsSearchFilter.kind === "loading" ) {
             content = <div className="loader" />;
