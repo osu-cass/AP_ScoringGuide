@@ -5,9 +5,7 @@ import {
     ItemCardModel,
     Resource,
     getResourceContent,
-    SubjectModel,
     AboutItemModel,
-    get,
     ItemModel,
     ItemsSearchFilterModel,
     BasicFilterCategoryModel,
@@ -22,7 +20,13 @@ import {
     FilterLink,
     GradeLevels
 } from '@osu-cass/sb-components';
-import { getBasicFilterCategories, getAdvancedFilterCategories, getItemSearchModel } from './ScoreGuideModels';
+import {
+    pdfURLPost,
+    pdfBodyPost,
+    getBasicFilterCategories,
+    getAdvancedFilterCategories,
+    getItemSearchModel
+} from './ScoreGuideModels';
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
@@ -37,6 +41,7 @@ export interface State {
     basicFilterCategories: BasicFilterCategoryModel[];
     advancedFilterCategories: AdvancedFilterCategoryModel[];
     visibleItems: ItemCardModel[];
+    selectedItems: ItemModel[];
     searchAPIParams: SearchAPIParamsModel;
     nonSelectedFilters: string[];
 }
@@ -51,6 +56,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             advancedFilterCategories: [],
             item: { kind: "none" },
             visibleItems: [],
+            selectedItems: [],
             searchAPIParams: SearchUrl.decodeSearch( this.props.location.search ),
             nonSelectedFilters: []
         };
@@ -71,7 +77,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     onLoadSuccess = ( cards: ItemCardModel[], filterModel: ItemsSearchFilterModel ) => {
         const { searchAPIParams } = this.state;
         const searchModel = getItemSearchModel( filterModel );
-        let advancedFilter = getAdvancedFilterCategories( filterModel, searchAPIParams );
+        const advancedFilter = getAdvancedFilterCategories( filterModel, searchAPIParams );
         this.setState( {
             allItems: { kind: "success", content: cards },
             itemsSearchFilter: { kind: "success", content: filterModel },
@@ -81,7 +87,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         } );
     }
 
-    onLoadFailure ( err: any ) {
+    onLoadFailure ( err: Error ) {
         console.error( err );
         this.setState( {
             allItems: { kind: "failure" },
@@ -100,18 +106,33 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         this.setState( { item } );
     }
 
-    onAboutItemError = ( err: any ) => {
+    onAboutItemError = ( err: Error ) => {
         console.error( err );
         this.setState( {
             item: { kind: "failure" }
         } );
     }
+    handleItemSelection = ( item: ItemCardModel ) => {
+        const { selectedItems, visibleItems } = this.state;
+        const { itemKey, bankKey } = item;
+        const selectedItem: ItemModel = { itemKey, bankKey };
+        const idx = selectedItems.findIndex( value => value.itemKey === selectedItem.itemKey && value.bankKey === selectedItem.bankKey );
+        const itemIdx = visibleItems.findIndex( value => value === item );
+        if ( idx > -1 ) {
+            selectedItems.splice( idx, 1 );
+        } else {
+            selectedItems.push( selectedItem );
+        }
+        visibleItems[ itemIdx ].selected = !visibleItems[ itemIdx ].selected;
+        this.setState( { selectedItems, visibleItems } );
+    }
 
-    onRowSelection = ( item: ItemModel, reset: boolean ) => {
+
+    handleRowSelection = ( item: ItemModel, reset: boolean ) => {
         if ( reset === false ) {
             this.getAboutItem( item );
         } else {
-            let item: Resource<AboutItemModel> = { kind: "none" };
+            const item: Resource<AboutItemModel> = { kind: "none" };
             this.setState( { item } );
         }
     }
@@ -136,20 +157,21 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 basicFilterCategories,
                 visibleItems,
                 searchAPIParams,
-                advancedFilterCategories: Filter.getUpdatedSearchFilters( searchModel, advancedFilterCategories, searchAPIParams )
+                advancedFilterCategories: Filter.getUpdatedSearchFilters( searchModel, advancedFilterCategories, searchAPIParams ),
+                selectedItems: []
             } );
         }
     }
 
-    onBasicFilterApplied = ( filter: BasicFilterCategoryModel[] ) => {
+    handleBasicFilterApplied = ( filter: BasicFilterCategoryModel[] ) => {
         this.onFilterApplied( filter, this.state.advancedFilterCategories );
     }
 
-    onAdvancedFilterApplied = ( filter: AdvancedFilterCategoryModel[] ) => {
+    handleAdvancedFilterApplied = ( filter: AdvancedFilterCategoryModel[] ) => {
         this.onFilterApplied( this.state.basicFilterCategories, filter );
     }
 
-    printItems ( searchModel: SearchAPIParamsModel, urlParamString: string ): void {
+    printItems ( searchModel: SearchAPIParamsModel ): void {
         const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
         const nonSelectedFilters: string[] = [];
         if ( !subjects || subjects.length <= 0 ) {
@@ -160,11 +182,16 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         }
         if ( !performanceOnly && !catOnly ) {
             nonSelectedFilters.push( "tech type" );
-        } if ( nonSelectedFilters.length > 0 ) {
+        }
+        if ( nonSelectedFilters.length > 0 ) {
             this.setState( { nonSelectedFilters } );
         }
         else {
-            window.location.href = `api/pdf${ urlParamString }`;
+            if ( this.state.selectedItems.length > 0 ) {
+                pdfBodyPost( this.state.selectedItems );
+            } else {
+                pdfURLPost( SearchUrl.encodeQuery( searchModel ) );
+            }
         }
     }
 
@@ -184,45 +211,49 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             } );
             content = <div>{filterPrompt}</div>;
         }
+
         return content;
     }
 
     renderFilterComponent (): JSX.Element {
         const { basicFilterCategories, advancedFilterCategories, nonSelectedFilters, searchAPIParams } = this.state;
-        const handleClick = () => this.printItems( searchAPIParams, SearchUrl.encodeQuery( searchAPIParams ) );
+
         return (
             <div className="search-controls">
                 <button
                     className="btn btn-blue btn-lg"
                     type="button"
-                    onClick={handleClick}>
+                    onClick={() => this.printItems( searchAPIParams )}>
                     Print Items
                 </button>
                 {this.renderErrorPrompt()}
                 <FilterContainer
                     filterId="sb-filter-id"
                     basicFilterCategories={basicFilterCategories}
-                    onUpdateBasicFilter={this.onBasicFilterApplied}
+                    onUpdateBasicFilter={this.handleBasicFilterApplied}
                     advancedFilterCategories={advancedFilterCategories}
-                    onUpdateAdvancedFilter={this.onAdvancedFilterApplied} />
+                    onUpdateAdvancedFilter={this.handleAdvancedFilterApplied} />
                 {this.renderTableComponent()}
             </div>
         );
     }
 
     renderTableComponent (): JSX.Element {
-        let content = ( <div className="loader"/> );
+        let content = ( <div className="loader" /> );
         if ( this.state.visibleItems.length > 0 ) {
             content = (
                 <ItemTableContainer
-                    onRowSelection={this.onRowSelection}
+                    onRowSelection={this.handleRowSelection}
+                    onItemSelection={this.handleItemSelection}
                     itemCards={this.state.visibleItems}
-                    item={this.state.item} />
+                    item={this.state.item}
+                />
             );
         }
         else if ( this.state.allItems.kind === "failure" ) {
             content = ( <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div> );
         }
+
         return content;
     }
 
@@ -233,10 +264,10 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if ( scoringModel ) {
             content = <div className="container search-page">
                 {this.renderFilterComponent()}
-                <FilterLink filterId="sb-filter-id" />
+                <FilterLink filterId="#sb-filter-id" />
             </div>;
         } else if ( itemsSearchFilter && itemsSearchFilter.kind === "loading" ) {
-            content =  <div className="loader"/> ;
+            content = <div className="loader" />;
         }
 
         return content;

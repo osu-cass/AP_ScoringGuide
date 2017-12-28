@@ -1,13 +1,13 @@
 import { ItemDataManager } from "./ItemDataManager";
 import * as Path from 'path';
 import * as RequestPromise from './RequestPromise';
-import { 
-    AboutItemModel, 
-    ItemCardModel, 
-    SubjectModel, 
-    ItemGroupModel, 
-    PdfViewType, 
-    SearchAPIParamsModel, 
+import {
+    AboutItemModel,
+    ItemCardModel,
+    SubjectModel,
+    ItemGroupModel,
+    PdfViewType,
+    SearchAPIParamsModel,
     ItemSearch,
     ItemsSearchFilterModel
 } from '@osu-cass/sb-components';
@@ -30,35 +30,33 @@ export class ApiRepo {
     }
 
     private async loadSubjectsFromSiw() {
-        const subjects = await RequestPromise.get(SAMPLE_ITEMS_API + '/ScoringGuide/ScoringGuideViewModel');
-        console.log("Subjects received from SampleItemsWebsite API:", SAMPLE_ITEMS_API);
-        this.subjects = JSON.parse(subjects).subjects.map((s: any) => {
+        const subjects = await RequestPromise.get(`${SAMPLE_ITEMS_API}/ScoringGuide/ScoringGuideViewModel`);
+        this.subjects = JSON.parse(subjects).subjects.map((s: {code: number, label: string, shortLabel: string}) => {
             return {
                 code: s.code,
                 label: s.label,
                 shortLabel: s.shortLabel
-            }
+            };
         });
     }
 
     public async getFilterSearchModel() {
         if (!this.filterSearchModel) {
-            const modelString = await RequestPromise.get(SAMPLE_ITEMS_API + '/BrowseItems/FilterSearchModel');
-            console.log("Filter Search Model received from SampleItemsWebsite API:", SAMPLE_ITEMS_API);
+            const modelString = await RequestPromise.get(`${SAMPLE_ITEMS_API}/BrowseItems/FilterSearchModel`);
             this.filterSearchModel = JSON.parse(modelString);
         }
+
         return this.filterSearchModel;
     }
 
     private async loadDataFromSiw() {
-        const items = await RequestPromise.get(SAMPLE_ITEMS_API + '/ScoringGuide/AboutAllItems');
-        console.log("Data received from SampleItemsWebsite API:", SAMPLE_ITEMS_API);
+        const items = await RequestPromise.get(`${SAMPLE_ITEMS_API}/ScoringGuide/AboutAllItems`);
         this.aboutItems = JSON.parse(items);
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }
 
     async getAssociatedItems(requestedIds: string[]) {
-        let idsArray: string[] = [];
+        const idsArray: string[] = [];
         const aboutItems = await this.getAboutAllItems();
         requestedIds.forEach(reqId => {
             const item = aboutItems.find(ai => (ai.associatedItems).includes(reqId));
@@ -67,8 +65,7 @@ export class ApiRepo {
             }
         });
 
-        const splitIdsArray = idsArray.map(idGroup => idGroup.split(','));
-        return splitIdsArray;
+        return idsArray.map(idGroup => idGroup.split(','));
     }
 
     async addDataToViews(itemViews: ItemGroupModel[]) {
@@ -78,29 +75,30 @@ export class ApiRepo {
             iv.questions.forEach(q => {
                 q.data = aboutItems.find(item =>
                     item.itemCardViewModel
-                    && item.itemCardViewModel.bankKey + '-' + item.itemCardViewModel.itemKey === q.id
+                    && `${item.itemCardViewModel.bankKey}-${item.itemCardViewModel.itemKey}` === q.id
                 );
-                q.questionNumber = questionNum++;
+                q.questionNumber = questionNum += 1;
             })
         );
     }
-
-    /** Loads HTML and, if needed, screenshots of items.
-     * Takes an array of string arrays, each of which should
-     * be an item Id or group of performance Ids. */
-    async loadViewData(itemIds: string[][]) {
-        let itemGroups = await Promise.all(
+/**
+ * Loads HTML and, if needed, screenshots of items.Takes an array of string arrays,
+ * each of which should be an item Id or group of performance Ids.
+ * @param {string[][]} itemIds
+ */
+async loadViewData(itemIds: string[][]) {
+        return await Promise.all(
             itemIds.map(idGroup =>
                 this.manager.getItemData(idGroup)
             )
         );
-        return itemGroups;
     }
 
     async getItemData() {
         if (!this.itemCards) {
             await this.loadDataFromSiw();
         }
+
         return this.itemCards;
     }
 
@@ -108,6 +106,7 @@ export class ApiRepo {
         if (!this.subjects) {
             await this.loadSubjectsFromSiw();
         }
+
         return this.subjects;
     }
 
@@ -115,17 +114,18 @@ export class ApiRepo {
         if (!this.aboutItems) {
             await this.loadDataFromSiw();
         }
-        const about = this.aboutItems.find(i =>
+
+        return this.aboutItems.find(i =>
             i.itemCardViewModel
             && i.itemCardViewModel.itemKey === itemKey
             && i.itemCardViewModel.bankKey === bankKey);
-        return about;
     }
 
     private async getAboutAllItems() {
         if (!this.aboutItems) {
             await this.loadDataFromSiw();
         }
+
         return this.aboutItems;
     }
 
@@ -138,11 +138,13 @@ export class ApiRepo {
         }
         const views = await this.loadViewData(idGroups);
         await this.addDataToViews(views);
+
         return views;
     }
 
     async getSubjectByCode(code: string) {
         const subjects = await this.getSubjects();
+
         return subjects.find(s => s.code === code);
     }
 
@@ -150,18 +152,17 @@ export class ApiRepo {
         const allItems = await this.getItemData();
         const filteredItems = ItemSearch.filterItemCards(allItems, filter);
         const aboutAllItems = await this.getAboutAllItems();
-        const aboutFilteredItems = filteredItems.map(i => 
-            aboutAllItems.find(ai => 
+
+        return filteredItems.map(i =>
+            aboutAllItems.find(ai =>
                 ai.itemCardViewModel && ai.itemCardViewModel.itemKey === i.itemKey && ai.itemCardViewModel.bankKey === i.bankKey
             )
         );
-        return aboutFilteredItems;
     }
 
     async getPdfDataByFilter(filter: SearchAPIParamsModel) {
-        //const subjects = await this.getSubjects();
         const aboutItems = await this.getAboutItemsByFilter(filter);
-        let associatedItems: string[] = [];
+        const associatedItems: string[] = [];
         aboutItems.forEach(ai => {
             if (!associatedItems.includes(ai.associatedItems)) {
                 associatedItems.push(ai.associatedItems);
@@ -170,8 +171,9 @@ export class ApiRepo {
 
         const idGroups = associatedItems.map(ai => ai.split(','));
         let views = await this.loadViewData(idGroups);
-        views = this.combinelikePassages(views);
-        await this.addDataToViews(views); //TODO: Optimize this by adding data first!
+        views = this.combineLikePassages(views);
+        // TODO: Optimize this by adding data first
+        await this.addDataToViews(views);
 
         return views;
     }
@@ -179,27 +181,27 @@ export class ApiRepo {
     /**
      * Finds all items with the same passage and combines the items into one passage with multiple questions
      */
-    combinelikePassages(itemGroups: ItemGroupModel[]) {
-        let combinedItems: ItemGroupModel[] = [];
+    combineLikePassages(itemGroups: ItemGroupModel[]) {
+        const combinedItems: ItemGroupModel[] = [];
         let addedIds: string[] = [];
 
-        for (let i = 0; i < itemGroups.length; i++) {
-            if (itemGroups[i].passage) {
+        for (const item of itemGroups) {
+            if (item.passage) {
 
                 const samePassageItems = itemGroups.filter((ig, filterIdx) =>
                     ig.passage && ig.passage.type === PdfViewType.html
-                    && ig.passage.html === itemGroups[i].passage.html);
+                    && ig.passage.html === item.passage.html);
                 const samePassageQuestions = samePassageItems
                     .map(ig => ig.questions)
                     .reduce((prev, curr) => prev.concat(curr), []);
                 if (samePassageQuestions.map(q => addedIds.includes(q.id)).every(bool => bool === false)) {
-                    combinedItems.push({ passage: itemGroups[i].passage, questions: samePassageQuestions });
+                    combinedItems.push({ passage: item.passage, questions: samePassageQuestions });
                     addedIds = addedIds.concat(samePassageQuestions.map(q => q.id));
                 }
 
-                //itemGroups = itemGroups.filter(ig => !samePassageItems.includes(ig));
+                // itemGroups = itemGroups.filter(ig => !samePassageItems.includes(ig));
             } else {
-                combinedItems.push(itemGroups[i]);
+                combinedItems.push(item);
             }
         }
 
