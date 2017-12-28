@@ -27,7 +27,7 @@ export const pdfBodyPost = ( params: ItemModel[] ) => {
 };
 
 export const itemSearchModelClient = () =>
-    getRequest<ItemsSearchModel>( "http://is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel" );
+    getRequest<ItemsSearchModel>( "is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel" );
 
 export const itemCardClient = () =>
     getRequest<ItemCardModel[]>( "api/search" );
@@ -50,7 +50,8 @@ export function getBasicFilterCategories ( itemSearchFilter: ItemsSearchFilterMo
 export function getAdvancedFilterCategories ( itemSearchFilter: ItemsSearchFilterModel, searchParams: SearchAPIParamsModel ): AdvancedFilterCategoryModel[] {
     const claims = { ...ItemSearch.filterSearchToCategory( itemSearchFilter.claims, searchParams ), isMultiSelect: true, displayAllButton: true };
     const interactionTypes = { ...ItemSearch.filterSearchToCategory( itemSearchFilter.interactionTypes, searchParams ), isMultiSelect: true, displayAllButton: true };
-    //const targets = {...ItemSearch.filterSearchToCategory(itemSearchFilter.targets, searchParams), isMultiSelect: true, displayAllButton: true};
+    // const targets = {...ItemSearch.filterSearchToCategory(itemSearchFilter.targets, searchParams), isMultiSelect: true, displayAllButton: true};
+
     return [ claims, interactionTypes ];
 }
 
@@ -59,6 +60,6 @@ export function getItemSearchModel ( itemSearchFilter: ItemsSearchFilterModel ):
         claims: itemSearchFilter.claims.filterOptions,
         subjects: itemSearchFilter.subjects.filterOptions,
         interactionTypes: itemSearchFilter.interactionTypes.filterOptions,
-        //targets: itemSearchFilter.targets.filterOptions
+        // targets: itemSearchFilter.targets.filterOptions
     };
 }

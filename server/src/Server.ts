@@ -1,3 +1,4 @@
+// tslint:disable-next-line: no-require-imports no-var-requires
 require( 'dotenv' ).config();
 
 import * as path from 'path';
@@ -30,5 +31,6 @@ app.get( '*', ( req, res ) => {
 } );
 
 app.listen( PORT || 3000, () => {
-    console.log( 'server started', PORT || 3000 )
+    // tslint:disable-next-line: no-console
+    console.log( 'server started', PORT || 3000 );
 } );
