@@ -23,7 +23,8 @@ import {
     GradeLevels
 } from '@osu-cass/sb-components';
 import {
-    pdfPost,
+    pdfURLPost,
+    pdfBodyPost,
     getBasicFilterCategories,
     getAdvancedFilterCategories,
     getItemSearchModel
@@ -42,6 +43,7 @@ export interface State {
     basicFilterCategories: BasicFilterCategoryModel[];
     advancedFilterCategories: AdvancedFilterCategoryModel[];
     visibleItems: ItemCardModel[];
+    selectedItems: ItemModel[];
     searchAPIParams: SearchAPIParamsModel;
     nonSelectedFilters: string[];
 }
@@ -56,6 +58,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             advancedFilterCategories: [],
             item: { kind: "none" },
             visibleItems: [],
+            selectedItems: [],
             searchAPIParams: SearchUrl.decodeSearch( this.props.location.search ),
             nonSelectedFilters: []
         };
@@ -111,8 +114,23 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             item: { kind: "failure" }
         } );
     }
+    handleItemSelection = ( item: ItemCardModel ) => {
+        const { selectedItems, visibleItems } = this.state;
+        const { itemKey, bankKey } = item;
+        const selectedItem: ItemModel = { itemKey, bankKey };
+        const idx = selectedItems.findIndex( value => value.itemKey === selectedItem.itemKey && value.bankKey === selectedItem.bankKey );
+        const itemIdx = visibleItems.findIndex( value => value === item );
+        if ( idx > -1 ) {
+            selectedItems.splice( idx, 1 );
+        } else {
+            selectedItems.push( selectedItem );
+        }
+        visibleItems[ itemIdx ].selected = !visibleItems[ itemIdx ].selected;
+        this.setState( { selectedItems, visibleItems } );
+    }
 
-    onRowSelection = ( item: ItemModel, reset: boolean ) => {
+
+    handleRowSelection = ( item: ItemModel, reset: boolean ) => {
         if ( reset === false ) {
             this.getAboutItem( item );
         } else {
@@ -141,16 +159,17 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 basicFilterCategories,
                 visibleItems,
                 searchAPIParams,
-                advancedFilterCategories: Filter.getUpdatedSearchFilters( searchModel, advancedFilterCategories, searchAPIParams )
+                advancedFilterCategories: Filter.getUpdatedSearchFilters( searchModel, advancedFilterCategories, searchAPIParams ),
+                selectedItems: []
             } );
         }
     }
 
-    onBasicFilterApplied = ( filter: BasicFilterCategoryModel[] ) => {
+    handleBasicFilterApplied = ( filter: BasicFilterCategoryModel[] ) => {
         this.onFilterApplied( filter, this.state.advancedFilterCategories );
     }
 
-    onAdvancedFilterApplied = ( filter: AdvancedFilterCategoryModel[] ) => {
+    handleAdvancedFilterApplied = ( filter: AdvancedFilterCategoryModel[] ) => {
         this.onFilterApplied( this.state.basicFilterCategories, filter );
     }
 
@@ -170,8 +189,11 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             this.setState( { nonSelectedFilters } );
         }
         else {
-            // window.location.href = `api/pdf${ urlParamString }`;
-            pdfPost( SearchUrl.encodeQuery( searchModel ) );
+            if ( this.state.selectedItems.length > 0 ) {
+                pdfBodyPost( this.state.selectedItems );
+            } else {
+                pdfURLPost( SearchUrl.encodeQuery( searchModel ) );
+            }
         }
     }
 
@@ -210,9 +232,9 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                 <FilterContainer
                     filterId="sb-filter-id"
                     basicFilterCategories={basicFilterCategories}
-                    onUpdateBasicFilter={this.onBasicFilterApplied}
+                    onUpdateBasicFilter={this.handleBasicFilterApplied}
                     advancedFilterCategories={advancedFilterCategories}
-                    onUpdateAdvancedFilter={this.onAdvancedFilterApplied} />
+                    onUpdateAdvancedFilter={this.handleAdvancedFilterApplied} />
                 {this.renderTableComponent()}
             </div>
         );
@@ -223,8 +245,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if ( this.state.visibleItems.length > 0 ) {
             content = (
                 <SearchResultContainer
-                    onRowSelection={this.onRowSelection}
-                    onItemSelection={() => {}}
+                    onRowSelection={this.handleRowSelection}
+                    onItemSelection={this.handleItemSelection}
                     itemCards={this.state.visibleItems}
                     item={this.state.item}
                 />

@@ -1,6 +1,6 @@
 import {
-    get,
-    post,
+    getRequest,
+    postRequest,
     ItemsSearchModel,
     ItemCardModel,
     ItemModel,
@@ -18,21 +18,25 @@ import {
 } from "@osu-cass/sb-components";
 
 
-export const pdfPost = (params: string) => {
-    post<object>(`api/pdf${params}`);
+export const pdfURLPost = ( params: string ) => {
+    postRequest<Blob>( `api/pdf${ params }` );
+};
+
+export const pdfBodyPost = ( params: ItemModel[] ) => {
+    postRequest<Blob>( "api/pdf/items", params );
 };
 
 export const itemSearchModelClient = () =>
-    get<ItemsSearchModel>( "http://is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel" );
+    getRequest<ItemsSearchModel>( "http://is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel" );
 
 export const itemCardClient = () =>
-    get<ItemCardModel[]>( "api/search" );
+    getRequest<ItemCardModel[]>( "api/search" );
 
 export const aboutItemClient = ( params: ItemModel ) =>
-    get<AboutItemModel>( "/api/aboutItem", params );
+    getRequest<AboutItemModel>( "/api/aboutItem", params );
 
 export const searchFilterModel = () =>
-    get<ItemsSearchFilterModel>( "api/filterSearchModel" );
+    getRequest<ItemsSearchFilterModel>( "api/filterSearchModel" );
 
 export function getBasicFilterCategories ( itemSearchFilter: ItemsSearchFilterModel, searchParams: SearchAPIParamsModel ): BasicFilterCategoryModel[] {
     const subjects = { ...ItemSearch.filterSearchToCategory( itemSearchFilter.subjects, searchParams ), type: OptionTypeModel.DropDown };

@@ -1,13 +1,13 @@
 import { ItemDataManager } from "./ItemDataManager";
 import * as Path from 'path';
 import * as RequestPromise from './RequestPromise';
-import { 
-    AboutItemModel, 
-    ItemCardModel, 
-    SubjectModel, 
-    ItemGroupModel, 
-    PdfViewType, 
-    SearchAPIParamsModel, 
+import {
+    AboutItemModel,
+    ItemCardModel,
+    SubjectModel,
+    ItemGroupModel,
+    PdfViewType,
+    SearchAPIParamsModel,
     ItemSearch,
     ItemsSearchFilterModel
 } from '@osu-cass/sb-components';
@@ -115,11 +115,10 @@ export class ApiRepo {
         if (!this.aboutItems) {
             await this.loadDataFromSiw();
         }
-        const about = this.aboutItems.find(i =>
+        return this.aboutItems.find(i =>
             i.itemCardViewModel
             && i.itemCardViewModel.itemKey === itemKey
             && i.itemCardViewModel.bankKey === bankKey);
-        return about;
     }
 
     private async getAboutAllItems() {

@@ -14,7 +14,7 @@ export class APIRoute {
     constructor() {
         this.repo = new ApiRepo();
         this.router = Express.Router();
-        this.router.get('/pdf/items', this.getPdfById);
+        this.router.post('/pdf/items', this.getPdfById);
         this.router.post('/pdf', this.getPdf);
         this.router.get('/search', this.search);
         this.router.get('/aboutItem', this.getAboutItem);
@@ -54,7 +54,8 @@ export class APIRoute {
     }
 
     getPdfById = (req: Express.Request, res: Express.Response) => {
-        const ids = req.query.Ids;
+        console.log(req);
+        const ids = req.body;
         const assoc = req.query.Assoc as string || "false";
         const printAssoc = (assoc.toLowerCase() === "true");
         const showRubric = (req.query.ScoringInfo as string || 'true') === 'true';
