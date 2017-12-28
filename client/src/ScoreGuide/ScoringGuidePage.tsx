@@ -5,7 +5,6 @@ import {
     ItemCardModel,
     Resource,
     getResourceContent,
-    SubjectModel,
     AboutItemModel,
     ItemModel,
     ItemsSearchFilterModel,
@@ -15,8 +14,7 @@ import {
     Filter,
     AdvancedFilterCategoryModel,
     SearchAPIParamsModel,
-    SearchResultContainer,
-    SearchResultType,
+    ItemTableContainer,
     FilterCategoryModel,
     FilterContainer,
     FilterLink,
@@ -244,7 +242,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         let content = ( <div className="loader" /> );
         if ( this.state.visibleItems.length > 0 ) {
             content = (
-                <SearchResultContainer
+                <ItemTableContainer
                     onRowSelection={this.handleRowSelection}
                     onItemSelection={this.handleItemSelection}
                     itemCards={this.state.visibleItems}

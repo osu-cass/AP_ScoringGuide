@@ -5,7 +5,9 @@ import { ScoringGuidePage } from './ScoreGuide/ScoringGuidePage';
 import {
     Layout,
     SbNavlinkProps,
-    ItemsSearchModel
+    ItemsSearchModel,
+    ItemCardViewer,
+    ErrorPageContainer
 } from '@osu-cass/sb-components';
 import { itemCardClient, searchFilterModel, aboutItemClient } from './ScoreGuide/ScoreGuideModels';
 
@@ -24,7 +26,7 @@ export const routes = <Layout siteName="Score Guide" links={siteLinks}>
             />
         )} />
         <Route path='*' render={(props) => (
-            <div>TODO: add error</div>
+            <ErrorPageContainer/>
         )} />
     </Switch>
 </Layout>;
