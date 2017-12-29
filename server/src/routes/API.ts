@@ -8,18 +8,18 @@ import { ApiRepo } from '../ApiRepo';
 import { GradeLevel, SearchAPIParamsModel, SearchUrl, ItemModel } from '@osu-cass/sb-components';
 
 export class APIRoute {
-    router: Express.Router;
+    routes: Express.Router;
     repo: ApiRepo;
 
     constructor () {
         this.repo = new ApiRepo();
-        this.router = Express.Router();
-        this.router.post( '/pdf/items', this.getPdfById );
-        this.router.post( '/pdf', this.getPdf );
-        this.router.get( '/search', this.search );
-        this.router.get( '/aboutItem', this.getAboutItem );
-        this.router.get( '/scoringGuideViewModel', this.getSubjects );
-        this.router.get( '/filterSearchModel', this.getFilterSearchModel );
+        this.routes = Express.Router();
+        this.routes.post( '/pdf/items', this.getPdfById );
+        this.routes.post( '/pdf', this.getPdf );
+        this.routes.get( '/search', this.search );
+        this.routes.get( '/aboutItem', this.getAboutItem );
+        this.routes.get( '/scoringGuideViewModel', this.getSubjects );
+        this.routes.get( '/filterSearchModel', this.getFilterSearchModel );
     }
 
     getPdf = ( req: Express.Request, res: Express.Response ) => {
