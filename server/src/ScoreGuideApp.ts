@@ -24,7 +24,7 @@ export class ScoreGuideApp {
     router: APIRoute;
 
     constructor () {
-        this.port = process.env.PORT;
+        this.port = process.env.PORT || "3000";
         this.app = Express();
         this.router = new APIRoute();
         this.config();
@@ -53,9 +53,9 @@ export class ScoreGuideApp {
     }
 
     listen() {
-        this.app.listen( this.port || 3000, () => {
+        this.app.listen( this.port , () => {
             // tslint:disable-next-line: no-console
-            console.log( 'server started', this.port || 3000 );
+            console.log( `server started ${this.port}`);
         } );
     }
 }
