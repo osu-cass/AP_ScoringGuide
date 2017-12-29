@@ -35,7 +35,7 @@ export class ScoreGuideApp {
         this.app.use( loggerApi( "tiny" ) );
         this.app.use( bodyParser.json() );
         this.app.use( bodyParser.urlencoded( { extended: true } ) );
-        this.app.use( Express.static( path.join( __dirname, '../public' ) ) );
+        this.app.use( Express.static( path.join( __dirname, '..', 'public' ) ) );
     }
 
     routes () {
@@ -48,14 +48,14 @@ export class ScoreGuideApp {
                 .catch( err => res.status( 500 ).send( err ) );
         } );
         this.app.get( '*', ( req, res ) => {
-            res.sendFile( path.join( __dirname, '../public/index.html' ) );
+            res.sendFile( path.join( __dirname, '..', 'public', 'index.html' ) );
         } );
     }
 
-    listen() {
-        this.app.listen( this.port , () => {
+    listen () {
+        this.app.listen( this.port, () => {
             // tslint:disable-next-line: no-console
-            console.log( `server started ${this.port}`);
+            console.log( `server started ${ this.port }` );
         } );
     }
 }
