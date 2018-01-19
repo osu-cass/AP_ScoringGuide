@@ -40,6 +40,9 @@ export class ApiRepo {
         });
     }
 
+    /**
+     * Load `ItemsSearchFilterModel` from the API
+     */
     public async getFilterSearchModel() {
         if (!this.filterSearchModel) {
             const modelString = await RequestPromise.get(`${SAMPLE_ITEMS_API}/BrowseItems/FilterSearchModel`);
@@ -55,7 +58,14 @@ export class ApiRepo {
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }
 
-    async getAssociatedItems(requestedIds: string[]) {
+    /**
+     * Returns a array of string arrays, each containing an item's associated items. The associated 
+     * items are each elements of the corresponding string array. Note that the mapped string array 
+     * will also contain the given item id.
+     * 
+     * @param {string[]} requestedIds 
+     */
+    public async getAssociatedItems(requestedIds: string[]) {
         const idsArray: string[] = [];
         const aboutItems = await this.getAboutAllItems();
         requestedIds.forEach(reqId => {
@@ -81,12 +91,12 @@ export class ApiRepo {
             })
         );
     }
-/**
- * Loads HTML and, if needed, screenshots of items.Takes an array of string arrays,
- * each of which should be an item Id or group of performance Ids.
- * @param {string[][]} itemIds
- */
-async loadViewData(itemIds: string[][]) {
+    /**
+     * Loads HTML and, if needed, screenshots of items.Takes an array of string arrays,
+     * each of which should be an item Id or group of performance Ids.
+     * @param {string[][]} itemIds
+     */
+    async loadViewData(itemIds: string[][]) {
         return await Promise.all(
             itemIds.map(idGroup =>
                 this.manager.getItemData(idGroup)
