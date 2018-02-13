@@ -247,6 +247,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     onItemSelection={this.handleItemSelection}
                     itemCards={this.state.visibleItems}
                     item={this.state.item}
+                    isLinkTable={false}
                 />
             );
         }
