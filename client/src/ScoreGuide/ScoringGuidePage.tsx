@@ -1,6 +1,6 @@
-﻿import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { RouteComponentProps } from 'react-router';
+﻿import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { RouteComponentProps } from "react-router";
 import {
     ItemCardModel,
     Resource,
@@ -21,18 +21,18 @@ import {
     GradeLevels,
     CombinedFilter,
     ItemsSearchModel
-} from '@osu-cass/sb-components';
+} from "@osu-cass/sb-components";
 import {
     pdfURLPost,
     pdfBodyPost,
     getBasicFilterCategories,
     getAdvancedFilterCategories,
     getItemSearchModel
-} from './ScoreGuideModels';
+} from "./ScoreGuideModels";
 
 export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
-    aboutItemClient: ( params: ItemModel ) => Promise<AboutItemModel>;
+    aboutItemClient: (params: ItemModel) => Promise<AboutItemModel>;
     itemCardClient: () => Promise<ItemCardModel[]>;
 }
 
@@ -49,8 +49,8 @@ export interface State {
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
-    constructor ( props: Props ) {
-        super( props );
+    constructor(props: Props) {
+        super(props);
         this.state = {
             itemsSearchModel: undefined,
             allItems: { kind: "loading" },
@@ -59,84 +59,105 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             item: { kind: "none" },
             visibleItems: [],
             selectedItems: [],
-            searchAPIParams: SearchUrl.decodeSearch( this.props.location.search ),
+            searchAPIParams: SearchUrl.decodeSearch(this.props.location.search),
             nonSelectedFilters: []
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         Promise.all([
             this.props.itemCardClient(),
             this.props.itemsSearchFilterClient()
         ])
-            .then(([cards, filterModel]) => this.onLoadSuccess(cards, filterModel))
-            .catch((err) => this.onLoadFailure(err));
+            .then(([cards, filterModel]) =>
+                this.onLoadSuccess(cards, filterModel)
+            )
+            .catch(err => this.onLoadFailure(err));
     }
 
-
-    onLoadSuccess = (cards: ItemCardModel[], filterModel: ItemsSearchFilterModel) => {
+    onLoadSuccess = (
+        cards: ItemCardModel[],
+        filterModel: ItemsSearchFilterModel
+    ) => {
         const { searchAPIParams } = this.state;
         const searchModel = getItemSearchModel(filterModel);
-        let advancedFilter = getAdvancedFilterCategories(filterModel, searchAPIParams);
-        advancedFilter = Filter.hideFiltersBasedOnSearchParams(advancedFilter, searchAPIParams);
+        let advancedFilter = getAdvancedFilterCategories(
+            filterModel,
+            searchAPIParams
+        );
+        advancedFilter = Filter.hideFiltersBasedOnSearchParams(
+            advancedFilter,
+            searchAPIParams
+        );
         this.setState({
             allItems: { kind: "success", content: cards },
             itemsSearchModel: searchModel,
             basicFilter: getBasicFilterCategories(filterModel, searchAPIParams),
-            advancedFilter: Filter.getUpdatedSearchFilters(searchModel, advancedFilter, searchAPIParams),
+            advancedFilter: Filter.getUpdatedSearchFilters(
+                searchModel,
+                advancedFilter,
+                searchAPIParams
+            ),
             visibleItems: ItemSearch.filterItemCards(cards, searchAPIParams)
+        });
+    };
+
+    onLoadFailure(err: Error) {
+        console.error(err);
+        this.setState({
+            allItems: { kind: "failure" }
         });
     }
 
-    onLoadFailure ( err: Error ) {
-        console.error( err );
-        this.setState( {
-            allItems: { kind: "failure" },
-        } );
-    }
+    getAboutItem = (item: ItemModel) => {
+        this.props
+            .aboutItemClient(item)
+            .then(data => this.onAboutItemSuccess(data))
+            .catch(err => this.onAboutItemError(err));
+    };
 
-    getAboutItem = ( item: ItemModel ) => {
-        this.props.aboutItemClient(item)
-            .then((data) => this.onAboutItemSuccess(data))
-            .catch((err) => this.onAboutItemError(err));
-    }
-
-    onAboutItemSuccess = ( data: AboutItemModel ) => {
-        const item: Resource<AboutItemModel> = { kind: "success", content: data };
+    onAboutItemSuccess = (data: AboutItemModel) => {
+        const item: Resource<AboutItemModel> = {
+            kind: "success",
+            content: data
+        };
         this.setState({ item });
-    }
+    };
 
-    onAboutItemError = ( err: Error ) => {
-        console.error( err );
-        this.setState( {
+    onAboutItemError = (err: Error) => {
+        console.error(err);
+        this.setState({
             item: { kind: "failure" }
-        } );
-    }
+        });
+    };
 
-    handleItemSelection = ( item: ItemCardModel ) => {
+    handleItemSelection = (item: ItemCardModel) => {
         const { selectedItems, visibleItems } = this.state;
         const { itemKey, bankKey } = item;
         const selectedItem: ItemModel = { itemKey, bankKey };
-        const idx = selectedItems.findIndex( value => value.itemKey === selectedItem.itemKey && value.bankKey === selectedItem.bankKey );
-        const itemIdx = visibleItems.findIndex( value => value === item );
-        if ( idx > -1 ) {
-            selectedItems.splice( idx, 1 );
+        const idx = selectedItems.findIndex(
+            value =>
+                value.itemKey === selectedItem.itemKey &&
+                value.bankKey === selectedItem.bankKey
+        );
+        const itemIdx = visibleItems.findIndex(value => value === item);
+        if (idx > -1) {
+            selectedItems.splice(idx, 1);
         } else {
-            selectedItems.push( selectedItem );
+            selectedItems.push(selectedItem);
         }
-        visibleItems[ itemIdx ].selected = !visibleItems[ itemIdx ].selected;
-        this.setState( { selectedItems, visibleItems } );
-    }
+        visibleItems[itemIdx].selected = !visibleItems[itemIdx].selected;
+        this.setState({ selectedItems, visibleItems });
+    };
 
-
-    handleRowSelection = ( item: ItemModel, reset: boolean ) => {
-        if ( reset === false ) {
-            this.getAboutItem( item );
+    handleRowSelection = (item: ItemModel, reset: boolean) => {
+        if (reset === false) {
+            this.getAboutItem(item);
         } else {
             const item: Resource<AboutItemModel> = { kind: "none" };
-            this.setState( { item } );
+            this.setState({ item });
         }
-    }
+    };
 
     onFilterApplied = (
         searchParams: SearchAPIParamsModel,
@@ -149,7 +170,10 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
         const allItems = getResourceContent(this.state.allItems);
 
-        const newVisibleItems = ItemSearch.filterItemCards(allItems || [], searchParams);
+        const newVisibleItems = ItemSearch.filterItemCards(
+            allItems || [],
+            searchParams
+        );
 
         this.setState({
             basicFilter: basic,
@@ -157,61 +181,69 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             searchAPIParams: searchParams,
             visibleItems: newVisibleItems
         });
-    }
+    };
 
-    printItems ( searchModel: SearchAPIParamsModel ): void {
+    printItems(searchModel: SearchAPIParamsModel): void {
         const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
         const nonSelectedFilters: string[] = [];
-        if ( !subjects || subjects.length <= 0 ) {
-            nonSelectedFilters.push( "subject" );
+        if (!subjects || subjects.length <= 0) {
+            nonSelectedFilters.push("subject");
         }
-        if ( !gradeLevels || gradeLevels.valueOf() === GradeLevels.NA ) {
-            nonSelectedFilters.push( "grade level" );
+        if (!gradeLevels || gradeLevels.valueOf() === GradeLevels.NA) {
+            nonSelectedFilters.push("grade level");
         }
-        if ( !performanceOnly && !catOnly ) {
-            nonSelectedFilters.push( "tech type" );
+        if (!performanceOnly && !catOnly) {
+            nonSelectedFilters.push("tech type");
         }
-        if ( nonSelectedFilters.length > 0 ) {
-            this.setState( { nonSelectedFilters } );
-        }
-        else {
-            if ( this.state.selectedItems.length > 0 ) {
-                pdfBodyPost( this.state.selectedItems );
+        if (nonSelectedFilters.length > 0) {
+            this.setState({ nonSelectedFilters });
+        } else {
+            if (this.state.selectedItems.length > 0) {
+                pdfBodyPost(this.state.selectedItems);
             } else {
-                pdfURLPost( SearchUrl.encodeQuery( searchModel ) );
+                pdfURLPost(SearchUrl.encodeQuery(searchModel));
             }
         }
     }
 
-    renderErrorPrompt (): JSX.Element | undefined {
+    renderErrorPrompt(): JSX.Element | undefined {
         const { nonSelectedFilters } = this.state;
         let content;
-        if ( nonSelectedFilters.length > 0 ) {
+        if (nonSelectedFilters.length > 0) {
             let filterPrompt = "Please select a ";
-            nonSelectedFilters.forEach( ( fil, idx ) => {
-                if ( idx === 2 || ( nonSelectedFilters.length === 2 && idx === 1 ) ) {
-                    filterPrompt = `${ filterPrompt } and ${ fil }.`;
-                } else if ( nonSelectedFilters.length === 1 && idx === 0 ) {
-                    filterPrompt = `${ filterPrompt } ${ fil }.`;
+            nonSelectedFilters.forEach((fil, idx) => {
+                if (
+                    idx === 2 ||
+                    (nonSelectedFilters.length === 2 && idx === 1)
+                ) {
+                    filterPrompt = `${filterPrompt} and ${fil}.`;
+                } else if (nonSelectedFilters.length === 1 && idx === 0) {
+                    filterPrompt = `${filterPrompt} ${fil}.`;
                 } else {
-                    filterPrompt = `${ filterPrompt } ${ fil },`;
+                    filterPrompt = `${filterPrompt} ${fil},`;
                 }
-            } );
+            });
             content = <div>{filterPrompt}</div>;
         }
 
         return content;
     }
 
-    renderFilterComponent (): JSX.Element {
-        const { basicFilter, advancedFilter, nonSelectedFilters, searchAPIParams } = this.state;
+    renderFilterComponent(): JSX.Element {
+        const {
+            basicFilter,
+            advancedFilter,
+            nonSelectedFilters,
+            searchAPIParams
+        } = this.state;
 
         return (
             <div className="search-controls">
                 <button
                     className="btn btn-blue btn-lg"
                     type="button"
-                    onClick={() => this.printItems( searchAPIParams )}>
+                    onClick={() => this.printItems(searchAPIParams)}
+                >
                     Print Items
                 </button>
                 {this.renderErrorPrompt()}
@@ -229,7 +261,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     renderTableComponent(): JSX.Element {
-        let content = (<div className="loader" />);
+        let content = <div className="loader" />;
         if (this.state.visibleItems.length > 0) {
             content = (
                 <ItemTableContainer
@@ -240,9 +272,12 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     isLinkTable={false}
                 />
             );
-        }
-        else if (this.state.allItems.kind === "failure") {
-            content = ( <div className="placeholder-text" role="alert">An error occurred. Please try again later.</div> );
+        } else if (this.state.allItems.kind === "failure") {
+            content = (
+                <div className="placeholder-text" role="alert">
+                    An error occurred. Please try again later.
+                </div>
+            );
         }
 
         return content;
@@ -252,16 +287,19 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         const allItems = getResourceContent(this.state.allItems);
         let content = <div>Search failed</div>;
         if (allItems) {
-            content = <div className="container search-page">
-                {this.renderFilterComponent()}
-                <FilterLink filterId="#sb-filter-id" />
-            </div>;
-        } else if (this.state.allItems && this.state.allItems.kind === "loading") {
+            content = (
+                <div className="container search-page">
+                    {this.renderFilterComponent()}
+                    <FilterLink filterId="#sb-filter-id" />
+                </div>
+            );
+        } else if (
+            this.state.allItems &&
+            this.state.allItems.kind === "loading"
+        ) {
             content = <div className="loader" />;
         }
 
         return content;
     }
 }
-
-
