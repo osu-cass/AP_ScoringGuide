@@ -79,13 +79,6 @@ export function getAdvancedFilterCategories(
         displayAllButton: true
     };
 
-    const subjects = {
-        ...ItemSearch.filterSearchToCategory(itemSearchFilter.subjects, searchAPI),
-        isMultiSelect: true,
-        disabled: false,
-        displayAllButton: true
-    };
-
     const interactions = {
         ...ItemSearch.filterSearchToCategory(
             itemSearchFilter.interactionTypes,
@@ -124,7 +117,6 @@ export function getAdvancedFilterCategories(
     };
 
     return [
-        subjects,
         claims,
         interactions,
         techTypes,
