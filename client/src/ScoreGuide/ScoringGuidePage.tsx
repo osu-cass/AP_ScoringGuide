@@ -261,7 +261,11 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     renderTableComponent(): JSX.Element {
-        let content = <div className="loader" />;
+        let content = (
+            <div className="placeholder-text" role="Note">
+                No items matched the specified search.
+            </div>
+        );
         if (this.state.visibleItems.length > 0) {
             content = (
                 <ItemTableContainer
