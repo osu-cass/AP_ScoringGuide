@@ -65,6 +65,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     componentDidMount() {
+        document.title = "Score Guide - Smarter Balanced";
         Promise.all([
             this.props.itemCardClient(),
             this.props.itemsSearchFilterClient()
