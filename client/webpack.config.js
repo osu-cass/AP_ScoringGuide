@@ -1,7 +1,6 @@
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require("webpack");
-const CheckerPlugin = require("awesome-typescript-loader").CheckerPlugin;
 const bundleOutputDir = "../server/public/client/";
 module.exports = env => {
   const isDevBuild = !(env && env.prod);
@@ -41,8 +40,8 @@ module.exports = env => {
         rules: [
           {
             test: /\.tsx?$/,
-            loaders: ["react-hot-loader/webpack", "awesome-typescript-loader"]
-            //options: {configFileName: 'tsconfig.json'}
+            include: /src/,
+            use: "ts-loader"
           },
           {
             test: /\.less$/,
@@ -75,7 +74,6 @@ module.exports = env => {
         new ExtractTextPlugin("bundle.css"),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new CheckerPlugin(),
         new webpack.DllReferencePlugin({
           context: __dirname,
           manifest: require(path.join(
