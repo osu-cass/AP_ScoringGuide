@@ -146,8 +146,16 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         } else {
             selectedItems.push(selectedItem);
         }
-        visibleItems[itemIdx].selected = !visibleItems[itemIdx].selected;
-        this.setState({ selectedItems, visibleItems });
+
+        const newVisibleItems = visibleItems.slice();
+        newVisibleItems[itemIdx] = {
+            ...visibleItems[itemIdx],
+            selected: !visibleItems[itemIdx].selected
+        };
+        this.setState({
+            selectedItems,
+            visibleItems: newVisibleItems
+        });
     };
 
     handleRowSelection = (item: ItemModel, reset: boolean) => {
