@@ -26,8 +26,6 @@ module.exports = env => {
         hot: true
       },
 
-      devtool: "#source-map",
-
       resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
         modules: [
@@ -38,6 +36,11 @@ module.exports = env => {
 
       module: {
         rules: [
+          {
+            test: /\.js$/,
+            use: ["source-map-loader"],
+            enforce: "pre"
+          },
           {
             test: /\.tsx?$/,
             include: /src/,
@@ -82,7 +85,22 @@ module.exports = env => {
             "vendor-manifest.json"
           ))
         })
-      ]
+      ].concat(
+        isDevBuild
+          ? [
+              // Plugins that apply in development builds only
+              new webpack.SourceMapDevToolPlugin({
+                moduleFilenameTemplate: path.relative(
+                  bundleOutputDir,
+                  "[resourcePath]"
+                ) // Point sourcemap entries to the original file locations on disk
+              })
+            ]
+          : [
+              // Plugins that apply in production builds only
+              new webpack.optimize.UglifyJsPlugin()
+            ]
+      )
     }
   ];
 };
