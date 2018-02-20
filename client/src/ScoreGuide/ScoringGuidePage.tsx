@@ -188,7 +188,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             basicFilter: basic,
             advancedFilter: advanced,
             searchAPIParams: searchParams,
-            visibleItems: newVisibleItems
+            visibleItems: newVisibleItems,
+            nonSelectedFilters: []
         });
     };
 
@@ -217,7 +218,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     renderErrorPrompt(): JSX.Element | undefined {
         const { nonSelectedFilters } = this.state;
-        let content;
+        let content = <div className="print-error-message invis"></div>;
         if (nonSelectedFilters.length > 0) {
             let filterPrompt = "Please select a ";
             nonSelectedFilters.forEach((fil, idx) => {
@@ -232,7 +233,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     filterPrompt = `${filterPrompt} ${fil},`;
                 }
             });
-            content = <div>{filterPrompt}</div>;
+            content = <div className="print-error-message" role="alert">{filterPrompt}</div>;
         }
 
         return content;
@@ -248,14 +249,16 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
         return (
             <div className="search-controls">
-                <button
-                    className="btn btn-blue btn-lg"
-                    type="button"
-                    onClick={() => this.printItems(searchAPIParams)}
-                >
-                    Print Items
-                </button>
-                {this.renderErrorPrompt()}
+                <div className="print-button-wrapper">
+                    <button
+                        className="btn btn-blue btn-lg"
+                        type="button"
+                        onClick={() => this.printItems(searchAPIParams)}
+                    >
+                        Print Items
+                    </button>
+                    {this.renderErrorPrompt()}
+                </div>
                 <CombinedFilter
                     filterId="sb-filter-id"
                     basicFilter={basicFilter}

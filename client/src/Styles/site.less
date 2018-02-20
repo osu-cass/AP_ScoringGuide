@@ -9,3 +9,25 @@
   background-color: @sb-white;
   width: 100%;
 }
+
+.print-button-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.print-error-message {
+  margin-right: 20px;
+  color: red;
+  position: relative;
+  left: 0;
+  opacity: 1;
+  transition: .4s;
+}
+
+.print-error-message.invis {
+  left: 20px;
+  opacity: 0;
+  transition: .4s;
+}
