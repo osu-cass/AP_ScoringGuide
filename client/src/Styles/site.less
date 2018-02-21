@@ -17,9 +17,13 @@
   align-items: center;
 }
 
+.filter-component-wrapper {
+  padding: @spacing-unit 0;
+}
+
 .print-error-message {
-  margin-right: 20px;
-  color: red;
+  margin-right: @spacing-unit;
+  color: rgb(172, 23, 23);
   position: relative;
   left: 0;
   opacity: 1;
@@ -27,7 +31,7 @@
 }
 
 .print-error-message.invis {
-  left: 20px;
+  left: @spacing-unit;
   opacity: 0;
   transition: .4s;
 }
