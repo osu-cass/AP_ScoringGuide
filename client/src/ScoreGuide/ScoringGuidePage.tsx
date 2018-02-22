@@ -241,15 +241,18 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     renderTitleAndPrint(): JSX.Element {
         return (
-            <div className="print-button-wrapper">
-                <button
-                    className="btn btn-blue btn-lg btn-primary"
-                    type="button"
-                    onClick={() => this.printItems(this.state.searchAPIParams)}
-                >
-                    Print Items
-                </button>
-                {this.renderErrorPrompt()}
+            <div className="search-page-header">
+                <h2 className="page-title">Filter Items</h2>
+                <div className="print-button-wrapper">
+                    <button
+                        className="btn btn-blue btn-lg btn-primary"
+                        type="button"
+                        onClick={() => this.printItems(this.state.searchAPIParams)}
+                    >
+                        Print Items
+                    </button>
+                    {this.renderErrorPrompt()}
+                </div>
             </div>
         );
     }
