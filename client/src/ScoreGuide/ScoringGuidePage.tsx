@@ -239,6 +239,21 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         return content;
     }
 
+    renderTitleAndPrint(): JSX.Element {
+        return (
+            <div className="print-button-wrapper">
+                <button
+                    className="btn btn-blue btn-lg btn-primary"
+                    type="button"
+                    onClick={() => this.printItems(this.state.searchAPIParams)}
+                >
+                    Print Items
+                </button>
+                {this.renderErrorPrompt()}
+            </div>
+        );
+    }
+
     renderFilterComponent(): JSX.Element {
         const {
             basicFilter,
@@ -248,27 +263,14 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         } = this.state;
 
         return (
-            <div className="search-controls">
-                <div className="print-button-wrapper">
-                    <button
-                        className="btn btn-blue btn-lg"
-                        type="button"
-                        onClick={() => this.printItems(searchAPIParams)}
-                    >
-                        Print Items
-                    </button>
-                    {this.renderErrorPrompt()}
-                </div>
-                <CombinedFilter
-                    filterId="sb-filter-id"
-                    basicFilter={basicFilter}
-                    advancedFilter={advancedFilter}
-                    onFilterUpdated={this.onFilterApplied}
-                    searchModel={this.state.itemsSearchModel}
-                    searchAPI={this.state.searchAPIParams}
-                />
-                {this.renderTableComponent()}
-            </div>
+            <CombinedFilter
+                filterId="sb-filter-id"
+                basicFilter={basicFilter}
+                advancedFilter={advancedFilter}
+                onFilterUpdated={this.onFilterApplied}
+                searchModel={this.state.itemsSearchModel}
+                searchAPI={this.state.searchAPIParams}
+            />
         );
     }
 
@@ -301,12 +303,16 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     render() {
         const allItems = getResourceContent(this.state.allItems);
-        let content = <div>Search failed</div>;
+        let content = <div role="alert">Search failed</div>;
         if (allItems) {
             content = (
                 <div className="container search-page">
-                    {this.renderFilterComponent()}
-                    <FilterLink filterId="#sb-filter-id" />
+                    <div className="search-controls">
+                        {this.renderTitleAndPrint()}
+                        {this.renderFilterComponent()}
+                        {this.renderTableComponent()}
+                        <FilterLink filterId="#sb-filter-id" />
+                    </div>
                 </div>
             );
         } else if (
