@@ -44,7 +44,7 @@ export function getBasicFilterCategories (
 ): BasicFilterCategoryModel[] {
     const subjects = {
         ...ItemSearch.filterSearchToCategory(itemSearchFilter.subjects, searchParams),
-        type: OptionTypeModel.DropDown
+        optionType: OptionTypeModel.DropDown
     };
     itemSearchFilter.grades.filterOptions = [
         GradeLevels.Grade3,
@@ -57,11 +57,11 @@ export function getBasicFilterCategories (
     ];
     const grades = {
         ...ItemSearch.filterSearchToCategory(itemSearchFilter.grades, searchParams),
-        type: OptionTypeModel.DropDown
+        optionType: OptionTypeModel.DropDown
     };
     const techTypes = {
         ...ItemSearch.filterSearchToCategory(itemSearchFilter.technologyTypes, searchParams),
-        type: OptionTypeModel.DropDown
+        optionType: OptionTypeModel.DropDown
     };
 
     return [ subjects, grades, techTypes ];
