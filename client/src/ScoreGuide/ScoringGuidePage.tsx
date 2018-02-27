@@ -46,6 +46,7 @@ export interface State {
     selectedItems: ItemModel[];
     searchAPIParams: SearchAPIParamsModel;
     nonSelectedFilters: string[];
+    pdfLoading: boolean;
 }
 
 export class ScoringGuidePage extends React.Component<Props, State> {
@@ -60,7 +61,8 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             visibleItems: [],
             selectedItems: [],
             searchAPIParams: SearchUrl.decodeSearch(this.props.location.search),
-            nonSelectedFilters: []
+            nonSelectedFilters: [],
+            pdfLoading: false
         };
     }
 
@@ -209,11 +211,24 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             this.setState({ nonSelectedFilters });
         } else {
             if (this.state.selectedItems.length > 0) {
-                pdfBodyPost(this.state.selectedItems);
+                pdfBodyPost(this.state.selectedItems)
+                    .then(this.onPdfDownloaded)
+                    .catch(this.onPdfError);
             } else {
-                pdfURLPost(SearchUrl.encodeQuery(searchModel));
+                pdfURLPost(SearchUrl.encodeQuery(searchModel))
+                    .then(this.onPdfDownloaded)
+                    .catch(this.onPdfError);
             }
+            this.setState({ pdfLoading: true });
         }
+    }
+
+    onPdfDownloaded = (blob: Blob) => {
+        this.setState({ pdfLoading: false });
+    }
+
+    onPdfError = (err: Error) => {
+        this.setState({ pdfLoading: false });
     }
 
     renderErrorPrompt(): JSX.Element | undefined {
@@ -239,6 +254,14 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         return content;
     }
 
+    renderPrintLoading(): JSX.Element | undefined {
+        if (!this.state.pdfLoading) {
+            return;
+        }
+
+        return <div className="loader pdf-loading-spinner" />;
+    }
+
     renderTitleAndPrint(): JSX.Element {
         return (
             <div className="search-page-header">
@@ -251,6 +274,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     >
                         Print Items
                     </button>
+                    {this.renderPrintLoading()}
                     {this.renderErrorPrompt()}
                 </div>
             </div>

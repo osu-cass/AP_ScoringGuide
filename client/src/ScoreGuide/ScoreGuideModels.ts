@@ -19,11 +19,11 @@ import {
 
 
 export const pdfURLPost = ( params: string ) => {
-    postRequest<Blob>( `api/pdf${ params }` );
+    return postRequest<Blob>( `api/pdf${ params }` );
 };
 
 export const pdfBodyPost = ( params: ItemModel[] ) => {
-    postRequest<Blob>( "api/pdf/items", params );
+    return postRequest<Blob>( "api/pdf/items", params );
 };
 
 export const itemSearchModelClient = () =>
