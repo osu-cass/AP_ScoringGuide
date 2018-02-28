@@ -34,6 +34,7 @@ export interface Props extends RouteComponentProps<{}> {
     itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
     aboutItemClient: (params: ItemModel) => Promise<AboutItemModel>;
     itemCardClient: () => Promise<ItemCardModel[]>;
+    errorRoute: string;
 }
 
 export interface State {
@@ -229,6 +230,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     onPdfError = (err: Error) => {
         this.setState({ pdfLoading: false });
+        this.props.history.push(this.props.errorRoute);
     }
 
     renderErrorPrompt(): JSX.Element | undefined {
