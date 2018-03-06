@@ -1,6 +1,6 @@
 import * as Request from 'request';
 
-export function get(url: string) {
+export function getRequest(url: string) {
     return new Promise<string>((resolve, reject) => {
         Request.get(url, {
             headers: {
@@ -16,7 +16,7 @@ export function get(url: string) {
     });
 }
 
-export function post(url: string, body: any) {
+export function postRequest(url: string, body: object) {
     return new Promise<string>((resolve, reject) => {
         Request.post(url, {
             json: body,

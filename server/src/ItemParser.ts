@@ -1,62 +1,66 @@
-import * as RequestPromise from './RequestPromise';
-import * as Cheerio from 'cheerio';
-import { ItemGroupModel, PdfViewType } from '@osu-cass/sb-components';
+import * as RequestPromise from "./RequestPromise";
+import * as Cheerio from "cheerio";
+import { ItemGroupModel, PdfViewType } from "@osu-cass/sb-components";
 
 const { ITEM_VIEWER_SERVICE_API } = process.env;
 
 export class ItemParser {
-
     /** Items should be related to each other (have the same passage) and be in the form BANK-ITEM (ex: 187-1437). */
     load(items: string[]) {
-        let postData = {
+        const postData = {
             items: items.map(i => {
-                return { response: '', id: 'I-' + i }
+                return { response: "", id: `I-${i}`};
             }),
-            accommodations: [] as any[]
-        }
-        return RequestPromise.post(ITEM_VIEWER_SERVICE_API + '/Pages/API/content/load', postData);
+            accommodations: [] as never[]
+        };
+
+        return RequestPromise.postRequest(
+            `${ITEM_VIEWER_SERVICE_API}/Pages/API/content/load`,
+            postData
+        );
     }
 
     parseXml(xmlString: string) {
         const $ = Cheerio.load(xmlString, {
             xmlMode: true
         });
-        const text = $('html').text();
-        return text;
+
+        return $("html").text();
     }
 
     parseHtml(htmlString: string, itemIds: string[]) {
-        let baseUrl = ITEM_VIEWER_SERVICE_API;
+        const baseUrl = ITEM_VIEWER_SERVICE_API;
         let $ = Cheerio.load(htmlString);
-        $('a').remove();
-        $('.questionNumber').remove();
-        $('img').map((i, el) => {
-            el.attribs['src'] = baseUrl + el.attribs['src'];
+        $("a").remove();
+        $(".questionNumber").remove();
+        $("img").map((i, el) => {
+            // tslint:disable-next-line:no-string-literal
+            el.attribs["src"] = baseUrl + el.attribs["src"];
         });
 
         $ = this.fixMultipleChoice($);
 
-        let itemData: ItemGroupModel = {
+        const itemData: ItemGroupModel = {
             questions: []
         };
 
-        if ($('.thePassage').length) {
-            const takePicture = this.shouldTakePicture($('.thePassage'))
+        if ($(".thePassage").length) {
+            const takePicture = this.shouldTakePicture($(".thePassage"));
             itemData.passage = {
                 id: itemIds[0],
                 type: takePicture ? PdfViewType.picture : PdfViewType.html,
-                html: takePicture ? undefined : $('.thePassage').html(),
+                html: takePicture ? undefined : $(".thePassage").html(),
                 captured: takePicture ? false : true
-            }
+            };
         }
 
-        itemIds.map(id => {
-            const selector = '#Item_' + id.split('-').pop();
+        itemIds.map(itemId => {
+            const selector = `#Item_${itemId.split("-").pop()}`;
             const takePicture = this.shouldTakePicture($(selector));
             itemData.questions.push({
-                id: id,
+                id: itemId,
                 view: {
-                    id: id,
+                    id: itemId,
                     type: takePicture ? PdfViewType.picture : PdfViewType.html,
                     html: takePicture ? undefined : $(selector).html(),
                     captured: takePicture ? false : true
@@ -68,12 +72,15 @@ export class ItemParser {
     }
 
     shouldTakePicture(element: Cheerio) {
-        let initializing = element.find('span').filter((i, el) => {
+        const initializing = element.find("span").filter((i, el) => {
             if (el.children[0]) {
-                return (el.children[0] as any).data === 'Initializing';
+                // tslint:disable-next-line:no-any
+                return (el.children[0] as any).data === "Initializing";
             }
+
             return false;
         }).length;
+
         return initializing !== 0;
     }
 
@@ -92,13 +99,23 @@ export class ItemParser {
     }
 
     fixMultipleChoice($: CheerioStatic) {
-        $('.optionContainer').each((i, el) => {
-            const optionElements = $(el).children('.optionContent').children();
-            const optionVal = optionElements.length === 1 && optionElements.first().is('p')
-                ? $(el).children('.optionContent').children('p').html()
-                : $(el).children('.optionContent').html();
-            $(el).html('<b>' + $(el).children('input').attr('value') + ':</b> ' + optionVal);
+        $(".optionContainer").each((i, el) => {
+            const optionElements = $(el)
+                .children(".optionContent")
+                .children();
+            const optionVal =
+                optionElements.length === 1 && optionElements.first().is("p")
+                    ? $(el)
+                          .children(".optionContent")
+                          .children("p")
+                          .html()
+                    : $(el)
+                          .children(".optionContent")
+                          .html();
+            // tslint:disable-next-line:no-inner-html
+            $(el).html(`<b> ${$(el).children("input").attr("value")}:</b> ${optionVal}`);
         });
+
         return $;
     }
 }
