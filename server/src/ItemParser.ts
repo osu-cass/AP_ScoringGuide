@@ -50,7 +50,7 @@ export class ItemParser {
                 id: itemIds[0],
                 type: takePicture ? PdfViewType.picture : PdfViewType.html,
                 html: takePicture ? undefined : $(".thePassage").html(),
-                captured: takePicture ? false : true
+                captured: !takePicture
             };
         }
 
@@ -81,10 +81,13 @@ export class ItemParser {
             return false;
         }).length;
 
-        return initializing !== 0;
+        return (initializing !== 0);
     }
 
-    /** Items should be related to each other (have the same passage) and be in the form BANK-ITEM (ex: 187-1437). */
+    /**
+     * Load a group of associated items (or an array with just 1 item) and parse HTML result.
+     * Items should be related to each other (have the same passage) and be in the form BANK-ITEM (ex: 187-1437).
+     */
     async loadItemData(items: string[]) {
         const response = await this.load(items);
         const htmlString = await this.parseXml(response);
