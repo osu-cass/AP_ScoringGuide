@@ -23,11 +23,12 @@ import {
     ItemsSearchModel
 } from "@osu-cass/sb-components";
 import {
-    pdfURLPost,
-    pdfBodyPost,
+    pdfSearchParams,
+    pdfItemSequence,
     getBasicFilterCategories,
     getAdvancedFilterCategories,
-    getItemSearchModel
+    getItemSearchModel,
+    downloadPdf
 } from "./ScoreGuideModels";
 
 export interface Props extends RouteComponentProps<{}> {
@@ -212,11 +213,11 @@ export class ScoringGuidePage extends React.Component<Props, State> {
             this.setState({ nonSelectedFilters });
         } else {
             if (this.state.selectedItems.length > 0) {
-                pdfBodyPost(this.state.selectedItems)
+                pdfItemSequence(this.state.selectedItems)
                     .then(this.onPdfDownloaded)
                     .catch(this.onPdfError);
             } else {
-                pdfURLPost(SearchUrl.encodeQuery(searchModel))
+                pdfSearchParams(searchModel)
                     .then(this.onPdfDownloaded)
                     .catch(this.onPdfError);
             }
@@ -225,6 +226,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     }
 
     onPdfDownloaded = (blob: Blob) => {
+        downloadPdf(blob);
         this.setState({ pdfLoading: false });
     }
 

@@ -14,17 +14,52 @@ import {
     BasicFilterCategoryModel,
     SearchAPIParamsModel,
     ItemSearch,
-    OptionTypeModel
+    OptionTypeModel,
+    SearchUrl
 } from "@osu-cass/sb-components";
 
+/**
+ * `GET` PDF based on search params
+ * @param searchParams search params object
+ * @param showTitlePage include title page in  PDF? defaults to true
+ * @param showScoringInfo include scoring info in PDF? defaults to true
+ */
+export const pdfSearchParams = (
+    searchParams: SearchAPIParamsModel,
+    showTitlePage = true,
+    showScoringInfo = true
+): Promise<Blob> => {
+    let paramsString = SearchUrl.encodeQuery(searchParams);
+    paramsString += `&titlePage=${showTitlePage}&scoringInfo=${showScoringInfo}`;
 
-export const pdfURLPost = ( params: string ) => {
-    return postRequest( `api/pdf${ params }` );
+    return getRequest<Blob>(`api/pdf${paramsString}`, undefined, "blob");
 };
 
-export const pdfBodyPost = ( params: ItemModel[] ) => {
-    return postRequest( "api/pdf/items", params );
+/**
+ * `POST` request for PDF given specific item IDs
+ * @param itemsToPrint Items to display in PDF
+ * @param includeAssociatedItems Display associated items in PDF? defaults to false
+ * @param showScoringInfo Display scoring info in PDF? defaults to true
+ */
+export const pdfItemSequence = (
+    itemsToPrint: ItemModel[],
+    includeAssociatedItems = false,
+    showScoringInfo = true
+): Promise<Blob> => {
+    const url = `api/pdf/items?assoc=${includeAssociatedItems}&scoringInfo=${showScoringInfo}`;
+
+    return postRequest<Blob>(url, itemsToPrint, "blob");
 };
+
+export function downloadPdf(pdfData: Blob) {
+    const now = new Date();
+    const fileName = `Scoring_Guide${now.getMonth()}-${now.getDay()}-${now.getFullYear()}_${now.getHours()}:${now.getMinutes()}.pdf`;
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(pdfData);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+}
 
 export const itemSearchModelClient = () =>
     getRequest<ItemsSearchModel>( "is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel" );
