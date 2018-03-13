@@ -27,8 +27,7 @@ import {
     pdfItemSequence,
     getBasicFilterCategories,
     getAdvancedFilterCategories,
-    getItemSearchModel,
-    downloadPdf
+    getItemSearchModel
 } from "./ScoreGuideModels";
 
 export interface Props extends RouteComponentProps<{}> {
@@ -225,13 +224,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         }
     }
 
-    onPdfDownloaded = (blob: Blob) => {
-        downloadPdf(blob);
+    onPdfDownloaded = () => {
         this.setState({ pdfLoading: false });
     }
 
     onPdfError = (err: Error) => {
         this.setState({ pdfLoading: false });
+        console.error(err);
         this.props.history.push(this.props.errorRoute);
     }
 

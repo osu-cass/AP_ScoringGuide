@@ -1,6 +1,5 @@
 import {
     getRequest,
-    postRequest,
     ItemsSearchModel,
     ItemCardModel,
     ItemModel,
@@ -15,7 +14,9 @@ import {
     SearchAPIParamsModel,
     ItemSearch,
     OptionTypeModel,
-    SearchUrl
+    SearchUrl,
+    downloadPdfGet,
+    downloadPdfPost
 } from "@osu-cass/sb-components";
 
 /**
@@ -28,11 +29,11 @@ export const pdfSearchParams = (
     searchParams: SearchAPIParamsModel,
     showTitlePage = true,
     showScoringInfo = true
-): Promise<Blob> => {
+): Promise<{}> => {
     let paramsString = SearchUrl.encodeQuery(searchParams);
     paramsString += `&titlePage=${showTitlePage}&scoringInfo=${showScoringInfo}`;
 
-    return getRequest<Blob>(`api/pdf${paramsString}`, undefined, "blob");
+    return downloadPdfGet(`api/pdf${paramsString}`);
 };
 
 /**
@@ -45,21 +46,11 @@ export const pdfItemSequence = (
     itemsToPrint: ItemModel[],
     includeAssociatedItems = false,
     showScoringInfo = true
-): Promise<Blob> => {
+): Promise<{}> => {
     const url = `api/pdf/items?assoc=${includeAssociatedItems}&scoringInfo=${showScoringInfo}`;
 
-    return postRequest<Blob>(url, itemsToPrint, "blob");
+    return downloadPdfPost(url, itemsToPrint);
 };
-
-export function downloadPdf(pdfData: Blob) {
-    const now = new Date();
-    const fileName = `Scoring_Guide${now.getMonth()}-${now.getDay()}-${now.getFullYear()}_${now.getHours()}:${now.getMinutes()}.pdf`;
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(pdfData);
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-}
 
 export const itemSearchModelClient = () =>
     getRequest<ItemsSearchModel>( "is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel" );
