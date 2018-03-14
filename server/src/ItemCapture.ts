@@ -31,6 +31,7 @@ export class ItemCapture {
         if (ids.length === 0 && paths.passage) {
             ids.push(paths.passage.id);
         }
+
         return ids.join(",");
     }
 
@@ -38,9 +39,7 @@ export class ItemCapture {
         const page = await this.browser.newPage();
         const idsString = this.getIdString(itemData);
         await page.goto(
-            "http://ivs.smarterbalanced.org/items?ids=" +
-                idsString +
-                "&isaap=TDS_SLM1"
+            `http://ivs.smarterbalanced.org/items?ids=${idsString}&isaap=TDS_SLM1`
         );
         await page.setViewport({
             width: this.pageWidth,
