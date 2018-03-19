@@ -9,6 +9,7 @@ import { loggerApi } from "./Logger";
 import { APIRoute } from './routes/API';
 import { ItemParser } from './ItemParser';
 
+const { PORT } = process.env;
 
 /**
  * The ScoreGuideApp encapsulates an Express Application for the Scoring Guide
@@ -24,7 +25,7 @@ export class ScoreGuideApp {
     router: APIRoute;
 
     constructor () {
-        this.port = process.env.PORT || "3000";
+        this.port = PORT || "3000";
         this.app = Express();
         this.router = new APIRoute();
         this.config();

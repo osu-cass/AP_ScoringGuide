@@ -5,7 +5,7 @@ import * as ReactDOMServer from 'react-dom/server';
 const wkhtmltopdf = require('wkhtmltopdf');
 import {PdfContainer, ItemGroupModel} from '@osu-cass/sb-components';
 
-const {ITEM_VIEWER_SERVICE_API} = process.env;
+const {ITEM_VIEWER_SERVICE_API, PORT} = process.env;
 
 export class HtmlRenderer {
     static renderBody(items: ItemGroupModel[], subject: string, grade: string, titlePage: boolean, scoringInfo: boolean) {
@@ -16,8 +16,9 @@ export class HtmlRenderer {
                 grade={grade}
                 ivsBaseUrl={ITEM_VIEWER_SERVICE_API}
                 cssUrl={path.join(__dirname, '../public/pdf/pdf.css')}
-                displayTitlePage={titlePage} 
-                displayScoreInfo={scoringInfo} />
+                displayTitlePage={titlePage}
+                displayScoreInfo={scoringInfo}
+                port={PORT} />
         );
     }
 }
@@ -33,7 +34,8 @@ export class PdfGenerator {
             marginBottom: '.75in',
             marginTop: '1.25in',
             marginLeft: '.5in',
-            marginRight: '.5in'
+            marginRight: '.5in',
+            debug: true
         }) as Stream;
     }
 }

@@ -22,11 +22,7 @@ export class ApiRepo {
     filterSearchModel: ItemsSearchFilterModel;
 
     constructor() {
-        const path = Path.join(__dirname, "../public/screenshots");
-        this.manager = new ItemDataManager({
-            pageWidth: parseInt(SCREENSHOT_WIDTH, 10),
-            screenshotPath: path
-        });
+        this.manager = new ItemDataManager();
     }
 
     /**

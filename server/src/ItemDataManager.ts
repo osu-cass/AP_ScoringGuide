@@ -1,6 +1,7 @@
 import { ItemCapture } from "./ItemCapture";
 import * as FileSystem from "fs";
 import * as Path from "path";
+import * as URL from "url";
 import {
     ItemGroupModel,
     ItemPdfModel,
@@ -8,18 +9,13 @@ import {
 } from "@osu-cass/sb-components";
 import { ItemParser } from "./ItemParser";
 
-export interface ScreenshotOptions {
-    screenshotPath: string;
-    pageWidth: number;
-}
+const { SCREENSHOT_PATH, SCREENSHOT_URL } = process.env;
 
 export class ItemDataManager {
     chrome: ItemCapture;
-    screenshotPath: string;
 
-    constructor(options: ScreenshotOptions) {
-        this.chrome = new ItemCapture(options.pageWidth);
-        this.screenshotPath = options.screenshotPath;
+    constructor() {
+        this.chrome = new ItemCapture();
         this.openChromeIfNeeded();
     }
 
@@ -32,18 +28,17 @@ export class ItemDataManager {
     /**
      * Takes one item id (or an array of related item ids, in case of performance items)
      */
-    async getItemData(ids: string[]) {
+    async getItemData(ids: string[]): Promise<ItemGroupModel> {
         if (ids.length === 0) {
-            return {
-                questions: []
-            } as ItemGroupModel;
+            return { questions: [] };
         }
 
         let itemData = await new ItemParser().loadItemData(ids);
         let takePictures = false;
 
-        if (!FileSystem.existsSync(this.screenshotPath)) {
-            FileSystem.mkdirSync(this.screenshotPath);
+        const sPath = Path.join(__dirname, SCREENSHOT_PATH);
+        if (!FileSystem.existsSync(sPath)) {
+            FileSystem.mkdirSync(sPath);
         }
 
         takePictures = this.getPassagePaths(itemData, ids, takePictures);
@@ -60,20 +55,26 @@ export class ItemDataManager {
         itemData: ItemGroupModel,
         ids: string[],
         takePictures: boolean
-    ) {
+    ): boolean {
+        let shouldScreenshot = takePictures;
         if (itemData.passage && itemData.passage.type === PdfViewType.picture) {
-            const possiblePassagePaths = ids.map(itemId => {
-                const pth = Path.join(
-                    this.screenshotPath,
-                    itemId + "-passage.png"
+            const possiblePassagePaths: ItemPdfModel[] = ids.map(itemId => {
+                const picPath = Path.join(
+                    __dirname,
+                    SCREENSHOT_PATH,
+                    `${itemId}-passage.png`
                 );
 
                 return {
-                    picturePath: pth,
+                    picturePath: picPath,
+                    screenshotUrl: URL.resolve(
+                        SCREENSHOT_URL,
+                        `${itemId}-passage.png`
+                    ),
                     id: itemId,
                     type: PdfViewType.picture,
-                    captured: FileSystem.existsSync(pth)
-                } as ItemPdfModel;
+                    captured: FileSystem.existsSync(picPath)
+                };
             });
 
             const capturedPassages = possiblePassagePaths.filter(
@@ -83,27 +84,35 @@ export class ItemDataManager {
                 itemData.passage = capturedPassages[0];
             } else {
                 itemData.passage = possiblePassagePaths[0];
-                takePictures = true;
+                shouldScreenshot = true;
             }
         }
-        return takePictures;
+
+        return shouldScreenshot;
     }
 
     private getQuestionPaths(itemData: ItemGroupModel, takePictures: boolean) {
+        let shouldScreenshot = takePictures;
         itemData.questions.forEach(q => {
             if (q.view.type === PdfViewType.picture) {
                 const pth = Path.join(
-                    this.screenshotPath,
-                    q.id + "-question.png"
+                    __dirname,
+                    SCREENSHOT_PATH,
+                    `${q.id}-question.png`
                 );
                 const captured = FileSystem.existsSync(pth);
                 if (!captured) {
-                    takePictures = true;
+                    shouldScreenshot = true;
                 }
                 q.view.picturePath = pth;
+                q.view.screenshotUrl = URL.resolve(
+                    SCREENSHOT_URL,
+                    `${q.id}-question.png`
+                );
                 q.view.captured = captured;
             }
         });
-        return takePictures;
+
+        return shouldScreenshot;
     }
 }

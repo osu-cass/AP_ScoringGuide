@@ -7,13 +7,10 @@ import {
 } from "@osu-cass/sb-components";
 const puppeteer = require("puppeteer");
 
+const { SCREENSHOT_WIDTH } = process.env;
+
 export class ItemCapture {
     browser: any;
-    pageWidth = 640;
-
-    constructor(pageWidth: number) {
-        this.pageWidth = pageWidth;
-    }
 
     async launchBrowser() {
         this.browser = await puppeteer.launch({ args: ["--no-sandbox"] });
@@ -21,7 +18,7 @@ export class ItemCapture {
     }
 
     getIdString(paths: ItemGroupModel) {
-        let ids: string[] = [];
+        const ids: string[] = [];
         paths.questions.forEach(p => {
             if (p.view.type === PdfViewType.picture) {
                 ids.push(p.id);
@@ -42,7 +39,7 @@ export class ItemCapture {
             `http://ivs.smarterbalanced.org/items?ids=${idsString}&isaap=TDS_SLM1`
         );
         await page.setViewport({
-            width: this.pageWidth,
+            width: SCREENSHOT_WIDTH,
             height: 1000
         });
         const iframe = await page.frames()[1];
@@ -60,7 +57,7 @@ export class ItemCapture {
         });
 
         await page.setViewport({
-            width: this.pageWidth,
+            width: SCREENSHOT_WIDTH,
             height: groupingHeight + headerHeight
         });
 
@@ -94,10 +91,11 @@ export class ItemCapture {
             const headerHeight = document.querySelector(".questionNumber")
                 .clientHeight;
             const elements = document.querySelector(".theQuestions").children;
-            let rects = [];
+            const rects = [];
+            // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < elements.length; i++) {
                 const boundingClientRect = elements[i].getBoundingClientRect();
-                var rect = {
+                const rect = {
                     x: scrollX + boundingClientRect.left,
                     y: scrollY + boundingClientRect.top + headerHeight,
                     width: boundingClientRect.width,
@@ -106,9 +104,11 @@ export class ItemCapture {
                 };
                 rects.push(rect);
             }
+
             return rects;
         });
 
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < itemRects.length; i++) {
             const question = itemData.questions.find(q =>
                 q.id.includes(itemRects[i].itemId)
@@ -124,8 +124,8 @@ export class ItemCapture {
                 question.view.captured = true;
             }
         }
-
         page.close(); // fire and forget
+
         return itemData;
     }
 }
