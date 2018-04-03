@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as Express from "express";
-import { HtmlRenderer, PdfGenerator } from "../PdfGenerator";
+import * as PdfGenerator from "../PdfGenerator";
 import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from "../RequestPromise";
@@ -66,7 +66,7 @@ export class APIRoute {
         Promise.all([subjectPromise, pdfDataPromise])
             .then(value => {
                 const subjectString = value[0].label;
-                const htmlString = HtmlRenderer.renderBody(
+                const htmlString = PdfGenerator.renderBody(
                     value[1],
                     subjectString,
                     gradeString,
@@ -109,7 +109,7 @@ export class APIRoute {
             this.repo
                 .getPdfDataByIds(requestedIds, printAssoc)
                 .then(itemViews => {
-                    const htmlString = HtmlRenderer.renderBody(
+                    const htmlString = PdfGenerator.renderBody(
                         itemViews,
                         "",
                         "",
