@@ -7,7 +7,7 @@ import * as path from "path";
  * The loggerApi handles each request and logs it to a file called requests.log in the root of the server.
  * If the response status code is > 400, the request is logged to the errors.log file at the root of 
  * the server.
- * @param {format: string} the format that Morgan uses to output request logs
+ * @param {string} format: the format that Morgan uses to output request logs
  */
 export const loggerApi = ( format: string ): Express.RequestHandler[] => {
     const requestStream = fs.createWriteStream( path.join( __dirname, '..', 'requests.log' ), { flags: 'a' } );

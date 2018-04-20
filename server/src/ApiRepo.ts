@@ -92,6 +92,10 @@ export class ApiRepo {
         return idsArray.map(idGroup => idGroup.split(","));
     }
 
+    /**
+     * Adds `AboutItemData` and question number to each item in the `itemViews` array.
+     * @param itemViews view models that data gets added to
+     */
     async addDataToViews(itemViews: ItemGroupModel[]) {
         let questionNum = 1;
         const aboutItems = await this.getAboutAllItems();
@@ -114,7 +118,7 @@ export class ApiRepo {
      * @param {string[][]} itemIds
      */
     async loadViewData(itemIds: string[][]) {
-        return await Promise.all(
+        return Promise.all(
             itemIds.map(idGroup => this.manager.getItemData(idGroup))
         );
     }
@@ -135,6 +139,12 @@ export class ApiRepo {
         return this.subjects;
     }
 
+    /**
+     * Find the `AboutItemModel` that corresponds to the given item and bank keys.
+     *
+     * @param {number} itemKey
+     * @param {number} bankKey
+     */
     async getAboutItem(itemKey: number, bankKey: number) {
         if (!this.aboutItems) {
             await this.loadDataFromSiw();
@@ -156,6 +166,12 @@ export class ApiRepo {
         return this.aboutItems;
     }
 
+    /**
+     * Given an array of item ids, return a corresponding array of `ItemGroupModel`s including the view data for each item and its metadata.
+     *
+     * @param {string[]} requestedIds Array of item ids of the form `BANK-ITEM`
+     * @param {boolean} printAssoc Include associated items? (performance items)
+     */
     async getPdfDataByIds(requestedIds: string[], printAssoc: boolean) {
         let idGroups: string[][];
         if (printAssoc) {
@@ -175,7 +191,12 @@ export class ApiRepo {
         return subjects.find(s => s.code === code);
     }
 
-    async getAboutItemsByFilter(filter: SearchAPIParamsModel) {
+    /**
+     * Filter `AboutItemModel`s down based on the `SearchAPIParamsModel` using `ItemSearch.filterItemCards() and return the result`
+     *
+     * @param {SearchAPIParamsModel} filter
+     */
+    private async getAboutItemsByFilter(filter: SearchAPIParamsModel) {
         const allItems = await this.getItemData();
         const filteredItems = ItemSearch.filterItemCards(allItems, filter);
         const aboutAllItems = await this.getAboutAllItems();
@@ -189,6 +210,10 @@ export class ApiRepo {
         );
     }
 
+    /** Filter down items based on given filter, then return a array of `ItemGroupModel`s including the view data for filtered items and its metadata.
+     *
+     * @param {SearchAPIParamsModel} filter
+     */
     async getPdfDataByFilter(filter: SearchAPIParamsModel) {
         const aboutItems = await this.getAboutItemsByFilter(filter);
         const associatedItems: string[] = [];
@@ -201,7 +226,6 @@ export class ApiRepo {
         const idGroups = associatedItems.map(ai => ai.split(","));
         let views = await this.loadViewData(idGroups);
         views = this.combineLikePassages(views);
-        // TODO: Optimize this by adding data first
         await this.addDataToViews(views);
 
         return views;
@@ -210,7 +234,7 @@ export class ApiRepo {
     /**
      * Finds all items with the same passage and combines the items into one passage with multiple questions
      */
-    combineLikePassages(itemGroups: ItemGroupModel[]) {
+    private combineLikePassages(itemGroups: ItemGroupModel[]) {
         const combinedItems: ItemGroupModel[] = [];
         let addedIds: string[] = [];
 
@@ -239,7 +263,6 @@ export class ApiRepo {
                     );
                 }
 
-                // itemGroups = itemGroups.filter(ig => !samePassageItems.includes(ig));
             } else {
                 combinedItems.push(item);
             }
