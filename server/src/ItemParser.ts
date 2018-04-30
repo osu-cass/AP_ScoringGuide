@@ -5,8 +5,12 @@ import { ItemGroupModel, PdfViewType } from "@osu-cass/sb-components";
 const { ITEM_VIEWER_SERVICE_API } = process.env;
 
 export class ItemParser {
-    /** Items should be related to each other (have the same passage) and be in the form BANK-ITEM (ex: 187-1437). */
-    load(items: string[]) {
+    /**
+     * Load item or group of items from Item Viewer Service
+     *
+     * @param {string[]} items should be related to each other (have the same passage) and be in the form `BANK-ITEM` (ex: "187-1437").
+     */
+    load(items: string[]): Promise<string> {
         const postData = {
             items: items.map(i => {
                 return { response: "", id: `I-${i}`};
@@ -20,7 +24,13 @@ export class ItemParser {
         );
     }
 
-    parseXml(xmlString: string) {
+    /**
+     * Parse XML string returned from Item Viewer Service, return
+     *
+     * @param {string} xmlString
+     * @returns item contents as HTML string
+     */
+    parseXml(xmlString: string): string {
         const $ = Cheerio.load(xmlString, {
             xmlMode: true
         });
@@ -28,7 +38,14 @@ export class ItemParser {
         return $("html").text();
     }
 
-    parseHtml(htmlString: string, itemIds: string[]) {
+    /**
+     * Given item or group of items and HTML string containing their content, parses out question and passage HTML and associates them in an `ItemGroupModel`.
+     * Also makes images absolute links to IVS, removes links we don't want to print, and reformats multiple choice options
+     *
+     * @param {string} htmlString unprocessed string of HTML from IVS
+     * @param {string[]} itemIds should be related to each other (have the same passage) and be in the form `BANK-ITEM` (ex: "187-1437").
+     */
+    parseHtml(htmlString: string, itemIds: string[]): ItemGroupModel {
         const baseUrl = ITEM_VIEWER_SERVICE_API;
         let $ = Cheerio.load(htmlString);
         $("a").remove();
@@ -71,7 +88,14 @@ export class ItemParser {
         return itemData;
     }
 
-    shouldTakePicture(element: Cheerio) {
+    /**
+     * Do we need to take a screenshot of the question or passage? We will need to if there is an element with the text `"Initializing"`
+     * because that signifies there is an interactive component using JavaScript to render the content, meaning it will not display
+     * correctly without a screenshot.
+     *
+     * @param {Cheerio} element cheerio object to query
+     */
+    shouldTakePicture(element: Cheerio): boolean {
         const initializing = element.find("span").filter((i, el) => {
             if (el.children[0]) {
                 // tslint:disable-next-line:no-any
@@ -91,14 +115,15 @@ export class ItemParser {
     async loadItemData(items: string[]) {
         const response = await this.load(items);
         const htmlString = await this.parseXml(response);
+
         return this.parseHtml(htmlString, items);
     }
 
     async loadPlainHtml(item: string) {
         const response = await this.load([item]);
         const baseUrl = ITEM_VIEWER_SERVICE_API;
-        const htmlString = await this.parseXml(response);
-        return htmlString;
+
+        return this.parseXml(response);
     }
 
     fixMultipleChoice($: CheerioStatic) {
