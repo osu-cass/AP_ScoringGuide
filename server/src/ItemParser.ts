@@ -4,16 +4,17 @@ import { ItemGroupModel, PdfViewType } from "@osu-cass/sb-components";
 
 const { ITEM_VIEWER_SERVICE_API } = process.env;
 
+// tslint:disable-next-line:no-unnecessary-class
 export class ItemParser {
     /**
      * Load item or group of items from Item Viewer Service
      *
      * @param {string[]} items should be related to each other (have the same passage) and be in the form `BANK-ITEM` (ex: "187-1437").
      */
-    load(items: string[]): Promise<string> {
+    private static load(items: string[]): Promise<string> {
         const postData = {
             items: items.map(i => {
-                return { response: "", id: `I-${i}`};
+                return { response: "", id: `I-${i}` };
             }),
             accommodations: [] as never[]
         };
@@ -25,12 +26,12 @@ export class ItemParser {
     }
 
     /**
-     * Parse XML string returned from Item Viewer Service, return
+     * Parse XML string returned from Item Viewer Service
      *
      * @param {string} xmlString
      * @returns item contents as HTML string
      */
-    parseXml(xmlString: string): string {
+    private static parseXml(xmlString: string): string {
         const $ = Cheerio.load(xmlString, {
             xmlMode: true
         });
@@ -45,7 +46,7 @@ export class ItemParser {
      * @param {string} htmlString unprocessed string of HTML from IVS
      * @param {string[]} itemIds should be related to each other (have the same passage) and be in the form `BANK-ITEM` (ex: "187-1437").
      */
-    parseHtml(htmlString: string, itemIds: string[]): ItemGroupModel {
+    private static parseHtml(htmlString: string, itemIds: string[]): ItemGroupModel {
         const baseUrl = ITEM_VIEWER_SERVICE_API;
         let $ = Cheerio.load(htmlString);
         $("a").remove();
@@ -55,14 +56,14 @@ export class ItemParser {
             el.attribs["src"] = baseUrl + el.attribs["src"];
         });
 
-        $ = this.fixMultipleChoice($);
+        $ = ItemParser.fixMultipleChoice($);
 
         const itemData: ItemGroupModel = {
             questions: []
         };
 
         if ($(".thePassage").length) {
-            const takePicture = this.shouldTakePicture($(".thePassage"));
+            const takePicture = ItemParser.shouldTakePicture($(".thePassage"));
             itemData.passage = {
                 id: itemIds[0],
                 type: takePicture ? PdfViewType.picture : PdfViewType.html,
@@ -73,7 +74,7 @@ export class ItemParser {
 
         itemIds.map(itemId => {
             const selector = `#Item_${itemId.split("-").pop()}`;
-            const takePicture = this.shouldTakePicture($(selector));
+            const takePicture = ItemParser.shouldTakePicture($(selector));
             itemData.questions.push({
                 id: itemId,
                 view: {
@@ -95,7 +96,7 @@ export class ItemParser {
      *
      * @param {Cheerio} element cheerio object to query
      */
-    shouldTakePicture(element: Cheerio): boolean {
+    private static shouldTakePicture(element: Cheerio): boolean {
         const initializing = element.find("span").filter((i, el) => {
             if (el.children[0]) {
                 // tslint:disable-next-line:no-any
@@ -105,28 +106,42 @@ export class ItemParser {
             return false;
         }).length;
 
-        return (initializing !== 0);
+        return initializing !== 0;
     }
 
     /**
      * Load a group of associated items (or an array with just 1 item) and parse HTML result.
      * Items should be related to each other (have the same passage) and be in the form BANK-ITEM (ex: 187-1437).
+     *
+     * @param {string[]} items
      */
-    async loadItemData(items: string[]) {
-        const response = await this.load(items);
+    public static async loadItemData(items: string[]): Promise<ItemGroupModel> {
+        const response = await ItemParser.load(items);
         const htmlString = await this.parseXml(response);
 
         return this.parseHtml(htmlString, items);
     }
 
-    async loadPlainHtml(item: string) {
-        const response = await this.load([item]);
+    /**
+     * Load a group of associated items (or an array with just 1 item) and parse XML result
+     *
+     * @param {string} item
+     * @returns {Promise<string>} HTML inside XML result from IVS
+     */
+    public static async loadPlainHtml(item: string): Promise<string> {
+        const response = await ItemParser.load([item]);
         const baseUrl = ITEM_VIEWER_SERVICE_API;
 
         return this.parseXml(response);
     }
 
-    fixMultipleChoice($: CheerioStatic) {
+    /**
+     * Find all instances of multiple choice and move option tag (A, B, C, etc.) to same line as option content and make the tags bold
+     *
+     * @param {CheerioStatic} $ Cheerio object to query
+     * @returns same Cheerio object with multiple choice made more readable
+     */
+    private static fixMultipleChoice($: CheerioStatic) {
         $(".optionContainer").each((i, el) => {
             const optionElements = $(el)
                 .children(".optionContent")
@@ -141,7 +156,11 @@ export class ItemParser {
                           .children(".optionContent")
                           .html();
             // tslint:disable-next-line:no-inner-html
-            $(el).html(`<b> ${$(el).children("input").attr("value")}:</b> ${optionVal}`);
+            $(el).html(
+                `<b> ${$(el)
+                    .children("input")
+                    .attr("value")}:</b> ${optionVal}`
+            );
         });
 
         return $;

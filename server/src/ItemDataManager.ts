@@ -11,6 +11,11 @@ import { ItemParser } from "./ItemParser";
 
 const { SCREENSHOT_PATH, SCREENSHOT_URL } = process.env;
 
+/**
+ *
+ *
+ * @class ItemDataManager
+ */
 export class ItemDataManager {
     chrome: ItemCapture;
 
@@ -26,14 +31,17 @@ export class ItemDataManager {
     }
 
     /**
-     * Takes one item id (or an array of related item ids, in case of performance items)
+     * Assembles item view data for given id(s) by calling `ItemParser.loadItemData()` and `ItemCapture.takeScreenshots()`
+     *
+     * @param {string[]} ids Takes one item id (or an array of related item ids, in case of performance items)
+     * @returns {Promise<ItemGroupModel>} `ItemGroupModel` which does not have metadata yet
      */
     async getItemData(ids: string[]): Promise<ItemGroupModel> {
         if (ids.length === 0) {
             return { questions: [] };
         }
 
-        let itemData = await new ItemParser().loadItemData(ids);
+        let itemData = await ItemParser.loadItemData(ids);
         let takePictures = false;
 
         const sPath = Path.join(__dirname, SCREENSHOT_PATH);
