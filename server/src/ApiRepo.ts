@@ -1,5 +1,5 @@
 import { ItemDataManager } from "./ItemDataManager";
-import * as Path from "path";
+import * as URL from "url";
 import * as RequestPromise from "./RequestPromise";
 import {
     AboutItemModel,
@@ -31,9 +31,8 @@ export class ApiRepo {
      * call `getSubjects()` instead of this.
      */
     private async loadSubjectsFromSiw() {
-        const subjects = await RequestPromise.getRequest(
-            `${SAMPLE_ITEMS_API}/ScoringGuide/ScoringGuideViewModel`
-        );
+        const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/ScoringGuide/ScoringGuideViewModel");
+        const subjects = await RequestPromise.getRequest(fullUrl);
         this.subjects = JSON.parse(subjects).subjects.map(
             (s: { code: number; label: string; shortLabel: string }) => {
                 return {
@@ -50,9 +49,8 @@ export class ApiRepo {
      */
     public async getFilterSearchModel() {
         if (!this.filterSearchModel) {
-            const modelString = await RequestPromise.getRequest(
-                `${SAMPLE_ITEMS_API}/BrowseItems/FilterSearchModel`
-            );
+            const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/BrowseItems/FilterSearchModel");
+            const modelString = await RequestPromise.getRequest(fullUrl);
             this.filterSearchModel = JSON.parse(modelString);
         }
 
@@ -63,9 +61,8 @@ export class ApiRepo {
      * Load `AboutItemModel`s from API, use that data to get `ItemCardModel`s
      */
     private async loadDataFromSiw() {
-        const items = await RequestPromise.getRequest(
-            `${SAMPLE_ITEMS_API}/ScoringGuide/AboutAllItems`
-        );
+        const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/ScoringGuide/AboutAllItems");
+        const items = await RequestPromise.getRequest(fullUrl);
         this.aboutItems = JSON.parse(items);
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }

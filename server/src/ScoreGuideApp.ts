@@ -1,13 +1,13 @@
 // tslint:disable-next-line: no-require-imports no-var-requires
-require( 'dotenv' ).config();
+require("dotenv").config();
 
-import * as path from 'path';
-import * as Express from 'express';
+import * as path from "path";
+import * as Express from "express";
 import * as bodyParser from "body-parser";
 import * as morgan from "morgan";
 import { loggerApi } from "./Logger";
-import { APIRoute } from './routes/API';
-import { ItemParser } from './ItemParser';
+import { APIRoute } from "./routes/API";
+import { ItemParser } from "./ItemParser";
 
 const { PORT } = process.env;
 
@@ -24,7 +24,7 @@ export class ScoreGuideApp {
     app: Express.Application;
     router: APIRoute;
 
-    constructor () {
+    constructor() {
         this.port = PORT || "3000";
         this.app = Express();
         this.router = new APIRoute();
@@ -32,31 +32,30 @@ export class ScoreGuideApp {
         this.routes();
     }
 
-    config () {
-        this.app.use( loggerApi( "tiny" ) );
-        this.app.use( bodyParser.json() );
-        this.app.use( bodyParser.urlencoded( { extended: true } ) );
-        this.app.use( Express.static( path.join( __dirname, '..', 'public' ) ) );
+    config() {
+        this.app.use(loggerApi("tiny"));
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(Express.static(path.join(__dirname, "..", "public")));
     }
 
-    routes () {
-        this.app.use( '/api', this.router.routes );
-        this.app.get( '/item', ( req, res ) => {
-            const id = req.param( 'id', '' ) as string;
-            const ip = new ItemParser();
-            ip.loadPlainHtml( id )
-                .then( item => res.send( item ) )
-                .catch( err => res.status( 500 ).send( err ) );
-        } );
-        this.app.get( '*', ( req, res ) => {
-            res.sendFile( path.join( __dirname, '..', 'public', 'index.html' ) );
-        } );
+    routes() {
+        this.app.use("/api", this.router.routes);
+        this.app.get("/item", (req, res) => {
+            const id = req.param("id", "") as string;
+            ItemParser.loadPlainHtml(id)
+                .then(item => res.send(item))
+                .catch(err => res.status(500).send(err));
+        });
+        this.app.get("*", (req, res) => {
+            res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+        });
     }
 
-    listen () {
-        this.app.listen( this.port, () => {
+    listen() {
+        this.app.listen(this.port, () => {
             // tslint:disable-next-line: no-console
-            console.log( `server started ${ this.port }` );
-        } );
+            console.log(`server started ${this.port}`);
+        });
     }
 }
