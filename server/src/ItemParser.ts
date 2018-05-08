@@ -72,7 +72,7 @@ export class ItemParser {
             };
         }
 
-        itemIds.map(itemId => {
+        itemIds.forEach(itemId => {
             const selector = `#Item_${itemId.split("-").pop()}`;
             const takePicture = ItemParser.shouldTakePicture($(selector));
             itemData.questions.push({

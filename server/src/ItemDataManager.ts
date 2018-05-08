@@ -42,15 +42,14 @@ export class ItemDataManager {
         }
 
         let itemData = await ItemParser.loadItemData(ids);
-        let takePictures = false;
 
         const sPath = Path.join(__dirname, SCREENSHOT_PATH);
         if (!FileSystem.existsSync(sPath)) {
             FileSystem.mkdirSync(sPath);
         }
 
-        takePictures = this.getPassagePaths(itemData, ids, takePictures);
-        takePictures = this.getQuestionPaths(itemData, takePictures);
+        let takePictures = this.getPassagePaths(itemData);
+        takePictures = this.getQuestionPaths(itemData) || takePictures;// This way we don't short circuit
 
         if (takePictures) {
             itemData = await this.chrome.takeScreenshots(itemData);
@@ -59,31 +58,36 @@ export class ItemDataManager {
         return itemData;
     }
 
-    private getPassagePaths(
-        itemData: ItemGroupModel,
-        ids: string[],
-        takePictures: boolean
-    ): boolean {
-        let shouldScreenshot = takePictures;
+    /**
+     * Update `ItemGroupModel` with screenshot path and url for passage. Return true if screenshots need to be
+     * taken and false if screenshots already exist
+     *
+     * @param {ItemGroupModel} itemData
+     * @returns {boolean} true if screenshots need to be taken, false if screenshots already exist for passage
+     */
+    private getPassagePaths(itemData: ItemGroupModel): boolean {
+        let shouldScreenshot = false;
         if (itemData.passage && itemData.passage.type === PdfViewType.picture) {
-            const possiblePassagePaths: ItemPdfModel[] = ids.map(itemId => {
-                const picPath = Path.join(
-                    __dirname,
-                    SCREENSHOT_PATH,
-                    `${itemId}-passage.png`
-                );
+            const possiblePassagePaths: ItemPdfModel[] = itemData.questions.map(
+                question => {
+                    const picPath = Path.join(
+                        __dirname,
+                        SCREENSHOT_PATH,
+                        `${question.id}-passage.png`
+                    );
 
-                return {
-                    picturePath: picPath,
-                    screenshotUrl: URL.resolve(
-                        SCREENSHOT_URL,
-                        `${itemId}-passage.png`
-                    ),
-                    id: itemId,
-                    type: PdfViewType.picture,
-                    captured: FileSystem.existsSync(picPath)
-                };
-            });
+                    return {
+                        picturePath: picPath,
+                        screenshotUrl: URL.resolve(
+                            SCREENSHOT_URL,
+                            `${question.id}-passage.png`
+                        ),
+                        id: question.id,
+                        type: PdfViewType.picture,
+                        captured: FileSystem.existsSync(picPath)
+                    };
+                }
+            );
 
             const capturedPassages = possiblePassagePaths.filter(
                 pp => pp.captured
@@ -99,8 +103,14 @@ export class ItemDataManager {
         return shouldScreenshot;
     }
 
-    private getQuestionPaths(itemData: ItemGroupModel, takePictures: boolean) {
-        let shouldScreenshot = takePictures;
+    /**
+     * Update `ItemGroupModel` with paths and urls for question screenshots. Returns true if screenshots need
+     * to be taken for one or more of the questions, false otherwise.
+     *
+     * @param {ItemGroupModel} itemData
+     */
+    private getQuestionPaths(itemData: ItemGroupModel): boolean {
+        let shouldScreenshot = false;
         itemData.questions.forEach(q => {
             if (q.view.type === PdfViewType.picture) {
                 const pth = Path.join(
