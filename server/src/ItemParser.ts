@@ -81,7 +81,7 @@ export class ItemParser {
                     id: itemId,
                     type: takePicture ? PdfViewType.picture : PdfViewType.html,
                     html: takePicture ? undefined : $(selector).html(),
-                    captured: takePicture ? false : true
+                    captured: !takePicture
                 }
             });
         });
