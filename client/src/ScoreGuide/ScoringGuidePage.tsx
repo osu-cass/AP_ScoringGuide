@@ -341,7 +341,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                         {this.renderTitleAndPrint()}
                         {this.renderFilterComponent()}
                         {this.renderTableComponent()}
-                        <FilterLink filterId="#sb-filter-id" />
+                        <FilterLink filterId="sb-filter-id" />
                     </div>
                 </div>
             );
