@@ -5,7 +5,7 @@ import * as path from "path";
 
 /**
  * The loggerApi handles each request and logs it to a file called requests.log in the root of the server.
- * If the response status code is > 400, the request is logged to the errors.log file at the root of 
+ * If the response status code is > 400, the request is logged to the errors.log file at the root of
  * the server.
  * @param {string} format: the format that Morgan uses to output request logs
  */

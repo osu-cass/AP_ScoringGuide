@@ -31,9 +31,9 @@ import {
 } from "./ScoreGuideModels";
 
 export interface Props extends RouteComponentProps<{}> {
-    itemsSearchFilterClient: () => Promise<ItemsSearchFilterModel>;
-    aboutItemClient: (params: ItemModel) => Promise<AboutItemModel>;
-    itemCardClient: () => Promise<ItemCardModel[]>;
+    itemsSearchFilterClient(): Promise<ItemsSearchFilterModel>;
+    aboutItemClient(params: ItemModel): Promise<AboutItemModel>;
+    itemCardClient(): Promise<ItemCardModel[]>;
     errorRoute: string;
 }
 
@@ -273,7 +273,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
                     <button
                         className="btn btn-blue btn-lg btn-primary"
                         type="button"
-                        onClick={() => this.printItems(this.state.searchAPIParams)}
+                        onClick={(() => this.printItems(this.state.searchAPIParams))}
                     >
                         Print Items
                     </button>
