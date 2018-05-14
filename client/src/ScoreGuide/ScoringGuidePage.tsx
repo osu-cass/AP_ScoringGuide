@@ -208,18 +208,17 @@ export class ScoringGuidePage extends React.Component<Props, State> {
         if (!performanceOnly && !catOnly) {
             nonSelectedFilters.push("tech type");
         }
-        if (nonSelectedFilters.length > 0) {
+        if (this.state.selectedItems.length > 0) {
+            pdfItemSequence(this.state.selectedItems)
+                .then(this.onPdfDownloaded)
+                .catch(this.onPdfError);
+            this.setState({ pdfLoading: true });
+        } else if (nonSelectedFilters.length > 0) {
             this.setState({ nonSelectedFilters });
         } else {
-            if (this.state.selectedItems.length > 0) {
-                pdfItemSequence(this.state.selectedItems)
-                    .then(this.onPdfDownloaded)
-                    .catch(this.onPdfError);
-            } else {
-                pdfSearchParams(searchModel)
-                    .then(this.onPdfDownloaded)
-                    .catch(this.onPdfError);
-            }
+            pdfSearchParams(searchModel)
+                .then(this.onPdfDownloaded)
+                .catch(this.onPdfError);
             this.setState({ pdfLoading: true });
         }
     }
