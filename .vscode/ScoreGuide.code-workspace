@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "C:\\Users\\mikkelsb\\Documents\\Projects\\ScoringGuide\\server"
+			"path": "../server"
 		},
 		{
-			"path": "C:\\Users\\mikkelsb\\Documents\\Projects\\ScoringGuide\\client"
+			"path": "../client"
 		}
 	],
 	"settings": {}
