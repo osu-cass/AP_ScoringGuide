@@ -1,11 +1,17 @@
 import * as RequestPromise from "./RequestPromise";
 import * as Cheerio from "cheerio";
 import { ItemGroupModel, PdfViewType } from "@osu-cass/sb-components";
+import * as URL from 'url';
 
 const { ITEM_VIEWER_SERVICE_API } = process.env;
 
 // tslint:disable-next-line:no-unnecessary-class
 export class ItemParser {
+    itemViewGetter: (items: string[]) => string;
+
+    constructor(itemViewGetter: (items: string[]) => string) {
+        this.itemViewGetter = itemViewGetter;
+    }
     /**
      * Load item or group of items from Item Viewer Service
      *
@@ -31,12 +37,24 @@ export class ItemParser {
      * @param {string} xmlString
      * @returns item contents as HTML string
      */
-    private static parseXml(xmlString: string): string {
+    public static parseXml(xmlString: string): string {
         const $ = Cheerio.load(xmlString, {
             xmlMode: true
         });
 
         return $("html").text();
+    }
+
+    public static prepHtmlForPrinting($: CheerioStatic, baseUrl: string): CheerioStatic {
+        $("a").remove();
+        $(".questionNumber").remove();
+        $("img").map((i, el) => {
+            el.attribs["src"] = URL.resolve(baseUrl, el.attribs["src"]);
+        });
+
+        ItemParser.fixMultipleChoice($);
+
+        return $;
     }
 
     /**
@@ -45,18 +63,16 @@ export class ItemParser {
      *
      * @param {string} htmlString unprocessed string of HTML from IVS
      * @param {string[]} itemIds should be related to each other (have the same passage) and be in the form `BANK-ITEM` (ex: "187-1437").
+     * @param {string?} baseUrlOverride override the base url. Otherwise, we'll use the environment variable `ITEM_VIEWER_SERVICE_API`. This is primarily for testing.
      */
-    private static parseHtml(htmlString: string, itemIds: string[]): ItemGroupModel {
-        const baseUrl = ITEM_VIEWER_SERVICE_API;
+    public static parseHtml(
+        htmlString: string,
+        itemIds: string[],
+        baseUrlOverride?: string
+    ): ItemGroupModel {
+        const baseUrl = baseUrlOverride || ITEM_VIEWER_SERVICE_API;
         let $ = Cheerio.load(htmlString);
-        $("a").remove();
-        $(".questionNumber").remove();
-        $("img").map((i, el) => {
-            // tslint:disable-next-line:no-string-literal
-            el.attribs["src"] = baseUrl + el.attribs["src"];
-        });
-
-        $ = ItemParser.fixMultipleChoice($);
+        $ = this.prepHtmlForPrinting($, baseUrl);
 
         const itemData: ItemGroupModel = {
             questions: []
@@ -115,11 +131,11 @@ export class ItemParser {
      *
      * @param {string[]} items
      */
-    public static async loadItemData(items: string[]): Promise<ItemGroupModel> {
-        const response = await ItemParser.load(items);
-        const htmlString = await this.parseXml(response);
+    public async loadItemData(items: string[]): Promise<ItemGroupModel> {
+        const response = await this.itemViewGetter(items);
+        const htmlString = await ItemParser.parseXml(response);
 
-        return this.parseHtml(htmlString, items);
+        return ItemParser.parseHtml(htmlString, items);
     }
 
     /**
@@ -128,11 +144,10 @@ export class ItemParser {
      * @param {string} item
      * @returns {Promise<string>} HTML inside XML result from IVS
      */
-    public static async loadPlainHtml(item: string): Promise<string> {
-        const response = await ItemParser.load([item]);
-        const baseUrl = ITEM_VIEWER_SERVICE_API;
+    public async loadPlainHtml(item: string): Promise<string> {
+        const response = await this.itemViewGetter([item]);
 
-        return this.parseXml(response);
+        return ItemParser.parseXml(response);
     }
 
     /**
@@ -141,7 +156,7 @@ export class ItemParser {
      * @param {CheerioStatic} $ Cheerio object to query
      * @returns same Cheerio object with multiple choice made more readable
      */
-    private static fixMultipleChoice($: CheerioStatic) {
+    public static fixMultipleChoice($: CheerioStatic) {
         $(".optionContainer").each((i, el) => {
             const optionElements = $(el)
                 .children(".optionContent")

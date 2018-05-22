@@ -146,30 +146,38 @@ export const itemSearchFilterModel: ItemsSearchFilterModel = {
     }
 };
 
-export const sgVMGetter = () =>
-    new Promise<ScoreGuideViewModel>((resolve, reject) => {
-        resolve(scoreGuideViewModel);
+function instaPromise<T>(content: T): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+        resolve(content);
     });
+}
 
-export const isfmGetter = () =>
-    new Promise<ItemsSearchFilterModel>((resolve, reject) => {
-        resolve(itemSearchFilterModel);
-    });
+export const sgVMGetter = () => instaPromise(scoreGuideViewModel);
+
+export const isfmGetter = () => instaPromise(itemSearchFilterModel);
 
 export const aboutItemsGetter = () =>
-    new Promise<AboutItemModel[]>((res, rej) => {
-        res([aboutItemVM, aboutItemVM2, aboutItemVM3]);
-    });
+    instaPromise([aboutItemVM, aboutItemVM2, aboutItemVM3]);
 
 export const itemViewGetter = (items: string[]) => {
+    if (items.includes("multi-items")) {
+        return instaPromise(
+            wrapItemHtml("<p>test<p><a href='https://google.com'>google</a>")
+        );
+    }
     if (items.includes("link-item")) {
-        return wrapItemHtml(
-            "<p>test<p><a href='https://google.com'>google</a>"
+        return instaPromise(
+            wrapItemHtml("<p>test<p><a href='https://google.com'>google</a>")
+        );
+    }
+    if (items.includes("interactive-item")) {
+        return instaPromise(
+            wrapItemHtml("<p>test<span>Initializing</span><p>")
         );
     }
 };
 
-function wrapItemHtml(html: string) {
+export function wrapItemHtml(html: string) {
     return `<?xml version='1.0' encoding='UTF-8' ?>
         <contents>
             <content>
