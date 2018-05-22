@@ -1,6 +1,5 @@
 import { ItemDataManager } from "./ItemDataManager";
-import * as URL from "url";
-import * as RequestPromise from "./RequestPromise";
+
 import {
     AboutItemModel,
     ItemCardModel,
@@ -9,7 +8,9 @@ import {
     PdfViewType,
     SearchAPIParamsModel,
     ItemSearch,
-    ItemsSearchFilterModel
+    ItemsSearchFilterModel,
+    ScoreGuideViewModel,
+    FilterSearchModel
 } from "@osu-cass/sb-components";
 
 const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API } = process.env;
@@ -20,51 +21,66 @@ export class ApiRepo {
     aboutItems: AboutItemModel[];
     subjects: SubjectModel[];
     filterSearchModel: ItemsSearchFilterModel;
+    sgViewModelGetter: () => Promise<ScoreGuideViewModel>;
+    filterSearchModelGetter: () => Promise<ItemsSearchFilterModel>;
+    aboutAllItemsGetter: () => Promise<AboutItemModel[]>;
+    itemViewGetter: (items: string[]) => Promise<string>;
 
-    constructor() {
+    constructor(
+        sgViewModelGetter: () => Promise<ScoreGuideViewModel>,
+        filterSearchModelGetter: () => Promise<ItemsSearchFilterModel>,
+        aboutAllItemsGetter: () => Promise<AboutItemModel[]>,
+        itemViewGetter: (items: string[]) => Promise<string>
+    ) {
         this.manager = new ItemDataManager();
+        this.sgViewModelGetter = sgViewModelGetter;
+        this.filterSearchModelGetter = filterSearchModelGetter;
+        this.aboutAllItemsGetter = aboutAllItemsGetter;
+        this.itemViewGetter = itemViewGetter;
     }
 
     /**
      * Load `ScoringGuideViewModel` from API, cache the subjects object from it.
-     * Call this if we don't already have subjects cached. Typically, we want to
-     * call `getSubjects()` instead of this.
+     * Returns cached version if we have it.
      */
-    private async loadSubjectsFromSiw() {
-        const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/ScoringGuide/ScoringGuideViewModel");
-        const subjects = await RequestPromise.getRequest(fullUrl);
-        this.subjects = JSON.parse(subjects).subjects.map(
-            (s: { code: number; label: string; shortLabel: string }) => {
-                return {
-                    code: s.code,
-                    label: s.label,
-                    shortLabel: s.shortLabel
-                };
-            }
-        );
+    private async loadSubjects(): Promise<SubjectModel[]> {
+        if (!this.subjects) {
+            const scoreGuideVM = await this.sgViewModelGetter();
+            this.subjects = scoreGuideVM.subjects;
+        }
+
+        return this.subjects;
     }
 
     /**
      * Load `ItemsSearchFilterModel` from the API
      */
-    public async getFilterSearchModel() {
+    public async getFilterSearchModel(): Promise<ItemsSearchFilterModel> {
         if (!this.filterSearchModel) {
-            const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/BrowseItems/FilterSearchModel");
-            const modelString = await RequestPromise.getRequest(fullUrl);
-            this.filterSearchModel = JSON.parse(modelString);
+            this.filterSearchModel = await this.filterSearchModelGetter();
         }
 
         return this.filterSearchModel;
     }
 
     /**
-     * Load `AboutItemModel`s from API, use that data to get `ItemCardModel`s
+     * Load `AboutItemModel`s from API, use that data to get `ItemCardModel`s.
      */
-    private async loadDataFromSiw() {
-        const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/ScoringGuide/AboutAllItems");
-        const items = await RequestPromise.getRequest(fullUrl);
-        this.aboutItems = JSON.parse(items);
-        this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
+    private async loadAboutItems(): Promise<AboutItemModel[]> {
+        if (!this.aboutItems) {
+            this.aboutItems = await this.aboutAllItemsGetter();
+            this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
+        }
+
+        return this.aboutItems;
+    }
+
+    async getItemData(): Promise<ItemCardModel[]> {
+        if (!this.itemCards) {
+            await this.loadAboutItems();
+        }
+
+        return this.itemCards;
     }
 
     /**
@@ -74,9 +90,11 @@ export class ApiRepo {
      *
      * @param {string[]} requestedIds
      */
-    public async getAssociatedItems(requestedIds: string[]) {
+    public async getAssociatedItems(
+        requestedIds: string[]
+    ): Promise<string[][]> {
         const idsArray: string[] = [];
-        const aboutItems = await this.getAboutAllItems();
+        const aboutItems = await this.loadAboutItems();
         requestedIds.forEach(reqId => {
             const item = aboutItems.find(ai =>
                 ai.associatedItems.includes(reqId)
@@ -93,9 +111,9 @@ export class ApiRepo {
      * Adds `AboutItemData` and question number to each item in the `itemViews` array.
      * @param itemViews view models that data gets added to
      */
-    async addDataToViews(itemViews: ItemGroupModel[]) {
+    async addDataToViews(itemViews: ItemGroupModel[]): Promise<void> {
         let questionNum = 1;
-        const aboutItems = await this.getAboutAllItems();
+        const aboutItems = await this.loadAboutItems();
         itemViews.forEach(iv =>
             iv.questions.forEach(q => {
                 q.data = aboutItems.find(
@@ -114,26 +132,10 @@ export class ApiRepo {
      * each of which should be an item Id or group of performance Ids.
      * @param {string[][]} itemIds
      */
-    async loadViewData(itemIds: string[][]) {
+    async loadViewData(itemIds: string[][]): Promise<ItemGroupModel[]> {
         return Promise.all(
             itemIds.map(idGroup => this.manager.getItemData(idGroup))
         );
-    }
-
-    async getItemData() {
-        if (!this.itemCards) {
-            await this.loadDataFromSiw();
-        }
-
-        return this.itemCards;
-    }
-
-    async getSubjects() {
-        if (!this.subjects) {
-            await this.loadSubjectsFromSiw();
-        }
-
-        return this.subjects;
     }
 
     /**
@@ -142,9 +144,12 @@ export class ApiRepo {
      * @param {number} itemKey
      * @param {number} bankKey
      */
-    async getAboutItem(itemKey: number, bankKey: number) {
+    public async getAboutItem(
+        itemKey: number,
+        bankKey: number
+    ): Promise<AboutItemModel> {
         if (!this.aboutItems) {
-            await this.loadDataFromSiw();
+            await this.loadAboutItems();
         }
 
         return this.aboutItems.find(
@@ -155,21 +160,16 @@ export class ApiRepo {
         );
     }
 
-    private async getAboutAllItems() {
-        if (!this.aboutItems) {
-            await this.loadDataFromSiw();
-        }
-
-        return this.aboutItems;
-    }
-
     /**
      * Given an array of item ids, return a corresponding array of `ItemGroupModel`s including the view data for each item and its metadata.
      *
      * @param {string[]} requestedIds Array of item ids of the form `BANK-ITEM`
      * @param {boolean} printAssoc Include associated items? (performance items)
      */
-    async getPdfDataByIds(requestedIds: string[], printAssoc: boolean) {
+    async getPdfDataByIds(
+        requestedIds: string[],
+        printAssoc: boolean
+    ): Promise<ItemGroupModel[]> {
         let idGroups: string[][];
         if (printAssoc) {
             idGroups = await this.getAssociatedItems(requestedIds);
@@ -182,8 +182,8 @@ export class ApiRepo {
         return views;
     }
 
-    async getSubjectByCode(code: string) {
-        const subjects = await this.getSubjects();
+    async getSubjectByCode(code: string): Promise<SubjectModel> {
+        const subjects = await this.loadSubjects();
 
         return subjects.find(s => s.code === code);
     }
@@ -193,16 +193,19 @@ export class ApiRepo {
      *
      * @param {SearchAPIParamsModel} filter
      */
-    private async getAboutItemsByFilter(filter: SearchAPIParamsModel) {
+    private async getAboutItemsByFilter(
+        filter: SearchAPIParamsModel
+    ): Promise<AboutItemModel[]> {
         const allItems = await this.getItemData();
         const filteredItems = ItemSearch.filterItemCards(allItems, filter);
-        const aboutAllItems = await this.getAboutAllItems();
+        const aboutAllItems = await this.loadAboutItems();
 
         return filteredItems.map(i =>
-            aboutAllItems.find( ai =>
-                ai.itemCardViewModel &&
-                ai.itemCardViewModel.itemKey === i.itemKey &&
-                ai.itemCardViewModel.bankKey === i.bankKey
+            aboutAllItems.find(
+                ai =>
+                    ai.itemCardViewModel &&
+                    ai.itemCardViewModel.itemKey === i.itemKey &&
+                    ai.itemCardViewModel.bankKey === i.bankKey
             )
         );
     }
@@ -211,7 +214,9 @@ export class ApiRepo {
      *
      * @param {SearchAPIParamsModel} filter
      */
-    async getPdfDataByFilter(filter: SearchAPIParamsModel) {
+    async getPdfDataByFilter(
+        filter: SearchAPIParamsModel
+    ): Promise<ItemGroupModel[]> {
         const aboutItems = await this.getAboutItemsByFilter(filter);
         const associatedItems: string[] = [];
         aboutItems.forEach(ai => {
@@ -231,7 +236,9 @@ export class ApiRepo {
     /**
      * Finds all items with the same passage and combines the items into one passage with multiple questions
      */
-    private combineLikePassages(itemGroups: ItemGroupModel[]) {
+    private combineLikePassages(
+        itemGroups: ItemGroupModel[]
+    ): ItemGroupModel[] {
         const combinedItems: ItemGroupModel[] = [];
         let addedIds: string[] = [];
 
@@ -259,7 +266,6 @@ export class ApiRepo {
                         samePassageQuestions.map(q => q.id)
                     );
                 }
-
             } else {
                 combinedItems.push(item);
             }

@@ -1,5 +1,5 @@
-describe("ApiRepo", () => {
-    it("does something", () => {
+describe("ApiRepo.getAssociatedItems", () => {
+    it("returns associated items", () => {
         
     });
 });
