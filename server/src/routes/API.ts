@@ -5,6 +5,7 @@ import { ItemCapture } from "../ItemCapture";
 import { ItemDataManager } from "../ItemDataManager";
 import * as RequestPromise from "../RequestPromise";
 import { ApiRepo } from "../ApiRepo";
+import * as Calls from "../ScoreGuideApiCalls";
 import {
     GradeLevel,
     SearchAPIParamsModel,
@@ -17,7 +18,12 @@ export class APIRoute {
     repo: ApiRepo;
 
     constructor() {
-        this.repo = new ApiRepo();
+        this.repo = new ApiRepo(
+            Calls.sgViewModelCall,
+            Calls.filterSearchModelCall,
+            Calls.aboutAllItemsCall,
+            Calls.itemViewCall
+        );
         this.routes = Express.Router();
         this.routes.post("/pdf/items", this.getPdfById);
         this.routes.get("/pdf", this.getPdf);

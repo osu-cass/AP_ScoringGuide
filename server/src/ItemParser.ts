@@ -7,28 +7,10 @@ const { ITEM_VIEWER_SERVICE_API } = process.env;
 
 // tslint:disable-next-line:no-unnecessary-class
 export class ItemParser {
-    itemViewGetter: (items: string[]) => string;
+    itemViewGetter: (items: string[]) => Promise<string>;
 
-    constructor(itemViewGetter: (items: string[]) => string) {
+    constructor(itemViewGetter: (items: string[]) => Promise<string>) {
         this.itemViewGetter = itemViewGetter;
-    }
-    /**
-     * Load item or group of items from Item Viewer Service
-     *
-     * @param {string[]} items should be related to each other (have the same passage) and be in the form `BANK-ITEM` (ex: "187-1437").
-     */
-    private static load(items: string[]): Promise<string> {
-        const postData = {
-            items: items.map(i => {
-                return { response: "", id: `I-${i}` };
-            }),
-            accommodations: [] as never[]
-        };
-
-        return RequestPromise.postRequest(
-            `${ITEM_VIEWER_SERVICE_API}/Pages/API/content/load`,
-            postData
-        );
     }
 
     /**

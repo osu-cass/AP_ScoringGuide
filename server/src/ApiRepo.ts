@@ -32,7 +32,7 @@ export class ApiRepo {
         aboutAllItemsGetter: () => Promise<AboutItemModel[]>,
         itemViewGetter: (items: string[]) => Promise<string>
     ) {
-        this.manager = new ItemDataManager();
+        this.manager = new ItemDataManager(itemViewGetter);
         this.sgViewModelGetter = sgViewModelGetter;
         this.filterSearchModelGetter = filterSearchModelGetter;
         this.aboutAllItemsGetter = aboutAllItemsGetter;

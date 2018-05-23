@@ -8,6 +8,7 @@ import * as morgan from "morgan";
 import { loggerApi } from "./Logger";
 import { APIRoute } from "./routes/API";
 import { ItemParser } from "./ItemParser";
+import { itemViewCall } from "./ScoreGuideApiCalls";
 
 const { PORT } = process.env;
 
@@ -43,7 +44,8 @@ export class ScoreGuideApp {
         this.app.use("/api", this.router.routes);
         this.app.get("/item", (req, res) => {
             const id = req.param("id", "") as string;
-            ItemParser.loadPlainHtml(id)
+            const itemParser = new ItemParser(itemViewCall);
+            itemParser.loadPlainHtml(id)
                 .then(item => res.send(item))
                 .catch(err => res.status(500).send(err));
         });

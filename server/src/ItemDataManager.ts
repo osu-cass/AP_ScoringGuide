@@ -18,10 +18,12 @@ const { SCREENSHOT_PATH, SCREENSHOT_URL } = process.env;
  */
 export class ItemDataManager {
     chrome: ItemCapture;
+    itemViewGetter: (items: string[]) => Promise<string>;
 
-    constructor() {
+    constructor(itemViewGetter: (items: string[]) => Promise<string>) {
         this.chrome = new ItemCapture();
         this.openChromeIfNeeded();
+        this.itemViewGetter = itemViewGetter;
     }
 
     async openChromeIfNeeded() {
@@ -41,7 +43,8 @@ export class ItemDataManager {
             return { questions: [] };
         }
 
-        let itemData = await ItemParser.loadItemData(ids);
+        const itemParser = new ItemParser(this.itemViewGetter);
+        let itemData = await itemParser.loadItemData(ids);
 
         const sPath = Path.join(__dirname, SCREENSHOT_PATH);
         if (!FileSystem.existsSync(sPath)) {

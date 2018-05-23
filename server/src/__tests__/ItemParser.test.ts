@@ -39,3 +39,15 @@ describe("ItemParser.prepHtmlForPrinting", () => {
         expect(result("img").attr("src")).toEqual("http://base.url/test.png");
     });
 });
+
+describe("ItemParser.fixMultipleChoice", () => {
+    it("", () => {
+        const $ = Cheerio.load(
+            `<div class='optionContainer'><div class='optionContent'><div></div></div></div>`
+        );
+        const htmlWithoutLink = "<p>test</p>";
+
+        const result = ItemParser.prepHtmlForPrinting($, "");
+        expect(result("a").length).toEqual(0);
+    });
+});
