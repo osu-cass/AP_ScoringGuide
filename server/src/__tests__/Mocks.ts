@@ -187,3 +187,19 @@ export function wrapItemHtml(html: string) {
             </content>
         </contents>`;
 }
+
+// tslint:disable:no-multiline-string
+export const multipleChoicePTag = `<div class='optionContainer'>
+    <input type="radio" value="A" class="option">
+    <div class='optionContent'>
+        <p>option 1</p>
+    </div>
+</div>`;
+
+export const multipleChoiceHtml = `<div class='optionContainer'>
+    <input type="radio" value="B" class="option">
+    <div class='optionContent'>
+        <div>option 2</div><b>bold text</b>
+    </div>
+</div>`;
+// tslint:enable:no-multiline-string

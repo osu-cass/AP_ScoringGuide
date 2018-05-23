@@ -94,7 +94,7 @@ export class ItemParser {
      *
      * @param {Cheerio} element cheerio object to query
      */
-    private static shouldTakePicture(element: Cheerio): boolean {
+    public static shouldTakePicture(element: Cheerio): boolean {
         const initializing = element.find("span").filter((i, el) => {
             if (el.children[0]) {
                 // tslint:disable-next-line:no-any
