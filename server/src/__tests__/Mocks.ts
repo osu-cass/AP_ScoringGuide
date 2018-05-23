@@ -202,4 +202,15 @@ export const multipleChoiceHtml = `<div class='optionContainer'>
         <div>option 2</div><b>bold text</b>
     </div>
 </div>`;
+
+export const question1234Html = `<main><div id="Item_1234">
+    ${multipleChoicePTag}
+</div></main>`;
+
+export const question1234Init = `<main><div id="Item_1234">
+    <div class='thePassage'>
+        <div><span>Initializing</span></div>
+    </div>"
+</div></main>`;
+
 // tslint:enable:no-multiline-string

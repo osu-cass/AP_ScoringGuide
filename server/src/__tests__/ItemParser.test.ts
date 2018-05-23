@@ -102,3 +102,21 @@ describe("ItemParser.shouldTakePicture", () => {
         expect(result).toBeFalsy();
     });
 });
+
+describe("ItemParser.parseHtml", () => {
+    it("parses question", () => {
+        const result = ItemParser.parseHtml(Mocks.question1234Html, [
+            "187-1234"
+        ]);
+
+        expect(result.questions[0]).toEqual({
+            id: "187-1234",
+            view: {
+                captured: true,
+                html: '\n    <div class="optionContainer"><b> A:</b> option 1</div>\n',
+                id: "187-1234",
+                type: 1
+            }
+        });
+    });
+});
