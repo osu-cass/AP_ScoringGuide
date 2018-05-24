@@ -1,6 +1,7 @@
 import * as Mocks from "./Mocks";
 import { ItemParser } from "../ItemParser";
 import * as Cheerio from "cheerio";
+import { PdfViewType } from "@osu-cass/sb-components";
 
 describe("ItemParser.parseXml", () => {
     it("parses string out of xml", () => {
@@ -113,10 +114,53 @@ describe("ItemParser.parseHtml", () => {
             id: "187-1234",
             view: {
                 captured: true,
-                html: '\n    <div class="optionContainer"><b> A:</b> option 1</div>\n',
+                html:
+                    '\n    <div class="optionContainer"><b> A:</b> option 1</div>\n',
                 id: "187-1234",
-                type: 1
+                type: PdfViewType.html
             }
+        });
+    });
+
+    it("parses question as picture", () => {
+        const result = ItemParser.parseHtml(Mocks.question1234Init, [
+            "187-1234"
+        ]);
+
+        expect(result.questions[0]).toEqual({
+            id: "187-1234",
+            view: {
+                captured: false,
+                html: undefined,
+                id: "187-1234",
+                type: PdfViewType.picture
+            }
+        });
+    });
+
+    it("parses passage", () => {
+        const result = ItemParser.parseHtml(Mocks.passage1234Html, [
+            "187-1234"
+        ]);
+
+        expect(result.passage).toEqual({
+            captured: true,
+            html: "\n        <p>What is 2+2-1?</p>\n    ",
+            id: "187-1234",
+            type: PdfViewType.html
+        });
+    });
+
+    it("parses passage as picture", () => {
+        const result = ItemParser.parseHtml(Mocks.passage1234Init, [
+            "187-1234"
+        ]);
+
+        expect(result.passage).toEqual({
+            captured: false,
+            html: undefined,
+            id: "187-1234",
+            type: PdfViewType.picture
         });
     });
 });

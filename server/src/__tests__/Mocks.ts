@@ -208,9 +208,18 @@ export const question1234Html = `<main><div id="Item_1234">
 </div></main>`;
 
 export const question1234Init = `<main><div id="Item_1234">
-    <div class='thePassage'>
-        <div><span>Initializing</span></div>
-    </div>"
+    <div><span>Initializing</span></div>
 </div></main>`;
 
+export const passage1234Html = `<main>
+    <div class='thePassage'>
+        <p>What is 2+2-1?</p>
+    </div>
+</main>`;
+
+export const passage1234Init = `<main>
+    <div class='thePassage'>
+        <div><span>Initializing</span></div>
+    </div>
+</main>`;
 // tslint:enable:no-multiline-string
