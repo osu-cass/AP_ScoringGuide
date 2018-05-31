@@ -4,7 +4,9 @@ import {
     ItemCardModel,
     ScoreGuideViewModel,
     ItemsSearchFilterModel,
-    FilterType
+    FilterType,
+    ItemGroupModel,
+    PdfViewType
 } from "@osu-cass/sb-components";
 
 export const itemVM: ItemCardModel = {
@@ -160,21 +162,16 @@ export const aboutItemsGetter = () =>
     instaPromise([aboutItemVM, aboutItemVM2, aboutItemVM3]);
 
 export const itemViewGetter = (items: string[]) => {
-    if (items.includes("multi-items")) {
-        return instaPromise(
-            wrapItemHtml("<p>test<p><a href='https://google.com'>google</a>")
-        );
-    }
-    if (items.includes("link-item")) {
-        return instaPromise(
-            wrapItemHtml("<p>test<p><a href='https://google.com'>google</a>")
-        );
-    }
-    if (items.includes("interactive-item")) {
-        return instaPromise(
-            wrapItemHtml("<p>test<span>Initializing</span><p>")
-        );
-    }
+    return items
+        .map(i => {
+            if (i === "123-4567") {
+                return question4567Html;
+            }
+            if (i === "123-4568") {
+                return question4568Html;
+            }
+        })
+        .join("\n");
 };
 
 export function wrapItemHtml(html: string) {
@@ -222,4 +219,54 @@ export const passage1234Init = `<main>
         <div><span>Initializing</span></div>
     </div>
 </main>`;
+
+export const question4567Html = `<main><div id="Item_4567">
+    ${multipleChoicePTag}
+</div></main>`;
+
+export const question4568Html = `<main><div id="Item_4568">
+    <div><span>Initializing</span></div>
+</div></main>`;
 // tslint:enable:no-multiline-string
+
+export const itemGroupModel4567: ItemGroupModel = {
+    questions: [
+        {
+            id: "123-4567",
+            view: {
+                id: "123-4567",
+                html: "<p>first question</p>",
+                captured: true,
+                type: PdfViewType.html
+            }
+        },
+        {
+            id: "123-4568",
+            view: {
+                id: "123-4568",
+                html: "<p>this is the 2nd question</p>",
+                captured: true,
+                type: PdfViewType.html
+            }
+        }
+    ]
+};
+
+export const itemGroupModel4569: ItemGroupModel = {
+    questions: [
+        {
+            id: "123-4569",
+            view: {
+                id: "123-4569",
+                captured: true,
+                type: PdfViewType.picture,
+                picturePath: "c:/pics/4569.png",
+                screenshotUrl: "/pics/4569.png"
+            }
+        }
+    ]
+};
+
+export function clone<T>(object: T): T {
+    return JSON.parse(JSON.stringify(object));
+}

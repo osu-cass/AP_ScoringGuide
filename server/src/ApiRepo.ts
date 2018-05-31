@@ -123,7 +123,7 @@ export class ApiRepo {
                             item.itemCardViewModel.itemKey
                         }` === q.id
                 );
-                q.questionNumber = questionNum += 1;
+                q.questionNumber = questionNum++;
             })
         );
     }
