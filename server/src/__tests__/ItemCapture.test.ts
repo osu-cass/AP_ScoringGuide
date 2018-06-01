@@ -57,25 +57,77 @@ describe("ItemCapture.setViewportHeight", async () => {
 });
 
 describe("ItemCapture.getPassageRect", async () => {
-    const browser = await Puppeteer.launch({ args: ["--no-sandbox"] });
-    const page = await browser.newPage();
-    await page.goto(
-        "http://ivs.smarterbalanced.org/items?ids=187-2558&isaap=TDS_SLM1"
-    );
-    const iframe = await page.frames()[1];
-    await iframe.waitForSelector(".grouping", {
-        timeout: 5000
+    let browser: Puppeteer.Browser;
+    let page: Puppeteer.Page;
+    let iframe: Puppeteer.Frame;
+
+    beforeAll(async () => {
+        browser = await Puppeteer.launch({ args: ["--no-sandbox"] });
+        page = await browser.newPage();
+        await page.goto(
+            "http://ivs.smarterbalanced.org/items?ids=187-2558&isaap=TDS_SLM1"
+        );
+        iframe = await page.frames()[1];
+        await iframe.waitForSelector(".grouping", {
+            timeout: 5000
+        });
+        await new Promise(resolve => setTimeout(resolve, 200));
+        await ItemCapture.updateViewportSize(page, iframe, 800);
     });
-    await new Promise(resolve => setTimeout(resolve, 200));
 
     it("gets the passage size", async () => {
-        // TODO: why isnt this running
-        const result = await ItemCapture.getPassageRect(iframe);
-        expect(result).toEqual({
-            x: 0,
-            y: 123,
-            height: 0,
-            width: 0
+        const expected = await iframe.evaluate(() => {
+            const rect = document
+                .querySelector(".thePassage")
+                .getBoundingClientRect();
+
+            return {
+                x: scrollX + rect.left,
+                y: scrollY + rect.top,
+                width: rect.width,
+                height: rect.height
+            };
         });
+        const result = await ItemCapture.getPassageRect(iframe);
+        expect(result).toEqual(expected);
+    });
+});
+
+describe("ItemCapture.getQuestionRects", async () => {
+    let browser: Puppeteer.Browser;
+    let page: Puppeteer.Page;
+    let iframe: Puppeteer.Frame;
+
+    beforeAll(async () => {
+        browser = await Puppeteer.launch({ args: ["--no-sandbox"] });
+        page = await browser.newPage();
+        await page.goto(
+            "http://ivs.smarterbalanced.org/items?ids=187-2558&isaap=TDS_SLM1"
+        );
+        iframe = await page.frames()[1];
+        await iframe.waitForSelector(".grouping", {
+            timeout: 5000
+        });
+        await new Promise(resolve => setTimeout(resolve, 200));
+        await ItemCapture.updateViewportSize(page, iframe, 800);
+    });
+
+    it("gets the question size", async () => {
+        // TODO: why isnt this running
+        const expected = await iframe.evaluate(() => {
+            const el = document.querySelector("#Item_2558");
+            const headerHeight = document.querySelector(".questionNumber")
+                .clientHeight;
+
+            return {
+                x: scrollX + el.getBoundingClientRect().left,
+                y: scrollY + el.getBoundingClientRect().top + headerHeight,
+                width: el.getBoundingClientRect().width,
+                height: el.getBoundingClientRect().height - headerHeight,
+                itemId: "2558"
+            };
+        });
+        const result = await ItemCapture.getQuestionRects(iframe);
+        expect(result).toEqual([expected]);
     });
 });
