@@ -5,7 +5,40 @@
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
-  padding: @spacing-unit;
-  background-color: @sb-white;
   width: 100%;
+}
+
+.search-page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.print-button-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin-bottom: @spacing-unit;
+}
+
+.print-error-message {
+  margin-right: @spacing-unit;
+  color: rgb(172, 23, 23);
+  position: relative;
+  left: 0;
+  opacity: 1;
+  transition: .4s;
+}
+
+.print-error-message.invis {
+  left: @spacing-unit;
+  opacity: 0;
+  transition: .4s;
+}
+
+.pdf-loading-spinner {
+  height: 40px;
+  width: 40px;
+  margin: 0 @spacing-unit;
 }

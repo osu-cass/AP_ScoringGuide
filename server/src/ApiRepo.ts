@@ -1,6 +1,6 @@
 import { ItemDataManager } from "./ItemDataManager";
-import * as Path from 'path';
-import * as RequestPromise from './RequestPromise';
+import * as URL from "url";
+import * as RequestPromise from "./RequestPromise";
 import {
     AboutItemModel,
     ItemCardModel,
@@ -10,7 +10,7 @@ import {
     SearchAPIParamsModel,
     ItemSearch,
     ItemsSearchFilterModel
-} from '@osu-cass/sb-components';
+} from "@osu-cass/sb-components";
 
 const { SCREENSHOT_WIDTH, SAMPLE_ITEMS_API } = process.env;
 
@@ -22,75 +22,101 @@ export class ApiRepo {
     filterSearchModel: ItemsSearchFilterModel;
 
     constructor() {
-        const path = Path.join(__dirname, '../public/screenshots');
-        this.manager = new ItemDataManager({
-            pageWidth: parseInt(SCREENSHOT_WIDTH, 10),
-            screenshotPath: path
-        });
+        this.manager = new ItemDataManager();
     }
 
+    /**
+     * Load `ScoringGuideViewModel` from API, cache the subjects object from it.
+     * Call this if we don't already have subjects cached. Typically, we want to
+     * call `getSubjects()` instead of this.
+     */
     private async loadSubjectsFromSiw() {
-        const subjects = await RequestPromise.get(`${SAMPLE_ITEMS_API}/ScoringGuide/ScoringGuideViewModel`);
-        this.subjects = JSON.parse(subjects).subjects.map((s: {code: number, label: string, shortLabel: string}) => {
-            return {
-                code: s.code,
-                label: s.label,
-                shortLabel: s.shortLabel
-            };
-        });
+        const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/ScoringGuide/ScoringGuideViewModel");
+        const subjects = await RequestPromise.getRequest(fullUrl);
+        this.subjects = JSON.parse(subjects).subjects.map(
+            (s: { code: number; label: string; shortLabel: string }) => {
+                return {
+                    code: s.code,
+                    label: s.label,
+                    shortLabel: s.shortLabel
+                };
+            }
+        );
     }
 
+    /**
+     * Load `ItemsSearchFilterModel` from the API
+     */
     public async getFilterSearchModel() {
         if (!this.filterSearchModel) {
-            const modelString = await RequestPromise.get(`${SAMPLE_ITEMS_API}/BrowseItems/FilterSearchModel`);
+            const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/BrowseItems/FilterSearchModel");
+            const modelString = await RequestPromise.getRequest(fullUrl);
             this.filterSearchModel = JSON.parse(modelString);
         }
 
         return this.filterSearchModel;
     }
 
+    /**
+     * Load `AboutItemModel`s from API, use that data to get `ItemCardModel`s
+     */
     private async loadDataFromSiw() {
-        const items = await RequestPromise.get(`${SAMPLE_ITEMS_API}/ScoringGuide/AboutAllItems`);
+        const fullUrl = URL.resolve(SAMPLE_ITEMS_API, "/ScoringGuide/AboutAllItems");
+        const items = await RequestPromise.getRequest(fullUrl);
         this.aboutItems = JSON.parse(items);
         this.itemCards = this.aboutItems.map(i => i.itemCardViewModel);
     }
 
-    async getAssociatedItems(requestedIds: string[]) {
+    /**
+     * Returns a array of string arrays, each containing an item's associated items. The associated
+     * items are each elements of the corresponding string array. Note that the mapped string array
+     * will also contain the given item id.
+     *
+     * @param {string[]} requestedIds
+     */
+    public async getAssociatedItems(requestedIds: string[]) {
         const idsArray: string[] = [];
         const aboutItems = await this.getAboutAllItems();
         requestedIds.forEach(reqId => {
-            const item = aboutItems.find(ai => (ai.associatedItems).includes(reqId));
+            const item = aboutItems.find(ai =>
+                ai.associatedItems.includes(reqId)
+            );
             if (item && !idsArray.includes(item.associatedItems)) {
                 idsArray.push(item.associatedItems);
             }
         });
 
-        return idsArray.map(idGroup => idGroup.split(','));
+        return idsArray.map(idGroup => idGroup.split(","));
     }
 
+    /**
+     * Adds `AboutItemData` and question number to each item in the `itemViews` array.
+     * @param itemViews view models that data gets added to
+     */
     async addDataToViews(itemViews: ItemGroupModel[]) {
         let questionNum = 1;
         const aboutItems = await this.getAboutAllItems();
         itemViews.forEach(iv =>
             iv.questions.forEach(q => {
-                q.data = aboutItems.find(item =>
-                    item.itemCardViewModel
-                    && `${item.itemCardViewModel.bankKey}-${item.itemCardViewModel.itemKey}` === q.id
+                q.data = aboutItems.find(
+                    item =>
+                        item.itemCardViewModel &&
+                        `${item.itemCardViewModel.bankKey}-${
+                            item.itemCardViewModel.itemKey
+                        }` === q.id
                 );
                 q.questionNumber = questionNum += 1;
             })
         );
     }
-/**
- * Loads HTML and, if needed, screenshots of items.Takes an array of string arrays,
- * each of which should be an item Id or group of performance Ids.
- * @param {string[][]} itemIds
- */
-async loadViewData(itemIds: string[][]) {
-        return await Promise.all(
-            itemIds.map(idGroup =>
-                this.manager.getItemData(idGroup)
-            )
+    /**
+     * Loads HTML and, if needed, screenshots of items.Takes an array of string arrays,
+     * each of which should be an item Id or group of performance Ids.
+     * @param {string[][]} itemIds
+     */
+    async loadViewData(itemIds: string[][]) {
+        return Promise.all(
+            itemIds.map(idGroup => this.manager.getItemData(idGroup))
         );
     }
 
@@ -110,15 +136,23 @@ async loadViewData(itemIds: string[][]) {
         return this.subjects;
     }
 
+    /**
+     * Find the `AboutItemModel` that corresponds to the given item and bank keys.
+     *
+     * @param {number} itemKey
+     * @param {number} bankKey
+     */
     async getAboutItem(itemKey: number, bankKey: number) {
         if (!this.aboutItems) {
             await this.loadDataFromSiw();
         }
 
-        return this.aboutItems.find(i =>
-            i.itemCardViewModel
-            && i.itemCardViewModel.itemKey === itemKey
-            && i.itemCardViewModel.bankKey === bankKey);
+        return this.aboutItems.find(
+            i =>
+                i.itemCardViewModel &&
+                i.itemCardViewModel.itemKey === itemKey &&
+                i.itemCardViewModel.bankKey === bankKey
+        );
     }
 
     private async getAboutAllItems() {
@@ -129,6 +163,12 @@ async loadViewData(itemIds: string[][]) {
         return this.aboutItems;
     }
 
+    /**
+     * Given an array of item ids, return a corresponding array of `ItemGroupModel`s including the view data for each item and its metadata.
+     *
+     * @param {string[]} requestedIds Array of item ids of the form `BANK-ITEM`
+     * @param {boolean} printAssoc Include associated items? (performance items)
+     */
     async getPdfDataByIds(requestedIds: string[], printAssoc: boolean) {
         let idGroups: string[][];
         if (printAssoc) {
@@ -148,18 +188,29 @@ async loadViewData(itemIds: string[][]) {
         return subjects.find(s => s.code === code);
     }
 
-    async getAboutItemsByFilter(filter: SearchAPIParamsModel) {
+    /**
+     * Filter `AboutItemModel`s down based on the `SearchAPIParamsModel` using `ItemSearch.filterItemCards() and return the result`
+     *
+     * @param {SearchAPIParamsModel} filter
+     */
+    private async getAboutItemsByFilter(filter: SearchAPIParamsModel) {
         const allItems = await this.getItemData();
         const filteredItems = ItemSearch.filterItemCards(allItems, filter);
         const aboutAllItems = await this.getAboutAllItems();
 
         return filteredItems.map(i =>
-            aboutAllItems.find(ai =>
-                ai.itemCardViewModel && ai.itemCardViewModel.itemKey === i.itemKey && ai.itemCardViewModel.bankKey === i.bankKey
+            aboutAllItems.find( ai =>
+                ai.itemCardViewModel &&
+                ai.itemCardViewModel.itemKey === i.itemKey &&
+                ai.itemCardViewModel.bankKey === i.bankKey
             )
         );
     }
 
+    /** Filter down items based on given filter, then return a array of `ItemGroupModel`s including the view data for filtered items and its metadata.
+     *
+     * @param {SearchAPIParamsModel} filter
+     */
     async getPdfDataByFilter(filter: SearchAPIParamsModel) {
         const aboutItems = await this.getAboutItemsByFilter(filter);
         const associatedItems: string[] = [];
@@ -169,10 +220,9 @@ async loadViewData(itemIds: string[][]) {
             }
         });
 
-        const idGroups = associatedItems.map(ai => ai.split(','));
+        const idGroups = associatedItems.map(ai => ai.split(","));
         let views = await this.loadViewData(idGroups);
         views = this.combineLikePassages(views);
-        // TODO: Optimize this by adding data first
         await this.addDataToViews(views);
 
         return views;
@@ -181,25 +231,35 @@ async loadViewData(itemIds: string[][]) {
     /**
      * Finds all items with the same passage and combines the items into one passage with multiple questions
      */
-    combineLikePassages(itemGroups: ItemGroupModel[]) {
+    private combineLikePassages(itemGroups: ItemGroupModel[]) {
         const combinedItems: ItemGroupModel[] = [];
         let addedIds: string[] = [];
 
         for (const item of itemGroups) {
             if (item.passage) {
-
-                const samePassageItems = itemGroups.filter((ig, filterIdx) =>
-                    ig.passage && ig.passage.type === PdfViewType.html
-                    && ig.passage.html === item.passage.html);
+                const samePassageItems = itemGroups.filter(
+                    (ig, filterIdx) =>
+                        ig.passage &&
+                        ig.passage.type === PdfViewType.html &&
+                        ig.passage.html === item.passage.html
+                );
                 const samePassageQuestions = samePassageItems
                     .map(ig => ig.questions)
                     .reduce((prev, curr) => prev.concat(curr), []);
-                if (samePassageQuestions.map(q => addedIds.includes(q.id)).every(bool => bool === false)) {
-                    combinedItems.push({ passage: item.passage, questions: samePassageQuestions });
-                    addedIds = addedIds.concat(samePassageQuestions.map(q => q.id));
+                if (
+                    samePassageQuestions
+                        .map(q => addedIds.includes(q.id))
+                        .every(bool => bool === false)
+                ) {
+                    combinedItems.push({
+                        passage: item.passage,
+                        questions: samePassageQuestions
+                    });
+                    addedIds = addedIds.concat(
+                        samePassageQuestions.map(q => q.id)
+                    );
                 }
 
-                // itemGroups = itemGroups.filter(ig => !samePassageItems.includes(ig));
             } else {
                 combinedItems.push(item);
             }

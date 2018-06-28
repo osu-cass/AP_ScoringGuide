@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es2016",
     "outDir": "./dist",
     "module": "commonjs",
@@ -7,31 +8,21 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": false,
     "jsx": "react",
-    "types": [
-      "jest",
-      "node"
-    ],
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "plugins": [
-      {
-        "name": "tslint-language-service"
-      }
-    ]
+    "types": ["jest", "node"],
+    "moduleResolution": "node",
+    "paths": {
+      "@src/*": ["node_modules/@osu-cass/sb-components/lib/src/*"]
+    }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "public",
-    "**/__tests__/*",
-    "**/setupTest.ts"
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "public", "**/__tests__/*", "**/setupTest.ts"],
+  "typeRoots": ["./node_modules/@types"],
+  "plugins": [
+    {
+      "name": "tslint-language-service"
+    }
   ],
   "jest": {
-    "moduleDirectories": [
-      "node_modules"
-    ]
+    "moduleDirectories": ["node_modules"]
   }
 }

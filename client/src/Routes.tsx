@@ -23,11 +23,22 @@ export const routes = <Layout siteName="Score Guide" links={siteLinks}>
                 itemsSearchFilterClient={searchFilterModel}
                 aboutItemClient={aboutItemClient}
                 itemCardClient={itemCardClient}
+                errorRoute="/error"
             />
         )} />
-        <Route path='*' render={(props) => (
-            <ErrorPageContainer/>
-        )} />
+
+        <Route
+            path="/error"
+            render={props => (
+                <ErrorPageContainer {...props} description="An error occured while processing your request." errorCode={500} />
+            )}
+        />
+
+        <Route
+            render={props => (
+                <ErrorPageContainer {...props} errorCode={404} />
+            )}
+        />
     </Switch>
 </Layout>;
 
