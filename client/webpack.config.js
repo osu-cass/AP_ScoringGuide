@@ -3,8 +3,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require("webpack");
 const bundleOutputDir = "../server/public/client/";
 module.exports = env => {
-  const isDevBuild = !(env && env.prod);
-
+  const isDevBuild = (env && env.dev);
   return [
     {
       entry: path.join(__dirname, "src", "Index.tsx"),
@@ -84,6 +83,9 @@ module.exports = env => {
             bundleOutputDir,
             "vendor-manifest.json"
           ))
+        }),
+        new webpack.EnvironmentPlugin({
+          "NODE_ENV": isDevBuild ? "development" : "production"
         })
       ].concat(
         isDevBuild

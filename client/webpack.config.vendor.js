@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = env => {
   const extractCSS = new ExtractTextPlugin("vendor.css");
-  const isDevBuild = !(env && env.prod);
+  const isDevBuild = (env && env.dev);
   return [
     {
       stats: {
@@ -71,8 +71,8 @@ module.exports = env => {
           path: path.join(__dirname, bundleOutputDir, "[name]-manifest.json"),
           name: "[name]_[hash]"
         }),
-        new webpack.DefinePlugin({
-          "process.env.NODE_ENV": isDevBuild ? '"development"' : '"production"'
+        new webpack.EnvironmentPlugin({
+          "NODE_ENV": isDevBuild ? '"development"' : '"production"'
         }),
         new CopyWebpackPlugin([
           {
