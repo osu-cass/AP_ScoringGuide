@@ -8,7 +8,7 @@
     "watch-server": "nodemon dist/Server.js",
     "start": "node dist/Server.js",
     "test": "jest",
-    "dev": "concurrently -n w: npm:watch-*",
+    "dev": "concurrently -c inverse,bgCyan -n w: npm:watch-*",
     "coverage": "jest --coverage",
     "prettier": "prettier --write server/src/**/*.ts*",
     "ts": "tsc",
