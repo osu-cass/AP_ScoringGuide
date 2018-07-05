@@ -67,7 +67,7 @@ node server/dist/Server.js
 
 ### Development
 
-In Visual Studio Code, you can run the launch configuration **Development** (or press F5). This will build all of the necessary server components, run the server, then launch Webpack with the `--watch` flag within the client directory. Upon any changes, either the server code will be rebuilt and re-launched, or the client will be rebuilt without having to restart the server.
+In Visual Studio Code, you can run the launch configuration **Development** _without debugging_. To do this, click on the Debug icon in the sidebar, select the Development profile, and then press `CTRL/CMD + F5`. This will build all of the necessary server components, run the server, then launch Webpack with the `--watch` flag within the client directory. Upon any changes, either the server code will be rebuilt and re-launched, or the client will be rebuilt without having to restart the server.
 
 In any other editor or IDE, you can use the following commands from a terminal of your choice to get the same result. Note you only need to start watching for changes to webpack once, and that you must keep the process alive to continue watching.
 ```sh
