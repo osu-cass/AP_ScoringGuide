@@ -9,21 +9,28 @@ import * as path from "path";
  * the server.
  * @param {string} format: the format that Morgan uses to output request logs
  */
-export const loggerApi = ( format: string ): Express.RequestHandler[] => {
-    const requestStream = fs.createWriteStream( path.join( __dirname, '..', 'requests.log' ), { flags: 'a' } );
-    const errorStream = fs.createWriteStream( path.join( __dirname, '..', 'errors.log' ), { flags: 'a' } );
+export const loggerApi = (format: string): Express.RequestHandler[] => {
+  const requestStream = fs.createWriteStream(
+    path.join(__dirname, "..", "requests.log"),
+    { flags: "a" }
+  );
+  const errorStream = fs.createWriteStream(
+    path.join(__dirname, "..", "errors.log"),
+    { flags: "a" }
+  );
 
-    return [
-        morgan( format, {
-            skip: ( req: Express.Request, res: Express.Response ) => {
-                return res.statusCode >= 400;
-            },
-            stream: requestStream
-        } ),
-        morgan( format, {
-            skip: ( req: Express.Request, res: Express.Response ) => {
-                return res.statusCode < 400;
-            },
-            stream: errorStream
-        } ) ];
+  return [
+    morgan(format, {
+      skip: (req: Express.Request, res: Express.Response) => {
+        return res.statusCode >= 400;
+      },
+      stream: requestStream
+    }),
+    morgan(format, {
+      skip: (req: Express.Request, res: Express.Response) => {
+        return res.statusCode < 400;
+      },
+      stream: errorStream
+    })
+  ];
 };
