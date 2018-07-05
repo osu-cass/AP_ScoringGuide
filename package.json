@@ -3,9 +3,13 @@
     "lint:client": "tslint -c ./tslint.json -p client/ --fix",
     "lint:server": "tslint -c ./tslint.json -p server/ --fix",
     "lint": "run-s -c lint:client lint:server",
-    "prettier": "prettier --write {client,server}/**/*.{tsx,ts}",
-    "precommit": "lint-staged",
-    "commitmsg": "commitlint -E GIT_PARAMS"
+    "prettier": "prettier --write {client,server}/**/*.{tsx,ts}"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E GIT_PARAMS"
+    }
   },
   "lint-staged": {
     "{src}/**/*.{tsx,ts}": [
