@@ -3,6 +3,12 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Development",
+            "configurations": ["Watch Client", "Watch Server"]
+        }
+    ],
     "configurations": [
         {
             "type": "node",
@@ -16,8 +22,7 @@
                 "webpack",
                 "--",
                 "--watch"
-            ],
-            "port": 9230
+            ]
         },
         {
             "type": "node",
@@ -28,15 +33,8 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run",
-                "dev"
-            ],
-            "port": 9229
-        }
-    ],
-    "compounds": [
-        {
-            "name": "Development",
-            "configurations": ["Watch Client", "Watch Server"]
+                "watch"
+            ]
         }
     ]
 }
