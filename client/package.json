@@ -11,12 +11,12 @@
     "webpack:prod": "webpack -p --config webpack.config.js",
     "webpack-vendor": "webpack --config webpack.config.vendor.js --env.dev",
     "webpack-vendor:prod": "webpack -p --config webpack.config.vendor.js",
+    "clean": "rimraf ../server/public/client",
     "build": "npm run webpack-vendor && npm run webpack",
     "build:prod": "npm run webpack-vendor:prod && npm run webpack:prod",
-    "clean": "rimraf ../server/public/client",
+    "watch": "npm run clean && npm run webpack-vendor && npm run webpack -- --watch",
     "test": "jest",
     "coverage": "jest --coverage",
-    "watch": "npm run clean && npm run webpack-vendor && npm run webpack -- --watch",
     "prettier": "prettier --write client/src/**/*.ts*"
   },
   "dependencies": {
