@@ -1,7 +1,7 @@
-import * as Express from "express";
-import * as morgan from "morgan";
-import * as fs from "fs";
-import * as path from "path";
+import * as Express from 'express';
+import * as morgan from 'morgan';
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  * The loggerApi handles each request and logs it to a file called requests.log in the root of the server.
@@ -10,14 +10,12 @@ import * as path from "path";
  * @param {string} format: the format that Morgan uses to output request logs
  */
 export const loggerApi = (format: string): Express.RequestHandler[] => {
-  const requestStream = fs.createWriteStream(
-    path.join(__dirname, "..", "requests.log"),
-    { flags: "a" }
-  );
-  const errorStream = fs.createWriteStream(
-    path.join(__dirname, "..", "errors.log"),
-    { flags: "a" }
-  );
+  const requestStream = fs.createWriteStream(path.join(__dirname, '..', 'requests.log'), {
+    flags: 'a'
+  });
+  const errorStream = fs.createWriteStream(path.join(__dirname, '..', 'errors.log'), {
+    flags: 'a'
+  });
 
   return [
     morgan(format, {

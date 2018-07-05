@@ -1,6 +1,6 @@
-import * as RequestPromise from "./RequestPromise";
-import * as Cheerio from "cheerio";
-import { ItemGroupModel, PdfViewType } from "@osu-cass/sb-components";
+import * as RequestPromise from './RequestPromise';
+import * as Cheerio from 'cheerio';
+import { ItemGroupModel, PdfViewType } from '@osu-cass/sb-components';
 
 const { ITEM_VIEWER_SERVICE_API } = process.env;
 
@@ -14,7 +14,7 @@ export class ItemParser {
   private static load(items: string[]): Promise<string> {
     const postData = {
       items: items.map(i => {
-        return { response: "", id: `I-${i}` };
+        return { response: '', id: `I-${i}` };
       }),
       accommodations: [] as never[]
     };
@@ -36,7 +36,7 @@ export class ItemParser {
       xmlMode: true
     });
 
-    return $("html").text();
+    return $('html').text();
   }
 
   /**
@@ -46,17 +46,14 @@ export class ItemParser {
    * @param {string} htmlString unprocessed string of HTML from IVS
    * @param {string[]} itemIds should be related to each other (have the same passage) and be in the form `BANK-ITEM` (ex: "187-1437").
    */
-  private static parseHtml(
-    htmlString: string,
-    itemIds: string[]
-  ): ItemGroupModel {
+  private static parseHtml(htmlString: string, itemIds: string[]): ItemGroupModel {
     const baseUrl = ITEM_VIEWER_SERVICE_API;
     let $ = Cheerio.load(htmlString);
-    $("a").remove();
-    $(".questionNumber").remove();
-    $("img").map((i, el) => {
+    $('a').remove();
+    $('.questionNumber').remove();
+    $('img').map((i, el) => {
       // tslint:disable-next-line:no-string-literal
-      el.attribs["src"] = baseUrl + el.attribs["src"];
+      el.attribs['src'] = baseUrl + el.attribs['src'];
     });
 
     $ = ItemParser.fixMultipleChoice($);
@@ -65,18 +62,18 @@ export class ItemParser {
       questions: []
     };
 
-    if ($(".thePassage").length) {
-      const takePicture = ItemParser.shouldTakePicture($(".thePassage"));
+    if ($('.thePassage').length) {
+      const takePicture = ItemParser.shouldTakePicture($('.thePassage'));
       itemData.passage = {
         id: itemIds[0],
         type: takePicture ? PdfViewType.picture : PdfViewType.html,
-        html: takePicture ? undefined : $(".thePassage").html(),
+        html: takePicture ? undefined : $('.thePassage').html(),
         captured: !takePicture
       };
     }
 
     itemIds.forEach(itemId => {
-      const selector = `#Item_${itemId.split("-").pop()}`;
+      const selector = `#Item_${itemId.split('-').pop()}`;
       const takePicture = ItemParser.shouldTakePicture($(selector));
       itemData.questions.push({
         id: itemId,
@@ -100,10 +97,10 @@ export class ItemParser {
    * @param {Cheerio} element cheerio object to query
    */
   private static shouldTakePicture(element: Cheerio): boolean {
-    const initializing = element.find("span").filter((i, el) => {
+    const initializing = element.find('span').filter((i, el) => {
       if (el.children[0]) {
         // tslint:disable-next-line:no-any
-        return (el.children[0] as any).data === "Initializing";
+        return (el.children[0] as any).data === 'Initializing';
       }
 
       return false;
@@ -145,24 +142,24 @@ export class ItemParser {
    * @returns same Cheerio object with multiple choice made more readable
    */
   private static fixMultipleChoice($: CheerioStatic) {
-    $(".optionContainer").each((i, el) => {
+    $('.optionContainer').each((i, el) => {
       const optionElements = $(el)
-        .children(".optionContent")
+        .children('.optionContent')
         .children();
       const optionVal =
-        optionElements.length === 1 && optionElements.first().is("p")
+        optionElements.length === 1 && optionElements.first().is('p')
           ? $(el)
-              .children(".optionContent")
-              .children("p")
+              .children('.optionContent')
+              .children('p')
               .html()
           : $(el)
-              .children(".optionContent")
+              .children('.optionContent')
               .html();
       // tslint:disable-next-line:no-inner-html
       $(el).html(
         `<b> ${$(el)
-          .children("input")
-          .attr("value")}:</b> ${optionVal}`
+          .children('input')
+          .attr('value')}:</b> ${optionVal}`
       );
     });
 

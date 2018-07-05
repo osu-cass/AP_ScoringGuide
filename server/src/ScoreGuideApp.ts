@@ -1,13 +1,13 @@
 // tslint:disable-next-line: no-require-imports no-var-requires
-require("dotenv").config();
+require('dotenv').config();
 
-import * as path from "path";
-import * as Express from "express";
-import * as bodyParser from "body-parser";
-import * as morgan from "morgan";
-import { loggerApi } from "./Logger";
-import { APIRoute } from "./routes/API";
-import { ItemParser } from "./ItemParser";
+import * as path from 'path';
+import * as Express from 'express';
+import * as bodyParser from 'body-parser';
+import * as morgan from 'morgan';
+import { loggerApi } from './Logger';
+import { APIRoute } from './routes/API';
+import { ItemParser } from './ItemParser';
 
 const { PORT } = process.env;
 
@@ -25,7 +25,7 @@ export class ScoreGuideApp {
   router: APIRoute;
 
   constructor() {
-    this.port = PORT || "3000";
+    this.port = PORT || '3000';
     this.app = Express();
     this.router = new APIRoute();
     this.config();
@@ -33,22 +33,22 @@ export class ScoreGuideApp {
   }
 
   config() {
-    this.app.use(loggerApi("tiny"));
+    this.app.use(loggerApi('tiny'));
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
-    this.app.use(Express.static(path.join(__dirname, "..", "public")));
+    this.app.use(Express.static(path.join(__dirname, '..', 'public')));
   }
 
   routes() {
-    this.app.use("/api", this.router.routes);
-    this.app.get("/item", (req, res) => {
-      const id = req.param("id", "");
+    this.app.use('/api', this.router.routes);
+    this.app.get('/item', (req, res) => {
+      const id = req.param('id', '');
       ItemParser.loadPlainHtml(id)
         .then(item => res.send(item))
         .catch(err => res.status(500).send(err));
     });
-    this.app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+    this.app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
     });
   }
 

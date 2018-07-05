@@ -1,13 +1,9 @@
-import { ItemCapture } from "./ItemCapture";
-import * as FileSystem from "fs";
-import * as Path from "path";
-import * as URL from "url";
-import {
-  ItemGroupModel,
-  ItemPdfModel,
-  PdfViewType
-} from "@osu-cass/sb-components";
-import { ItemParser } from "./ItemParser";
+import { ItemCapture } from './ItemCapture';
+import * as FileSystem from 'fs';
+import * as Path from 'path';
+import * as URL from 'url';
+import { ItemGroupModel, ItemPdfModel, PdfViewType } from '@osu-cass/sb-components';
+import { ItemParser } from './ItemParser';
 
 const { SCREENSHOT_PATH, SCREENSHOT_URL } = process.env;
 
@@ -68,26 +64,17 @@ export class ItemDataManager {
   private getPassagePaths(itemData: ItemGroupModel): boolean {
     let shouldScreenshot = false;
     if (itemData.passage && itemData.passage.type === PdfViewType.picture) {
-      const possiblePassagePaths: ItemPdfModel[] = itemData.questions.map(
-        question => {
-          const picPath = Path.join(
-            __dirname,
-            SCREENSHOT_PATH,
-            `${question.id}-passage.png`
-          );
+      const possiblePassagePaths: ItemPdfModel[] = itemData.questions.map(question => {
+        const picPath = Path.join(__dirname, SCREENSHOT_PATH, `${question.id}-passage.png`);
 
-          return {
-            picturePath: picPath,
-            screenshotUrl: URL.resolve(
-              SCREENSHOT_URL,
-              `${question.id}-passage.png`
-            ),
-            id: question.id,
-            type: PdfViewType.picture,
-            captured: FileSystem.existsSync(picPath)
-          };
-        }
-      );
+        return {
+          picturePath: picPath,
+          screenshotUrl: URL.resolve(SCREENSHOT_URL, `${question.id}-passage.png`),
+          id: question.id,
+          type: PdfViewType.picture,
+          captured: FileSystem.existsSync(picPath)
+        };
+      });
 
       const capturedPassages = possiblePassagePaths.filter(pp => pp.captured);
       if (capturedPassages.length > 0) {
@@ -111,20 +98,13 @@ export class ItemDataManager {
     let shouldScreenshot = false;
     itemData.questions.forEach(q => {
       if (q.view.type === PdfViewType.picture) {
-        const pth = Path.join(
-          __dirname,
-          SCREENSHOT_PATH,
-          `${q.id}-question.png`
-        );
+        const pth = Path.join(__dirname, SCREENSHOT_PATH, `${q.id}-question.png`);
         const captured = FileSystem.existsSync(pth);
         if (!captured) {
           shouldScreenshot = true;
         }
         q.view.picturePath = pth;
-        q.view.screenshotUrl = URL.resolve(
-          SCREENSHOT_URL,
-          `${q.id}-question.png`
-        );
+        q.view.screenshotUrl = URL.resolve(SCREENSHOT_URL, `${q.id}-question.png`);
         q.view.captured = captured;
       }
     });

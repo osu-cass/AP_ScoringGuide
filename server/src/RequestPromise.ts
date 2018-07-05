@@ -1,4 +1,4 @@
-import * as Request from "request";
+import * as Request from 'request';
 
 export function getRequest(url: string) {
   return new Promise<string>((resolve, reject) => {
@@ -6,9 +6,9 @@ export function getRequest(url: string) {
       url,
       {
         headers: {
-          Accept: "",
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
+          Accept: '',
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
         }
       },
       (error, response, body) => {
@@ -28,9 +28,9 @@ export function postRequest(url: string, body: object) {
       {
         json: body,
         headers: {
-          Accept: "",
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
+          Accept: '',
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
         }
       },
       (error, response, body) => {
