@@ -17,7 +17,7 @@ import {
   SearchUrl,
   downloadPdfGet,
   downloadPdfPost
-} from "@osu-cass/sb-components";
+} from '@osu-cass/sb-components';
 
 /**
  * `GET` PDF based on search params
@@ -53,27 +53,22 @@ export const pdfItemSequence = async (
 };
 
 export const itemSearchModelClient = async () =>
-  getRequest<ItemsSearchModel>(
-    "is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel"
-  );
+  getRequest<ItemsSearchModel>('is-score.cass.oregonstate.edu/ScoringGuide/ScoringGuideViewModel');
 
-export const itemCardClient = async () => getRequest<ItemCardModel[]>("api/search");
+export const itemCardClient = async () => getRequest<ItemCardModel[]>('api/search');
 
 export const aboutItemClient = async (params: ItemModel) =>
-  getRequest<AboutItemModel>("/api/aboutItem", params);
+  getRequest<AboutItemModel>('/api/aboutItem', params);
 
 export const searchFilterModel = async () =>
-  getRequest<ItemsSearchFilterModel>("api/filterSearchModel");
+  getRequest<ItemsSearchFilterModel>('api/filterSearchModel');
 
 export function getBasicFilterCategories(
   itemSearchFilter: ItemsSearchFilterModel,
   searchParams: SearchAPIParamsModel
 ): BasicFilterCategoryModel[] {
   const subjects = {
-    ...ItemSearch.filterSearchToCategory(
-      itemSearchFilter.subjects,
-      searchParams
-    ),
+    ...ItemSearch.filterSearchToCategory(itemSearchFilter.subjects, searchParams),
     optionType: OptionTypeModel.DropDown
   };
   itemSearchFilter.grades.filterOptions = [
@@ -90,10 +85,7 @@ export function getBasicFilterCategories(
     optionType: OptionTypeModel.DropDown
   };
   const techTypes = {
-    ...ItemSearch.filterSearchToCategory(
-      itemSearchFilter.technologyTypes,
-      searchParams
-    ),
+    ...ItemSearch.filterSearchToCategory(itemSearchFilter.technologyTypes, searchParams),
     optionType: OptionTypeModel.DropDown
   };
 
@@ -112,20 +104,14 @@ export function getAdvancedFilterCategories(
   };
 
   const interactions = {
-    ...ItemSearch.filterSearchToCategory(
-      itemSearchFilter.interactionTypes,
-      searchAPI
-    ),
+    ...ItemSearch.filterSearchToCategory(itemSearchFilter.interactionTypes, searchAPI),
     isMultiSelect: true,
     disabled: false,
     displayAllButton: true
   };
 
   const techTypes = {
-    ...ItemSearch.filterSearchToCategory(
-      itemSearchFilter.technologyTypes,
-      searchAPI
-    ),
+    ...ItemSearch.filterSearchToCategory(itemSearchFilter.technologyTypes, searchAPI),
     isMultiSelect: false,
     disabled: false,
     displayAllButton: true
@@ -139,10 +125,7 @@ export function getAdvancedFilterCategories(
   };
 
   const calculator = {
-    ...ItemSearch.filterSearchToCategory(
-      itemSearchFilter.calculator,
-      searchAPI
-    ),
+    ...ItemSearch.filterSearchToCategory(itemSearchFilter.calculator, searchAPI),
     isMultiSelect: false,
     disabled: false,
     displayAllButton: true
@@ -151,9 +134,7 @@ export function getAdvancedFilterCategories(
   return [claims, interactions, techTypes, targets, calculator];
 }
 
-export function getItemSearchModel(
-  itemSearchFilter: ItemsSearchFilterModel
-): ItemsSearchModel {
+export function getItemSearchModel(itemSearchFilter: ItemsSearchFilterModel): ItemsSearchModel {
   return {
     claims: itemSearchFilter.claims.filterOptions,
     subjects: itemSearchFilter.subjects.filterOptions,

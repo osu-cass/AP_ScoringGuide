@@ -12,13 +12,13 @@ declare interface String {
   endsWith(str: string): boolean;
 }
 
-if (typeof Object.assign != "function") {
+if (typeof Object.assign != 'function') {
   Object.assign = function(target: any, varArgs: any) {
     // .length of function is 2
-    "use strict";
+    'use strict';
     if (target == undefined) {
       // TypeError if undefined or null
-      throw new TypeError("Cannot convert undefined or null to object");
+      throw new TypeError('Cannot convert undefined or null to object');
     }
 
     const to = Object(target);
@@ -43,10 +43,10 @@ if (typeof Object.assign != "function") {
 if (!Array.prototype.find) {
   Array.prototype.find = function(predicate: any) {
     if (this == undefined) {
-      throw new TypeError("Array.prototype.find called on null or undefined");
+      throw new TypeError('Array.prototype.find called on null or undefined');
     }
-    if (typeof predicate !== "function") {
-      throw new TypeError("predicate must be a function");
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
     }
     const list = Object(this);
     const length = list.length >>> 0;

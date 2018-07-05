@@ -1,6 +1,6 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { RouteComponentProps } from "react-router";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { RouteComponentProps } from 'react-router';
 import {
   ItemCardModel,
   Resource,
@@ -21,14 +21,14 @@ import {
   GradeLevels,
   CombinedFilter,
   ItemsSearchModel
-} from "@osu-cass/sb-components";
+} from '@osu-cass/sb-components';
 import {
   pdfSearchParams,
   pdfItemSequence,
   getBasicFilterCategories,
   getAdvancedFilterCategories,
   getItemSearchModel
-} from "./ScoreGuideModels";
+} from './ScoreGuideModels';
 
 export interface Props extends RouteComponentProps<{}> {
   itemsSearchFilterClient(): Promise<ItemsSearchFilterModel>;
@@ -55,10 +55,10 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     super(props);
     this.state = {
       itemsSearchModel: undefined,
-      allItems: { kind: "loading" },
+      allItems: { kind: 'loading' },
       basicFilter: [],
       advancedFilter: [],
-      item: { kind: "none" },
+      item: { kind: 'none' },
       visibleItems: [],
       selectedItems: [],
       searchAPIParams: SearchUrl.decodeSearch(this.props.location.search),
@@ -68,38 +68,22 @@ export class ScoringGuidePage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    document.title = "Score Guide - Smarter Balanced";
-    Promise.all([
-      this.props.itemCardClient(),
-      this.props.itemsSearchFilterClient()
-    ])
+    document.title = 'Score Guide - Smarter Balanced';
+    Promise.all([this.props.itemCardClient(), this.props.itemsSearchFilterClient()])
       .then(([cards, filterModel]) => this.onLoadSuccess(cards, filterModel))
       .catch(err => this.onLoadFailure(err));
   }
 
-  onLoadSuccess = (
-    cards: ItemCardModel[],
-    filterModel: ItemsSearchFilterModel
-  ) => {
+  onLoadSuccess = (cards: ItemCardModel[], filterModel: ItemsSearchFilterModel) => {
     const { searchAPIParams } = this.state;
     const searchModel = getItemSearchModel(filterModel);
-    let advancedFilter = getAdvancedFilterCategories(
-      filterModel,
-      searchAPIParams
-    );
-    advancedFilter = Filter.hideFiltersBasedOnSearchParams(
-      advancedFilter,
-      searchAPIParams
-    );
+    let advancedFilter = getAdvancedFilterCategories(filterModel, searchAPIParams);
+    advancedFilter = Filter.hideFiltersBasedOnSearchParams(advancedFilter, searchAPIParams);
     this.setState({
-      allItems: { kind: "success", content: cards },
+      allItems: { kind: 'success', content: cards },
       itemsSearchModel: searchModel,
       basicFilter: getBasicFilterCategories(filterModel, searchAPIParams),
-      advancedFilter: Filter.getUpdatedSearchFilters(
-        searchModel,
-        advancedFilter,
-        searchAPIParams
-      ),
+      advancedFilter: Filter.getUpdatedSearchFilters(searchModel, advancedFilter, searchAPIParams),
       visibleItems: ItemSearch.filterItemCards(cards, searchAPIParams)
     });
   };
@@ -107,7 +91,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
   onLoadFailure(err: Error) {
     console.error(err);
     this.setState({
-      allItems: { kind: "failure" }
+      allItems: { kind: 'failure' }
     });
   }
 
@@ -120,7 +104,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
   onAboutItemSuccess = (data: AboutItemModel) => {
     const item: Resource<AboutItemModel> = {
-      kind: "success",
+      kind: 'success',
       content: data
     };
     this.setState({ item });
@@ -129,7 +113,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
   onAboutItemError = (err: Error) => {
     console.error(err);
     this.setState({
-      item: { kind: "failure" }
+      item: { kind: 'failure' }
     });
   };
 
@@ -138,9 +122,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     const { itemKey, bankKey } = item;
     const selectedItem: ItemModel = { itemKey, bankKey };
     const idx = selectedItems.findIndex(
-      value =>
-        value.itemKey === selectedItem.itemKey &&
-        value.bankKey === selectedItem.bankKey
+      value => value.itemKey === selectedItem.itemKey && value.bankKey === selectedItem.bankKey
     );
     const itemIdx = visibleItems.findIndex(value => value === item);
     if (idx > -1) {
@@ -164,7 +146,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     if (!reset) {
       this.getAboutItem(item);
     } else {
-      const item: Resource<AboutItemModel> = { kind: "none" };
+      const item: Resource<AboutItemModel> = { kind: 'none' };
       this.setState({ item });
     }
   };
@@ -180,10 +162,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
 
     const allItems = getResourceContent(this.state.allItems);
 
-    const newVisibleItems = ItemSearch.filterItemCards(
-      allItems || [],
-      searchParams
-    );
+    const newVisibleItems = ItemSearch.filterItemCards(allItems || [], searchParams);
 
     this.setState({
       basicFilter: basic,
@@ -198,13 +177,13 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     const { subjects, gradeLevels, performanceOnly, catOnly } = searchModel;
     const nonSelectedFilters: string[] = [];
     if (!subjects || subjects.length <= 0) {
-      nonSelectedFilters.push("subject");
+      nonSelectedFilters.push('subject');
     }
     if (!gradeLevels || gradeLevels.valueOf() === GradeLevels.NA) {
-      nonSelectedFilters.push("grade level");
+      nonSelectedFilters.push('grade level');
     }
     if (!performanceOnly && !catOnly) {
-      nonSelectedFilters.push("tech type");
+      nonSelectedFilters.push('tech type');
     }
     if (this.state.selectedItems.length > 0) {
       pdfItemSequence(this.state.selectedItems)
@@ -235,7 +214,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
     const { nonSelectedFilters } = this.state;
     let content = <div className="print-error-message invis" />;
     if (nonSelectedFilters.length > 0) {
-      let filterPrompt = "Please select a ";
+      let filterPrompt = 'Please select a ';
       nonSelectedFilters.forEach((fil, idx) => {
         if (idx === 2 || (nonSelectedFilters.length === 2 && idx === 1)) {
           filterPrompt = `${filterPrompt} and ${fil}.`;
@@ -283,12 +262,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
   }
 
   renderFilterComponent(): JSX.Element {
-    const {
-      basicFilter,
-      advancedFilter,
-      nonSelectedFilters,
-      searchAPIParams
-    } = this.state;
+    const { basicFilter, advancedFilter, nonSelectedFilters, searchAPIParams } = this.state;
 
     return (
       <CombinedFilter
@@ -318,7 +292,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
           isLinkTable={false}
         />
       );
-    } else if (this.state.allItems.kind === "failure") {
+    } else if (this.state.allItems.kind === 'failure') {
       content = (
         <div className="placeholder-text" role="alert">
           An error occurred. Please try again later.
@@ -343,7 +317,7 @@ export class ScoringGuidePage extends React.Component<Props, State> {
           </div>
         </div>
       );
-    } else if (this.state.allItems && this.state.allItems.kind === "loading") {
+    } else if (this.state.allItems && this.state.allItems.kind === 'loading') {
       content = <div className="loader" />;
     }
 
