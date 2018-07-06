@@ -1,29 +1,40 @@
 const path = require("path");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require("webpack");
-const bundleOutputDir = "../server/public/client/";
-module.exports = env => {
-  const isDevBuild = !(env && env.prod);
+const TimeFixPlugin = require("time-fix-plugin")
+const HTMLPlugin = require("html-webpack-plugin")
+const AddHTMLPlugin = require("add-asset-html-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const bundleOutputDir = "../server/public/client/";
+
+const vendorFiles = [
+  {
+    filepath: path.resolve(__dirname, "..", "server", "public", "client", "vendor.js"),
+    hash: true,
+    includeSourcemap: false
+  },
+  {
+    filepath: path.resolve(__dirname, "..", "server", "public", "client", "vendor.css"),
+    typeOfAsset: 'css',
+    hash: true,
+    includeSourcemap: false
+  }
+]
+
+module.exports = env => {
+  const isDevBuild = (env && env.dev);
   return [
     {
+      mode: isDevBuild ? 'development' : 'production',
       entry: path.join(__dirname, "src", "Index.tsx"),
 
       output: {
         // redirect compiled files into server project
-        path: path.join(__dirname, bundleOutputDir),
+        path: path.resolve(__dirname, bundleOutputDir),
         publicPath: "/client/",
-        filename: "bundle.js"
-      },
-
-      devServer: {
-        port: 8080,
-        quiet: true,
-        noInfo: true,
-        proxy: {
-          "/": "http://localhost:3000/"
-        },
-        hot: true
+        filename: "bundle.js",
+        hotUpdateChunkFilename: 'hot/hot-update.js',
+        hotUpdateMainFilename: 'hot/main-update.json'
       },
 
       resolve: {
@@ -50,9 +61,13 @@ module.exports = env => {
             test: /\.less$/,
             use: isDevBuild
               ? ["style-loader", "css-loader", "less-loader?sourceMap"]
-              : ExtractTextPlugin.extract({
-                  use: ["css-loader?minimize", "less-loader"]
-                })
+              : [
+                {
+                  loader: MiniCssExtractPlugin.loader
+                },
+                "css-loader?minimize",
+                "less-loader"
+            ]
           },
           {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -66,15 +81,15 @@ module.exports = env => {
             test: /\.(jpe?g|png|gif)$/i,
             loader: "file-loader?name=images/[name].[ext]"
           }
-
-          // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-          //{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
         ]
       },
 
       plugins: [
         new webpack.ProvidePlugin({ $: "jquery", jQuery: "jquery" }),
-        new ExtractTextPlugin("bundle.css"),
+        new MiniCssExtractPlugin({
+          filename: "bundle.css",
+          chunkFilename: "[id].css"
+        }),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.DllReferencePlugin({
@@ -84,7 +99,14 @@ module.exports = env => {
             bundleOutputDir,
             "vendor-manifest.json"
           ))
-        })
+        }),
+        new HTMLPlugin({
+          title: "Smarter Balanced Score Guide",
+          template: "index.ejs",
+          hash: true,
+          filename: path.resolve(__dirname, "..", "server", "public", "index.html")
+        }),
+        new AddHTMLPlugin( isDevBuild ? vendorFiles[0] : vendorFiles )
       ].concat(
         isDevBuild
           ? [
@@ -94,12 +116,11 @@ module.exports = env => {
                   bundleOutputDir,
                   "[resourcePath]"
                 ) // Point sourcemap entries to the original file locations on disk
-              })
+              }),
+              // Temporary workaround for Webpack's infinite HMR loop
+              new TimeFixPlugin()
             ]
-          : [
-              // Plugins that apply in production builds only
-              new webpack.optimize.UglifyJsPlugin()
-            ]
+          : []
       )
     }
   ];

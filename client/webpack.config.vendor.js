@@ -1,14 +1,15 @@
 const path = require("path");
 const webpack = require("webpack");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const bundleOutputDir = "../server/public/client/";
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const bundleOutputDir = "../server/public/client/";
 
 module.exports = env => {
-  const extractCSS = new ExtractTextPlugin("vendor.css");
-  const isDevBuild = !(env && env.prod);
+  const isDevBuild = (env && env.dev);
   return [
     {
+      mode: isDevBuild ? 'development' : 'production',
       stats: {
         modules: false
       },
@@ -18,22 +19,20 @@ module.exports = env => {
       module: {
         rules: [
           {
-            test: /\.less$/,
-            use: isDevBuild
+            test: /\.(css|less)$/,
+            use: isDevBuild 
               ? ["style-loader", "css-loader", "less-loader"]
-              : ExtractTextPlugin.extract({
-                  use: ["css-loader?minimize", "less-loader"]
-                })
+              : [
+                {
+                  loader: MiniCssExtractPlugin.loader
+                },
+                "css-loader?minimize",
+                "less-loader"
+              ]
           },
           {
             test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/,
             use: "url-loader?limit=100000"
-          },
-          {
-            test: /\.css(\?|$)/,
-            use: extractCSS.extract([
-              isDevBuild ? "css-loader" : "css-loader?minimize"
-            ])
           }
         ]
       },
@@ -62,7 +61,10 @@ module.exports = env => {
         library: "[name]_[hash]"
       },
       plugins: [
-        extractCSS,
+        new MiniCssExtractPlugin({
+          filename: "vendor.css",
+          chunkFilename: "[id].css"
+        }),
         new webpack.ProvidePlugin({
           $: "jquery",
           jQuery: "jquery"
@@ -71,8 +73,8 @@ module.exports = env => {
           path: path.join(__dirname, bundleOutputDir, "[name]-manifest.json"),
           name: "[name]_[hash]"
         }),
-        new webpack.DefinePlugin({
-          "process.env.NODE_ENV": isDevBuild ? '"development"' : '"production"'
+        new webpack.EnvironmentPlugin({
+          "NODE_ENV": isDevBuild ? '"development"' : '"production"'
         }),
         new CopyWebpackPlugin([
           {
@@ -84,7 +86,7 @@ module.exports = env => {
             to: path.join(__dirname, "../server/public", "Assets/Images")
           }
         ])
-      ].concat(isDevBuild ? [] : [new webpack.optimize.UglifyJsPlugin()])
+      ]
     }
   ];
 };

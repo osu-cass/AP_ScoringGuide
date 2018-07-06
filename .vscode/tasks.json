@@ -33,6 +33,20 @@
             "group": "build"
         },
         {
+            "label": "client-clean",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/client"
+            },
+            "command": "npm",
+            "args": [
+                "run",
+                "clean"
+            ],
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
             "label": "client-watch",
             "type": "shell",
             "dependsOn": "webpack-vendor",
