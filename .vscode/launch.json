@@ -3,17 +3,37 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Development",
+            "configurations": ["Watch Client", "Watch Server"]
+        }
+    ],
     "configurations": [
         {
             "type": "node",
             "request": "launch",
-            "name": "Run ScoreGuide",
-            "preLaunchTask": "build-server",
-            "program": "${workspaceRoot}/server/dist/Server.js",
+            "name": "Watch Client",
+            "cwd": "${workspaceFolder}/client",
+            "preLaunchTask": "webpack-vendor",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "webpack",
+                "--",
+                "--watch"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Watch Server",
+            "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/server",
-            "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/server/dist/**/*.js"
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "watch"
             ]
         }
     ]

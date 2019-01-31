@@ -7,9 +7,10 @@ The Scoring Guide website is a Typescript, Node, and Express Application. It all
 This project was developed using VS Code, but any editor would work. If you are using VS Code, make sure your integrated terminal is set to bash. [This link](https://code.visualstudio.com/docs/editor/integrated-terminal#_configuration) shows you how to change your integrated terminal. 
 
 ### Installation
-You can install most of the necessary dependencies with the install bash script. Note that you must have Node installed on your machine (version 8 is required for puppeteer). 
-```
-$ ./install
+You can install most of the necessary dependencies with the install bash script. Note that you must have Node installed on your machine (version 8 is required for puppeteer).
+```sh
+# From the root directory
+./install
 ```
 
 You also need to install [wkhtmltopdf](https://wkhtmltopdf.org/downloads.html) and add it to your path. 
@@ -17,43 +18,67 @@ You also need to install [wkhtmltopdf](https://wkhtmltopdf.org/downloads.html) a
 <details> 
   <summary>Installing by hand</summary>
 
-1. In the **client** directory, install npm dependencies.
+1. Install development dependencies from the root directory.
+```sh
+npm install
 ```
-$ cd client/
-$ npm install
+
+2. In the **client** directory, install npm dependencies.
+```sh
+cd client/
+npm install
 ```
-2. In the **server** directory, install npm dependencies. Note that you may need to go back to the project's root directory before running the following commands. 
-```
-$ cd server/
-$ npm install
+
+3. In the **server** directory, install npm dependencies. Note that you may need to go back to the project's root directory before running the following commands. 
+```sh
+cd server/
+npm install
 ```
 </details>
 
 ### Building the project
-Scoring Guide uses typescript and less files for both the server and the client, so these need to be compiled before running the app. 
+Scoring Guide uses typescript and less files for both the server and the client, so these need to be compiled before running the app. If you want to run the application while watching for file changes, skip this and go to the [Development](#development) section.
 
-In Visual Studio Code, you can run the launch configuration **Launch Program** (or press F5). This will build all of the necessary server components, and then run the server. You can run the **webpack-watch** task to start a service to watch for changes to the client side code and recompile with Webpack. 
+To build, run these commands:
+```sh
+# Build the TS and LESS files for the server
+cd server/
+npm run build
 
-In any other editor or IDE, you can use the following commands to get the same result. Note you only need to start watching for changes to webpack once, and that you must keep the process alive to continue watching. It is recommended to run the webpack command in a separate terminal window. 
-```
-$ cd server/
-$ npm run build
-
-$ cd ../client/
-$ npm run watch
+# Build the frontend client
+cd ../client/
+npm run build
 ```
 
 ### Running the project
-If you're not using Visual Studio Code or don't want to rebuild, you can run the project by starting the Node server in the server directory.
-```
-$ node server/dist/Server.js
+Once the project has been built, running it is easy; Just launch the compiled server:
+
+```sh
+# From the root folder
+cd server/
+npm start
 ```
 
-You could also run 
+Or, if you prefer to run it directly:
+```sh
+# From the root folder
+node server/dist/Server.js
 ```
-$ npm start
+
+### Development
+
+In Visual Studio Code, you can run the launch configuration **Development** _without debugging_. To do this, click on the Debug icon in the sidebar, select the Development profile, and then press `CTRL/CMD + F5`. This will build all of the necessary server components, run the server, then launch Webpack with the `--watch` flag within the client directory. Upon any changes, either the server code will be rebuilt and re-launched, or the client will be rebuilt without having to restart the server.
+
+In any other editor or IDE, you can use the following commands from a terminal of your choice to get the same result. Note you only need to start watching for changes to webpack once, and that you must keep the process alive to continue watching.
+```sh
+# Watch, rebuild, and re-launch the server on change
+$ cd server/
+$ npm run watch
+
+# In a new window, watch and rebuild the client on change
+$ cd client/
+$ npm run watch
 ```
-From server folder
 
 ### Testing
 There is a script in the root directory of the project named 'test'. We're using Jest as our test framework and run two types of tests.  
@@ -83,3 +108,26 @@ To update snapshot tests:
 $ ./test -u
 ```
 
+## Deployment
+
+### Deployment Checklist
+- Ensure that the client has been built.
+- Ensure that the server has been built.
+- Check the values of the variables in the .env file in the server directory to ensure that values for the API and IVS are correct.
+
+### Packaging the Application
+To package the application ensure that you have preformed the steps above in the deployment checklist. Next run the following commands:
+```
+> docker build -t {desired tag} .
+```
+After building the docker image verify your build using:
+```
+> docker run -p 3000:3000 {desired tag}
+```
+visit localhost:3000 and ensure that the application runs.
+Next push the image to docker hub so that it can be deployed.
+```
+> docker push {desired tag}
+```
+
+Now you are ready to deploy the score guide application. See the scoring guide configuration repo for instructions on how to deploy the application.

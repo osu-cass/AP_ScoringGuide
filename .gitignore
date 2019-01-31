@@ -5,3 +5,5 @@ server/dist/
 server/public/client/
 server/public/Assets/
 server/public/pdf/pdf.css
+server/requests.log
+server/errors.log

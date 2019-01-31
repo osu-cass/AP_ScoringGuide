@@ -1,31 +1,47 @@
 import * as React from 'react';
-import { Router, Route } from 'react-router';
+import { Router, Route, Switch } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { ScoringGuidePage } from './ScoreGuide/ScoringGuidePage';
 import {
-    Layout,
-    SbNavlinkProps,
-    ItemsSearchModel,
-    get
+  Layout,
+  SbNavlinkProps,
+  ItemsSearchModel,
+  ItemCardViewer,
+  ErrorPageContainer
 } from '@osu-cass/sb-components';
 import { itemCardClient, searchFilterModel, aboutItemClient } from './ScoreGuide/ScoreGuideModels';
 
-const siteLinks: SbNavlinkProps[] = [
-];
+const siteLinks: SbNavlinkProps[] = [];
 
-
-export const routes = <Layout siteName="Score Guide" links={siteLinks}>
-    <Route exact path='/' render={(props) => (
-        <ScoringGuidePage
+export const routes = (
+  <Layout siteName="Score Guide" links={siteLinks}>
+    <Switch>
+      <Route
+        exact
+        path="/"
+        render={props => (
+          <ScoringGuidePage
             {...props}
             itemsSearchFilterClient={searchFilterModel}
             aboutItemClient={aboutItemClient}
             itemCardClient={itemCardClient}
-        />
-    )} />
-    <Route exact path='*' render={(props) => (
-        <div>TODO: add error</div>
-    )} />
+            errorRoute="/error"
+          />
+        )}
+      />
 
-</Layout>;
+      <Route
+        path="/error"
+        render={props => (
+          <ErrorPageContainer
+            {...props}
+            description="An error occured while processing your request."
+            errorCode={500}
+          />
+        )}
+      />
 
+      <Route render={props => <ErrorPageContainer {...props} errorCode={404} />} />
+    </Switch>
+  </Layout>
+);
